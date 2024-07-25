@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-23T00:43:53.895267+00:00",
+  "timestamp": "2024-07-25T00:43:44.741970+00:00",
   "repo": "wbl/roughtime-draft",
   "labels": [
     {
@@ -616,6 +616,32 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 10,
+      "id": "PR_kwDOLYaY4c52W2xe",
+      "title": "Table 2: Fix byte order of the SRV tag",
+      "url": "https://github.com/wbl/roughtime-draft/pull/10",
+      "state": "OPEN",
+      "author": "cjpatton",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-07-24T15:22:17Z",
+      "updatedAt": "2024-07-24T15:22:18Z",
+      "baseRepository": "wbl/roughtime-draft",
+      "baseRefName": "main",
+      "baseRefOid": "f20249e8daf9f960d3f5cbc1e648e3a03594fd17",
+      "headRepository": "cjpatton/roughtime-draft",
+      "headRefName": "fix-table-2-SRV",
+      "headRefOid": "492e75b555e91dbece7fc4949176dbaceeb8638f",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
     }
   ]
 }
