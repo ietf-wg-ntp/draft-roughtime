@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-07-25T00:43:44.741970+00:00",
+  "timestamp": "2024-07-28T00:48:44.118376+00:00",
   "repo": "wbl/roughtime-draft",
   "labels": [
     {
@@ -57,7 +57,7 @@
       "url": "https://github.com/wbl/roughtime-draft/issues/1",
       "state": "CLOSED",
       "author": "cjpatton",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This make it easier to edit with more text editors (vim in particular) and to read PRs.",
@@ -81,7 +81,7 @@
       "url": "https://github.com/wbl/roughtime-draft/issues/4",
       "state": "CLOSED",
       "author": "cjpatton",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "https://github.com/wbl/roughtime-draft/blob/695381624a2478973d7f090dc60725746a4433d8/draft-ietf-ntp-roughtime.md?plain=1#L537\r\n\r\n\"ZZZZ\" is 0x5a5a5a5a in hex, not 0x7a7a7a7a. This is \"zzzz\".\r\n\r\nThe intention is probably \"ZZZZ\", so the table should be updated to 0x5a5a5a5a.",
@@ -123,7 +123,7 @@
       "url": "https://github.com/wbl/roughtime-draft/pull/2",
       "state": "MERGED",
       "author": "cjpatton",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Resolves https://github.com/aanchal4/draft-roughtime/issues/46.\r\n\r\nAdd multi-tenancy as an operational consideration. The idea is that if multiple servers share the same IP or port space, then the client needs a way to indicate which server it expects to respond to a request.\r\n\r\nTo resolve this, define a new request tag, SRV, that indicates the DNS name associated with long-term public key the client expects to verify the response with.",
@@ -144,21 +144,21 @@
       "comments": [
         {
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "Rebased.",
           "createdAt": "2024-04-25T14:03:47Z",
           "updatedAt": "2024-04-25T14:03:47Z"
         },
         {
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "Squashed.",
           "createdAt": "2024-04-29T17:06:24Z",
           "updatedAt": "2024-04-29T17:06:24Z"
         },
         {
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "This is ready to merge. I deleted the extra privacy consideration as I think it's covered by the current text.",
           "createdAt": "2024-04-29T17:16:28Z",
           "updatedAt": "2024-04-29T17:16:28Z"
@@ -171,7 +171,7 @@
             "abbreviatedOid": "8afc804"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-03-04T18:03:54Z",
@@ -211,7 +211,7 @@
             "abbreviatedOid": "8afc804"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-03-04T20:27:18Z",
@@ -251,7 +251,7 @@
             "abbreviatedOid": "8afc804"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-04-25T14:07:12Z",
@@ -291,7 +291,7 @@
             "abbreviatedOid": "8afc804"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-04-25T20:13:22Z",
@@ -311,7 +311,7 @@
             "abbreviatedOid": "8afc804"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-04-25T20:18:29Z",
@@ -435,7 +435,7 @@
             "abbreviatedOid": "aad9875"
           },
           "author": "cjpatton",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "state": "COMMENTED",
           "body": "",
           "createdAt": "2024-06-10T16:02:15Z",
@@ -622,24 +622,26 @@
       "id": "PR_kwDOLYaY4c52W2xe",
       "title": "Table 2: Fix byte order of the SRV tag",
       "url": "https://github.com/wbl/roughtime-draft/pull/10",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "cjpatton",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
       "createdAt": "2024-07-24T15:22:17Z",
-      "updatedAt": "2024-07-24T15:22:18Z",
+      "updatedAt": "2024-07-26T19:22:50Z",
       "baseRepository": "wbl/roughtime-draft",
       "baseRefName": "main",
       "baseRefOid": "f20249e8daf9f960d3f5cbc1e648e3a03594fd17",
       "headRepository": "cjpatton/roughtime-draft",
       "headRefName": "fix-table-2-SRV",
       "headRefOid": "492e75b555e91dbece7fc4949176dbaceeb8638f",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-07-26T19:22:50Z",
+      "mergedAt": "2024-07-26T19:22:50Z",
+      "mergedBy": "wbl",
+      "mergeCommit": {
+        "oid": "937de508c03e117086d2fa2f4a07c0e865de8df6"
+      },
       "comments": [],
       "reviews": []
     }
