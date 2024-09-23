@@ -37,9 +37,12 @@ informative:
 
 --- abstract
 
-This document specifies Roughtime - a protocol that aims to achieve
-rough time synchronization even for clients without any idea of what
-time it is.
+This document describes Roughtime - a protocol that aims to achieve
+two things: secure rough time synchronization even for clients
+without any idea of what time it is, and giving clients a format by
+which to report any inconsistencies they observe between time servers.
+This document specifies the on-wire protocol required for these goals,
+and discusses aspects of the ecosystem needed for it to work.
 
 
 --- middle
@@ -51,12 +54,19 @@ security protocols and other applications require synchronization
 {{?RFC738}}. Unfortunately, widely deployed protocols such as
 the Network Time Protocol (NTP) {{?RFC5905}} lack essential security
 features, and even newer protocols like Network Time Security (NTS)
-{{?RFC8915}} lack mechanisms to ensure that the servers behave
+{{?RFC8915}} lack mechanisms to observe that the servers behave
 correctly. Furthermore, clients may lack even a basic idea of the
-time, creating bootstrapping problems. Roughtime is intended to permit
-devices to obtain a rough idea of the current time from fairly static
-configuration consisting of a key and a server.
+time, creating bootstrapping problems.
 
+The primary design goal of Roughtime is to permit devices to obtain a
+rough idea of the current time from fairly static configuration
+consisting of a key and a server, and to enable them to report any
+inconsistencies they observe between time servers.
+
+This memo is limited to describing the Roughtime on-wire protocol.
+Apart from describing the malfeasance report format, this memo does
+not describe the ecosystem required for maintaining lists of trusted
+servers and processing malfeasance reports.
 
 # Conventions and Definitions
 
@@ -64,22 +74,22 @@ configuration consisting of a key and a server.
 
 # Protocol Overview {#protocol-overview}
 
-Roughtime is a protocol for rough time synchronization that enables
-clients to provide cryptographic proof of server malfeasance. It does
-so by having responses from servers include a signature over a value
-derived from a nonce in the client request. This provides
-cryptographic proof that the timestamp was issued after the server
-received the client's request. The derived value included in the
-server's response is the root of a Merkle tree which includes the hash
-of the client's nonce as the value of one of its leaf nodes. This
-enables the server to amortize the relatively costly signing operation
-over a number of client requests.
+Roughtime is a protocol for authenticated rough time synchronization
+that enables clients to provide cryptographic proof of server
+malfeasance. It does so by having responses from servers include a
+signature over a value derived from a nonce in the client request.
+This provides cryptographic proof that the timestamp was issued after
+the server received the client's request. The derived value included
+in the server's response is the root of a Merkle tree which includes
+the hash of the client's nonce as the value of one of its leaf nodes.
+This enables the server to amortize the relatively costly signing
+operation over a number of client requests.
 
-Single server mode: At its most basic level, Roughtime is a one round
-protocol in which a completely fresh client requests the current time
-and the server sends a signed response. The response includes a
-timestamp and a radius used to indicate the server's certainty about
-the reported time.
+## Single server mode
+At its most basic level, Roughtime is a one round protocol in which a
+completely fresh client requests the current time and the server sends
+a signed response. The response includes a timestamp and a radius used
+to indicate the server's certainty about the reported time.
 
 The server proves freshness of its response as follows. The client's
 request contains a nonce which the server incorporates into its signed
@@ -87,17 +97,26 @@ response. The client can verify the server's signatures and - provided
 that the nonce has sufficient entropy - this proves that the signed
 response could only have been generated after the nonce.
 
-# The Guarantee
+## Multi server mode
+When using multiple servers, a client can detect, cryptographically
+prove, and report inconsistencies between different servers.
 
-A Roughtime server guarantees that a response to a query sent at
-t<sub>1</sub>, received at t<sub>2</sub>, and with timestamp
-t<sub>3</sub> has been created between t<sub>1</sub> and
-t<sub>2</sub>. If t<sub>3</sub> is not within that interval, a server
-inconsistency may be detected and used to impeach the server. The
-propagation of such a guarantee and its use for time synchronization
-is discussed in {{integration-into-ntp}}. No delay attacker may affect
-this: they may only expand the interval between t<sub>1</sub> and
-t<sub>2</sub>, or of course stop the measurement in the first place.
+A Roughtime server guarantees that for a query received at
+t<sub>1</sub>, a response sent at t<sub>3</sub> always includes a
+timestamp created at a time t<sub>2</sub> which is between
+t<sub>1</sub> and t<sub>3</sub>. If t<sub>2</sub> is not consistent
+with time responses from other servers, this indicates possible server
+error or malfeasance that may be reported (and potentially used to
+impeach the server).
+
+Proofs of malfeasance are constructed by chaining requests to
+different Roughtime servers. For details on proofs and reporting
+malfeasance, see {{roughtime-clients}}. For the reporting to result in
+impeachment, an additional mechanism is required that provides a
+review and impeachment process. Defining such a mechanism is
+beyond the scope of this document. A simple option could be an online
+forum where a court of human observers judge cases after reviewing
+input reports.
 
 # Message Format {#message-format}
 
@@ -112,7 +131,7 @@ Messages MAY be recursive, i.e. the value of a tag can itself be a
 Roughtime message.
 
 ~~~~~
-0                   1                   2                   3
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                   Number of pairs (uint32)                    |
@@ -131,7 +150,7 @@ Roughtime message.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
-.                            Values                             .
+.                           N Values                            .
 .                                                               .
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -139,14 +158,6 @@ Roughtime message.
 {: #figmessage title="Roughtime Message"}
 
 ## Data types
-
-### int32
-
-An int32 is a 32 bit signed integer. It is serialized least
-significant byte first in sign-magnitude representation with the sign
-bit in the most significant bit. The negative zero value (0x80000000)
-MUST NOT be used and any message with it is syntactically invalid and
-MUST be ignored.
 
 ### uint32
 
@@ -162,13 +173,12 @@ significant byte first.
 
 Tags are used to identify values in Roughtime messages. A tag is a
 uint32 but can also be represented as a sequence of up to four ASCII
-characters {{!RFC20}}. ASCII strings shorter than four characters can
-be unambiguously converted to tags by padding them with zero bytes.
-Tags MUST NOT contain any other bytes than capital letters (A-Z) or
-padding zero bytes. For example, the ASCII string "NONC" would
-correspond to the tag 0x434e4f4e and "ZZZZ" would correspond to
-0x5a5a5a5a. Note that when encoded into a message the ASCII values
-will be in the natural bytewise order.
+characters {{!RFC20}} with the first character in the most significant
+byte. ASCII strings shorter than four characters can be unambiguously
+converted to tags by padding them with zero bytes. Tags MUST NOT
+contain any other bytes than capital letters (A-Z) or padding zero
+bytes. For example, the ASCII string "NONC" would correspond to the
+tag 0x434e4f4e and "ZZZZ" would correspond to 0x5a5a5a5a.
 
 ### Timestamp
 
@@ -207,7 +217,7 @@ As described in {{protocol-overview}}, clients initiate time
 synchronization by sending requests containing a nonce to servers who
 send signed time responses in return. Roughtime packets can be sent
 between clients and servers either as UDP datagrams or via TCP
-streams. Servers SHOULD support the UDP transport mode and TCP mode.
+streams. Servers SHOULD support both the UDP and TCP transport modes.
 
 A Roughtime packet MUST be formatted according to {{figpack}} and as
 described here. The first field is a uint64 with the value
@@ -216,8 +226,8 @@ and contains the length of the third field. The third and last field
 contains a Roughtime message as specified in {{message-format}}.
 
 ~~~~~
-0                   1                   2                   3
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                  0x4d49544847554f52 (uint64)                  |
 |                        ("ROUGHTIM")                           |
@@ -250,8 +260,8 @@ list of one or more uint32 version numbers. The version of Roughtime
 specified by this memo has version number 1.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
-testing drafts of this memo, a version number of 0x80000000 plus the
-draft number is used.
+testing this draft of the memo, a version number of 0x8000000b is
+used.
 
 ## Requests
 
@@ -264,13 +274,13 @@ The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
 added to the message. Responding to requests shorter than 1024 bytes
 is OPTIONAL and servers MUST NOT send responses larger than the
-requests they are replying to.
+requests they are replying to, see {{security-considerations}}.
 
 ### VER
 
-In a request, the VER tag contains a list of versions. The VER tag
-MUST include at least one Roughtime version supported by the
-client. The client MUST ensure that the version numbers and tags
+In a request, the VER tag contains a list of uint32 version numbers.
+The VER tag MUST include at least one Roughtime version supported by
+the client. The client MUST ensure that the version numbers and tags
 included in the request are not incompatible with each other or the
 packet contents.
 
@@ -287,13 +297,13 @@ guidelines regarding this {{!RFC4086}}.
 The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is `H(0xff || public_key)` where `public_key` is the server's
-long-term, 32-byte Ed25519 public key and H is SHA512 truncated to
+long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
 the first 32 bytes.
 
 ### ZZZZ
 
 The ZZZZ tag is used to expand the response to the minimum required
-length. Its value MUST be a string of all zeros.
+length. Its value MUST be all zero bytes.
 
 ## Responses
 
@@ -357,16 +367,16 @@ of the accuracy of MIDP in seconds. Servers MUST ensure that the true
 time is within (MIDP-RADI, MIDP+RADI) at the time they transmit the
 response message.
 
-The value of the RADI tag MUST be at least 3 seconds. Otherwise leap seconds will impact the
-observed correctness of Roughtime servers.
+The value of the RADI tag MUST be at least 3 seconds. Otherwise leap
+seconds will impact the observed correctness of Roughtime servers.
 
 ### CERT
 
 The CERT tag contains a public-key certificate signed with the
-server's long-term key. Its value is a Roughtime message with the tags
-DELE and SIG, where SIG is a signature over the DELE value. The
-context string used to generate SIG MUST be "RoughTime v1 delegation
-signature--".
+server's private long-term key. Its value is a Roughtime message with
+the tags DELE and SIG, where SIG is a signature over the DELE value.
+The context string used to generate SIG MUST be "RoughTime v1
+delegation signature--".
 
 The DELE tag contains a delegated public-key certificate used by the
 server to sign the SREP tag. Its value is a Roughtime message with the
@@ -464,27 +474,32 @@ clock on the machine. Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
 (t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
-to mix with NTP or PTP discipline of the clock is to trim the observed
-intervals in NTP to fit entirely within this window or reject
-measurements that fall to far outside. This assumes time has not been
-stepped. If the NTP process decides to step the time, it MUST use
-Roughtime to ensure the new truetime estimate that will be stepped to
-is consistent with the true time.  Should this window become too
-large, another Roughtime measurement is called for. The definition of
-"too large" is implementation defined. Implementations MAY use other,
-more sophisticated means of adjusting the clock respecting Roughtime
-information. Other applications such as X.509 verification may wish to
-apply different rules.
+to mix with NTP or Precision Time Protocol (PTP) discipline of the
+clock is to trim the observed intervals in NTP to fit entirely within
+this window or reject measurements that fall to far outside. This
+assumes time has not been stepped. If the NTP process decides to step
+the time, it MUST use Roughtime to ensure the new truetime estimate
+that will be stepped to is consistent with the true time.  Should this
+window become too large, another Roughtime measurement is called for.
+The definition of "too large" is implementation defined.
+Implementations MAY use other, more sophisticated means of adjusting
+the clock respecting Roughtime information. Other applications such as
+X.509 verification may wish to apply different rules.
 
 # Grease
 
-Servers SHOULD send back a fraction of responses that are syntactically
-invalid or contain invalid signatures as well as incorrect
-times. Clients MUST properly reject such responses. Servers MUST NOT
-send back responses with incorrect times and valid signatures. Either
-signature MAY be invalid for this application.
+The primary purpose of grease is to prevent protocol ossification,
+which could prohibit future protocol extensions and development
+{{!RFC9170}}. In Roughtime, grease is also intended to ensure that
+clients validate signatures. To grease the Roughtime protocol, servers
+SHOULD send back a fraction of responses with any of the following:
+lack of mandatory tags, version numbers not in the request, undefined
+tags, or invalid signatures together with incorrect times. Clients
+MUST properly ignore undefined tags and reject invalid responses.
+Servers MUST NOT send back responses with incorrect times and valid
+signatures. Either signature MAY be invalid for this application.
 
-# Roughtime Clients
+# Roughtime Clients {#roughtime-clients}
 
 ## Necessary configuration
 
@@ -496,32 +511,38 @@ failure report as described below.
 
 ##  Measurement sequence
 
-The client randomly permutes three servers from the list, and
+The client randomly selects at least three servers from the list, and
 sequentially queries them. The first probe uses a NONC that is
-randomly generated. The second query uses `H(resp || rand)` where rand
-is a random 32 byte value and resp is the entire response to the first
-probe. The third query uses `H(resp || rand)` for a different 32 byte
-value.  If the times reported are consistent with the causal ordering,
-and the delay is within a system provided parameter, the measurement
-succeeds. If they are not consistent, there has been malfeasance and
-the client SHOULD store a report for evaluation, alert the operator,
-and make another measurement.
+randomly generated. The second query uses `H(resp || rand)` where
+`rand` is a random 32 byte value and `resp` is the entire response to
+the first probe, including the "ROUGHTIM" header. The third query uses
+`H(resp || rand)` for a different 32 byte value. `H(x)` and `||` are
+defined as in {{check-algorithm}}. If the times reported are
+consistent with the causal ordering, and the delay is within a system
+provided parameter, the measurement succeeds. If they are not
+consistent, there has been malfeasance and the client SHOULD store a
+report for evaluation, alert the operator, and make another
+measurement.
 
-## Malfeasence reporting
+## Malfeasance reporting
 
-A malfeasance report is a JSON {{!RFC8259}} object with keys "nonces",
-containing an array of the rand values as base64-encoded {{!RFC4648}}
-strings, and "responses", containing an array of the responses as
-base64-encoded strings.
+A malfeasance report is a JSON {{!RFC8259}} object containing the key
+"responses". Its value is a list of response objects. Each response
+object contains the keys "nonce", "publicKey", and "response". The
+value of "nonce" is the nonce sent in the request. The value of
+"publicKey" is expected long-term key used to derive the response
+signature. The value of "response" is the entire received response,
+including the "ROUGHTIM" header. All three values are represented as
+base64-encoded {{!RFC4648}} strings.
 
-Malfeasence reports MAY be transported by any means to the relevant
+Malfeasance reports MAY be transported by any means to the relevant
 vendor or server operator for discussion. A malfeasance report is
 cryptographic proof that the responses arrived in that order, and can
 be used to demonstrate that at least one server sent the wrong time.
 The venues for sharing such reports and what to do about them are
 outside the scope of this document.
 
-# Security Considerations
+# Security Considerations {#security-considerations}
 
 Since the only supported signature scheme, Ed25519, is not quantum
 resistant, the Roughtime version described in this memo will not
@@ -658,6 +679,8 @@ The initial contents of this registry SHALL be as follows:
 {:numbered="false"}
 
 Aanchal Malhotra and Adam Langley authored early drafts of this memo.
-Thomas Peterson corrected multiple nits. Peter Löthberg, Tal Mizrahi,
-Ragnar Sundblad, Kristof Teichel, and the other members of the NTP
-working group contributed comments and suggestions.
+Daniel Franke, Martin Langer, Ben Laurie, Peter Löthberg, Hal Murray,
+Tal Mizrahi, Christopher Patton, Thomas Peterson, Rich Salz, Ragnar
+Sundblad, Kristof Teichel, David Venhoek, Ulrich Windl, and the other
+members of the NTP working group contributed comments and suggestions
+as well as pointed out errors.
