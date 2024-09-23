@@ -123,7 +123,7 @@ Messages MAY be recursive, i.e. the value of a tag can itself be a
 Roughtime message.
 
 ~~~~~
-0                   1                   2                   3
+ 0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                   Number of pairs (uint32)                    |
@@ -227,8 +227,8 @@ and contains the length of the third field. The third and last field
 contains a Roughtime message as specified in {{message-format}}.
 
 ~~~~~
-0                   1                   2                   3
-0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+ 0                   1                   2                   3
+ 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                  0x4d49544847554f52 (uint64)                  |
 |                        ("ROUGHTIM")                           |
