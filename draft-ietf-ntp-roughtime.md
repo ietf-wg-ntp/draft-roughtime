@@ -150,7 +150,7 @@ Roughtime message.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
-.                            Values                             .
+.                           N Values                            .
 .                                                               .
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -274,7 +274,7 @@ The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
 added to the message. Responding to requests shorter than 1024 bytes
 is OPTIONAL and servers MUST NOT send responses larger than the
-requests they are replying to.
+requests they are replying to, see {{security-considerations}}.
 
 ### VER
 
@@ -297,13 +297,13 @@ guidelines regarding this {{!RFC4086}}.
 The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is `H(0xff || public_key)` where `public_key` is the server's
-long-term, 32-byte Ed25519 public key and H is SHA512 truncated to
+long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
 the first 32 bytes.
 
 ### ZZZZ
 
 The ZZZZ tag is used to expand the response to the minimum required
-length. Its value MUST be a string of all zeros.
+length. Its value MUST be all zero bytes.
 
 ## Responses
 
@@ -373,10 +373,10 @@ seconds will impact the observed correctness of Roughtime servers.
 ### CERT
 
 The CERT tag contains a public-key certificate signed with the
-server's long-term key. Its value is a Roughtime message with the tags
-DELE and SIG, where SIG is a signature over the DELE value. The
-context string used to generate SIG MUST be "RoughTime v1 delegation
-signature--".
+server's private long-term key. Its value is a Roughtime message with
+the tags DELE and SIG, where SIG is a signature over the DELE value.
+The context string used to generate SIG MUST be "RoughTime v1
+delegation signature--".
 
 The DELE tag contains a delegated public-key certificate used by the
 server to sign the SREP tag. Its value is a Roughtime message with the
@@ -474,17 +474,17 @@ clock on the machine. Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
 (t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
-to mix with NTP or PTP discipline of the clock is to trim the observed
-intervals in NTP to fit entirely within this window or reject
-measurements that fall to far outside. This assumes time has not been
-stepped. If the NTP process decides to step the time, it MUST use
-Roughtime to ensure the new truetime estimate that will be stepped to
-is consistent with the true time.  Should this window become too
-large, another Roughtime measurement is called for. The definition of
-"too large" is implementation defined. Implementations MAY use other,
-more sophisticated means of adjusting the clock respecting Roughtime
-information. Other applications such as X.509 verification may wish to
-apply different rules.
+to mix with NTP or Precision Time Protocol (PTP) discipline of the
+clock is to trim the observed intervals in NTP to fit entirely within
+this window or reject measurements that fall to far outside. This
+assumes time has not been stepped. If the NTP process decides to step
+the time, it MUST use Roughtime to ensure the new truetime estimate
+that will be stepped to is consistent with the true time.  Should this
+window become too large, another Roughtime measurement is called for.
+The definition of "too large" is implementation defined.
+Implementations MAY use other, more sophisticated means of adjusting
+the clock respecting Roughtime information. Other applications such as
+X.509 verification may wish to apply different rules.
 
 # Grease
 
@@ -513,15 +513,16 @@ failure report as described below.
 
 The client randomly selects at least three servers from the list, and
 sequentially queries them. The first probe uses a NONC that is
-randomly generated. The second query uses `H(resp || rand)` where rand
-is a random 32 byte value and resp is the entire response to the first
-probe, including the "ROUGHTIM" header. The third query uses `H(resp
-|| rand)` for a different 32 byte value. `H(x)` and `||` are defined
-as above. If the times reported are consistent with the causal
-ordering, and the delay is within a system provided parameter, the
-measurement succeeds. If they are not consistent, there has been
-malfeasance and the client SHOULD store a report for evaluation, alert
-the operator, and make another measurement.
+randomly generated. The second query uses `H(resp || rand)` where
+`rand` is a random 32 byte value and `resp` is the entire response to
+the first probe, including the "ROUGHTIM" header. The third query uses
+`H(resp || rand)` for a different 32 byte value. `H(x)` and `||` are
+defined as in {{check-algorithm}}. If the times reported are
+consistent with the causal ordering, and the delay is within a system
+provided parameter, the measurement succeeds. If they are not
+consistent, there has been malfeasance and the client SHOULD store a
+report for evaluation, alert the operator, and make another
+measurement.
 
 ## Malfeasance reporting
 
@@ -541,7 +542,7 @@ be used to demonstrate that at least one server sent the wrong time.
 The venues for sharing such reports and what to do about them are
 outside the scope of this document.
 
-# Security Considerations
+# Security Considerations {#security-considerations}
 
 Since the only supported signature scheme, Ed25519, is not quantum
 resistant, the Roughtime version described in this memo will not
