@@ -37,9 +37,12 @@ informative:
 
 --- abstract
 
-This document specifies Roughtime - a protocol that aims to achieve
-rough time synchronization even for clients without any idea of what
-time it is.
+This document describes Roughtime - a protocol that aims to achieve
+two things: enabling rough time synchronization even for clients
+without any idea of what time it is, and giving clients a format by
+which to report any inconsistencies they observe between time servers.
+This document specifies the on-wire protocol required for these goals,
+and discusses aspects of the ecosystem needed for it to work.
 
 
 --- middle
@@ -51,11 +54,12 @@ security protocols and other applications require synchronization
 {{?RFC738}}. Unfortunately, widely deployed protocols such as
 the Network Time Protocol (NTP) {{?RFC5905}} lack essential security
 features, and even newer protocols like Network Time Security (NTS)
-{{?RFC8915}} lack mechanisms to ensure that the servers behave
+{{?RFC8915}} lack mechanisms to observe that the servers behave
 correctly. Furthermore, clients may lack even a basic idea of the
 time, creating bootstrapping problems. Roughtime is intended to permit
 devices to obtain a rough idea of the current time from fairly static
-configuration consisting of a key and a server.
+configuration consisting of a key and a server, and to enable them to
+report any inconsistencies they observe between time servers.
 
 
 # Conventions and Definitions
@@ -75,11 +79,11 @@ of the client's nonce as the value of one of its leaf nodes. This
 enables the server to amortize the relatively costly signing operation
 over a number of client requests.
 
-Single server mode: At its most basic level, Roughtime is a one round
-protocol in which a completely fresh client requests the current time
-and the server sends a signed response. The response includes a
-timestamp and a radius used to indicate the server's certainty about
-the reported time.
+## Single server mode
+At its most basic level, Roughtime is a one round protocol in which a
+completely fresh client requests the current time and the server sends
+a signed response. The response includes a timestamp and a radius used
+to indicate the server's certainty about the reported time.
 
 The server proves freshness of its response as follows. The client's
 request contains a nonce which the server incorporates into its signed
@@ -87,17 +91,24 @@ response. The client can verify the server's signatures and - provided
 that the nonce has sufficient entropy - this proves that the signed
 response could only have been generated after the nonce.
 
-# The Guarantee
+## Multi server mode
+When using multiple servers, a client can detect, cryptographically
+prove, and report inconsistencies between different servers.
 
-A Roughtime server guarantees that a response to a query sent at
-t<sub>1</sub>, received at t<sub>2</sub>, and with timestamp
-t<sub>3</sub> has been created between t<sub>1</sub> and
-t<sub>2</sub>. If t<sub>3</sub> is not within that interval, a server
-inconsistency may be detected and used to impeach the server. The
-propagation of such a guarantee and its use for time synchronization
-is discussed in {{integration-into-ntp}}. No delay attacker may affect
-this: they may only expand the interval between t<sub>1</sub> and
-t<sub>2</sub>, or of course stop the measurement in the first place.
+A Roughtime server guarantees that for a query received at
+t<sub>1</sub>, a response sent at t<sub>3</sub> always includes a
+timestamp created at a time t<sub>2</sub> which is between
+t<sub>1</sub> and t<sub>3</sub>. If t<sub>2</sub> does not seem to be
+within that interval when compared to information of other servers
+previous or later, a server inconsistency may be detected and reported
+(and potentially used to impeach the server).
+
+For details on the reporting process, see {{roughtime-clients}}. For
+the reporting to result in impeachment, an additional ecosystem is
+required that provides a review an impeachment process. Defining such
+an ecosystem is out-of-scope of this document. A simple option could
+be an online forum where a court of human observers judge cases after
+reviewing input reports.
 
 # Message Format {#message-format}
 
@@ -357,8 +368,8 @@ of the accuracy of MIDP in seconds. Servers MUST ensure that the true
 time is within (MIDP-RADI, MIDP+RADI) at the time they transmit the
 response message.
 
-The value of the RADI tag MUST be at least 3 seconds. Otherwise leap seconds will impact the
-observed correctness of Roughtime servers.
+The value of the RADI tag MUST be at least 3 seconds. Otherwise leap
+seconds will impact the observed correctness of Roughtime servers.
 
 ### CERT
 
@@ -478,13 +489,13 @@ apply different rules.
 
 # Grease
 
-Servers SHOULD send back a fraction of responses that are syntactically
-invalid or contain invalid signatures as well as incorrect
-times. Clients MUST properly reject such responses. Servers MUST NOT
-send back responses with incorrect times and valid signatures. Either
-signature MAY be invalid for this application.
+Servers SHOULD send back a fraction of responses that are
+syntactically invalid or contain invalid signatures as well as
+incorrect times. Clients MUST properly reject such responses. Servers
+MUST NOT send back responses with incorrect times and valid
+signatures. Either signature MAY be invalid for this application.
 
-# Roughtime Clients
+# Roughtime Clients {#roughtime-clients}
 
 ## Necessary configuration
 
