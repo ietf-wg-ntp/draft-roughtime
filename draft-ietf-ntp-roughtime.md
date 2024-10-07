@@ -286,6 +286,11 @@ packet contents.
 
 The version numbers MUST NOT repeat.
 
+Servers SHOULD ignore any unknown version numbers in the list supplied
+by the client. If the list contains no version numbers supported by
+the server, it MAY respond with another version or ignore the request
+entirely, see {{response-ver}}.
+
 ### NONC
 
 The value of the NONC tag is a 32 byte nonce. It SHOULD be generated
@@ -333,7 +338,7 @@ The SIG tag in the root of a response MUST be a signature over the
 SREP value using the public key contained in CERT. The context string
 MUST be "RoughTime v1 response signature".
 
-### VER
+### VER {#response-ver}
 
 In a response, the VER tag MUST contain a single version number. It
 SHOULD be one of the version numbers supplied by the client in its
