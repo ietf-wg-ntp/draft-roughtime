@@ -1,7 +1,7 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-09-10T00:48:20.578397+00:00",
-  "repo": "wbl/roughtime-draft",
+  "timestamp": "2024-10-10T00:40:01.937269+00:00",
+  "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
       "name": "bug",
@@ -52,598 +52,198 @@
   "issues": [
     {
       "number": 1,
-      "id": "I_kwDOLYaY4c6A1lHT",
-      "title": "Break lines at 80 characters",
-      "url": "https://github.com/wbl/roughtime-draft/issues/1",
+      "id": "I_kwDOMvYKEc6W4xd0",
+      "title": "Freeze version tag until breaking changes are needed",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/1",
       "state": "CLOSED",
       "author": "cjpatton",
-      "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
-      "body": "This make it easier to edit with more text editors (vim in particular) and to read PRs.",
-      "createdAt": "2024-02-29T15:30:31Z",
-      "updatedAt": "2024-03-01T21:30:50Z",
-      "closedAt": "2024-03-01T21:30:50Z",
-      "comments": [
-        {
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "body": "Done",
-          "createdAt": "2024-03-01T21:30:50Z",
-          "updatedAt": "2024-03-01T21:30:50Z"
-        }
-      ]
-    },
-    {
-      "number": 4,
-      "id": "I_kwDOLYaY4c6Fj5vd",
-      "title": "ZZZZ Tag does not match Ascii representation",
-      "url": "https://github.com/wbl/roughtime-draft/issues/4",
-      "state": "CLOSED",
-      "author": "cjpatton",
-      "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
-      "body": "https://github.com/wbl/roughtime-draft/blob/695381624a2478973d7f090dc60725746a4433d8/draft-ietf-ntp-roughtime.md?plain=1#L537\r\n\r\n\"ZZZZ\" is 0x5a5a5a5a in hex, not 0x7a7a7a7a. This is \"zzzz\".\r\n\r\nThe intention is probably \"ZZZZ\", so the table should be updated to 0x5a5a5a5a.",
-      "createdAt": "2024-04-12T19:35:00Z",
-      "updatedAt": "2024-06-17T20:52:04Z",
-      "closedAt": "2024-06-17T20:52:04Z",
-      "comments": []
-    },
-    {
-      "number": 6,
-      "id": "I_kwDOLYaY4c6L5KSq",
-      "title": "Fix GitHub Repository link in Additional Resources on datatracker",
-      "url": "https://github.com/wbl/roughtime-draft/issues/6",
-      "state": "OPEN",
-      "author": "lukevalenta",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "The GitHub repo linked in the additional resources section of https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime/ is still https://github.com/aanchal4/draft-roughtime, but should be updated to this repo.",
-      "createdAt": "2024-06-11T18:15:23Z",
-      "updatedAt": "2024-06-17T20:52:22Z",
-      "closedAt": null,
+      "body": "At this point it would be helpful if we stopped bumping the version tag when a purely editorial draft is cut. This allows deployed clients and servers to be forward compatible.\r\n\r\nOf course, if breaking changes are needed at some point, then it's appropriate to change the tag as well.\r\n\r\nNote that draft-ietf-ntp-roughtime-11 has version `0x8000000b`. ",
+      "createdAt": "2024-09-17T15:27:52Z",
+      "updatedAt": "2024-09-23T21:35:05Z",
+      "closedAt": "2024-09-23T21:35:04Z",
       "comments": [
         {
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "body": "Have escalated to the WG Chair who is the person who can solve this.",
-          "createdAt": "2024-06-17T20:52:21Z",
-          "updatedAt": "2024-06-17T20:52:21Z"
+          "author": "dansarie",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I just made a pull request (#4) that should address this.",
+          "createdAt": "2024-09-23T20:38:50Z",
+          "updatedAt": "2024-09-23T20:38:50Z"
         }
       ]
-    }
-  ],
-  "pulls": [
+    },
     {
       "number": 2,
-      "id": "PR_kwDOLYaY4c5onxTF",
-      "title": "Add support for key multiplexing",
-      "url": "https://github.com/wbl/roughtime-draft/pull/2",
-      "state": "MERGED",
-      "author": "cjpatton",
-      "authorAssociation": "COLLABORATOR",
+      "id": "I_kwDOMvYKEc6W-5mQ",
+      "title": "Grease support",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/2",
+      "state": "CLOSED",
+      "author": "fiestajetsam",
+      "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
-      "body": "Resolves https://github.com/aanchal4/draft-roughtime/issues/46.\r\n\r\nAdd multi-tenancy as an operational consideration. The idea is that if multiple servers share the same IP or port space, then the client needs a way to indicate which server it expects to respond to a request.\r\n\r\nTo resolve this, define a new request tag, SRV, that indicates the DNS name associated with long-term public key the client expects to verify the response with.",
-      "createdAt": "2024-03-04T18:02:33Z",
-      "updatedAt": "2024-05-13T16:37:30Z",
-      "baseRepository": "wbl/roughtime-draft",
-      "baseRefName": "main",
-      "baseRefOid": "1a2d2d12c088e129ac662db4790ab263abed1c3b",
-      "headRepository": "cjpatton/roughtime-draft",
-      "headRefName": "multi-key",
-      "headRefOid": "06874c43ff95ac5487964e05dd08c318d6f724de",
-      "closedAt": "2024-05-13T16:37:30Z",
-      "mergedAt": "2024-05-13T16:37:30Z",
-      "mergedBy": "wbl",
-      "mergeCommit": {
-        "oid": "243e6e16a941d8b0ee77292d13dbd165103a2665"
-      },
+      "body": "[From a mail from](https://mailarchive.ietf.org/arch/msg/ntp/qa0iCrhqeVEtwt28pGH32dSV0sY/) @davidv1992:\r\n\r\n> First of all, regarding the ver tag, there is no requirement for\r\nservers to ignore unknown versions in that tag. this means that\r\ntechnically it is valid behavior right now for a server receiving\r\nunknown versions to reject that packet, even if there is version\r\noverlap. This seems highly undesirable\r\n\r\n> Second, the grease section seems to contain no mechanisms for actually\r\nexercising either the ignoring of unknown tags by servers (or clients\r\nfor that matter) nor for exercising the version negotiation mechanism.\r\nGiven the experience in TLS with this, this is probably a really good\r\nidea to include.\r\n\r\n> Finally, the grease section indicates the server must send malformed\r\npackets some amount of the time to clients to exercise the rejection\r\nmechanism, but doesn't specify in which way it may malform the\r\npackets. Thus servers could do this in ways that could potentially\r\nreduce future design space. I would be much more comfortable if we\r\nspecified a specific set of things the server is allowed to do to\r\ncreate malformed packets, so that we at least have control over which\r\nparts of the future design space are excluded.\r\n\r\nThis was also discussed at [interim](https://datatracker.ietf.org/doc/minutes-interim-2024-ntp-04-202409171500/) yesterday.",
+      "createdAt": "2024-09-18T08:29:29Z",
+      "updatedAt": "2024-10-07T19:58:04Z",
+      "closedAt": "2024-10-07T19:58:04Z",
       "comments": [
         {
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "body": "Rebased.",
-          "createdAt": "2024-04-25T14:03:47Z",
-          "updatedAt": "2024-04-25T14:03:47Z"
+          "author": "dansarie",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I just made a pull request (#4) updating the grease section, which should hopefully be a step towards resolving this. I do not fully understand what the problem described in the first paragraph is. Will ask on the mailing list.",
+          "createdAt": "2024-09-23T20:38:24Z",
+          "updatedAt": "2024-09-23T20:38:24Z"
         },
         {
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "body": "Squashed.",
-          "createdAt": "2024-04-29T17:06:24Z",
-          "updatedAt": "2024-04-29T17:06:24Z"
+          "author": "dansarie",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I just made another pull request (#5) clarifying the use of the VER tag in requests, to resolve the problem described in the first paragraph.",
+          "createdAt": "2024-10-07T19:22:25Z",
+          "updatedAt": "2024-10-07T19:22:25Z"
         },
         {
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "body": "This is ready to merge. I deleted the extra privacy consideration as I think it's covered by the current text.",
-          "createdAt": "2024-04-29T17:16:28Z",
-          "updatedAt": "2024-04-29T17:16:28Z"
-        }
-      ],
-      "reviews": [
-        {
-          "id": "PRR_kwDOLYaY4c5yJBHQ",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-03-04T18:03:54Z",
-          "updatedAt": "2024-03-04T18:03:54Z",
-          "comments": [
-            {
-              "originalPosition": 95,
-              "body": "Reviewer note: I'm not super confident about this text. It seems like we need to say something about the extra fingerprinting risk, but I'm not sure what to say.\r\n\r\nI guess the fingerprinting risk is similar to SNI for TLS, although it's important to emphasize that we don't lose privacy in the same way.",
-              "createdAt": "2024-03-04T18:03:54Z",
-              "updatedAt": "2024-03-04T18:03:54Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c5yJy4y",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
           "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "CHANGES_REQUESTED",
-          "body": "",
-          "createdAt": "2024-03-04T19:26:15Z",
-          "updatedAt": "2024-03-04T19:26:19Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "I'm not sure we want a 1:1 mapping of key to DNS name. Wasn't the idea here to have multiple keys on the same DNS name? Also typo in server",
-              "createdAt": "2024-03-04T19:26:15Z",
-              "updatedAt": "2024-03-04T19:26:19Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c5yKM6y",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "cjpatton",
           "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-03-04T20:27:18Z",
-          "updatedAt": "2024-03-04T20:27:18Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "Fixed the typo.\r\n\r\nFrom CF's perspective, the goal is be able to support multiple long-term keys on the same IP and port. It's fine if the mapping from long-term public keys to DNS names is 1:1.\r\n\r\nAlso, matches your suggestion here: https://mailarchive.ietf.org/arch/msg/ntp/K1InWKz-VKdL20KgSqj6AV0p4cs/",
-              "createdAt": "2024-03-04T20:27:18Z",
-              "updatedAt": "2024-03-04T20:27:18Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c53_GhU",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-20T05:26:55Z",
-          "updatedAt": "2024-04-20T05:26:55Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "I listed that more as a possibility than something to do",
-              "createdAt": "2024-04-20T05:26:55Z",
-              "updatedAt": "2024-04-20T05:26:55Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c54js6S",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-25T14:07:12Z",
-          "updatedAt": "2024-04-25T14:07:12Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "I think 1:1 mapping is perfectly fine, and I don't mind using the DNS name this way. If you don't think this would work, I think the best alternative is to replace `dns_name` input to the hash with the long-lived public key.\r\n\r\nWhat would you like to do? Do you have a suggestion for an alternative?",
-              "createdAt": "2024-04-25T14:07:12Z",
-              "updatedAt": "2024-04-25T14:07:12Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c54lm1k",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-25T17:10:47Z",
-          "updatedAt": "2024-04-25T17:10:47Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "How about hash the public key? I prefer that, but we might have to go to the list for consensus",
-              "createdAt": "2024-04-25T17:10:47Z",
-              "updatedAt": "2024-04-25T17:10:47Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c54nAWC",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-25T20:13:22Z",
-          "updatedAt": "2024-04-25T20:13:23Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "Either works for me. We previously discussed hashing the public key as being potentially problematic from a fingerprinting standpoint, but tbh I don't think we're all that much better off with the DNS name. (A malicious roughtime server can always advertise DNS names to specific clients.)",
-              "createdAt": "2024-04-25T20:13:23Z",
-              "updatedAt": "2024-04-25T20:13:23Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c54nCNk",
-          "commit": {
-            "abbreviatedOid": "8afc804"
-          },
-          "author": "cjpatton",
-          "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-25T20:18:29Z",
-          "updatedAt": "2024-04-25T20:18:30Z",
-          "comments": [
-            {
-              "originalPosition": 37,
-              "body": "Tacked on a commit for this, PTAL.",
-              "createdAt": "2024-04-25T20:18:30Z",
-              "updatedAt": "2024-04-25T20:18:30Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c54wXi8",
-          "commit": {
-            "abbreviatedOid": "0fbbc06"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "APPROVED",
-          "body": "",
-          "createdAt": "2024-04-26T22:25:03Z",
-          "updatedAt": "2024-04-29T17:05:58Z",
-          "comments": []
+          "body": "I think we can close this",
+          "createdAt": "2024-10-07T19:58:04Z",
+          "updatedAt": "2024-10-07T19:58:04Z"
         }
       ]
     },
     {
       "number": 3,
-      "id": "PR_kwDOLYaY4c5rQHik",
-      "title": "Editorial changes to draft",
-      "url": "https://github.com/wbl/roughtime-draft/pull/3",
+      "id": "I_kwDOMvYKEc6W_SIe",
+      "title": "Simplification of server response",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/3",
+      "state": "CLOSED",
+      "author": "fiestajetsam",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Originally Roughtime just sent over one, fixed cert and at some point switched to having a long lived, and an delegated cert. The current structure of server response is a few layers deep, and I'd propose a flattening out of it. If we represent it as something JSON-like, it should look as of -11 like:\r\n\r\n```\r\n{\r\n  VER: uint32,\r\n  PATH: Path,\r\n  INDX: uint32,\r\n  CERT: {\r\n    SIG: ed25519ctx signature,\r\n    DELE: {\r\n      MINT: Timestamp,\r\n      MAXT: Timestamp,\r\n      PUBK: ed25519 public key,\r\n    }\r\n  },\r\n  SIG: edd25519ctx signature,\r\n  SREP: {\r\n    ROOT: Root,\r\n    MIDP: Timestamp,\r\n    RADI: uint32\r\n  }\r\n}\r\n```\r\n\r\nWhat I propose is a slight restructure, flattening out:\r\n```\r\n{\r\n  VER: uint32,\r\n  PATH: Path,\r\n  INDX: uint32,\r\n  CSIG: ed25519ctx signature,\r\n  CERT: {\r\n    MINT: Timestamp,\r\n    MAXT: Timestamp,\r\n    PUBK: ed25519 public key\r\n  },\r\n  TSIG: ed25519ctx signature,\r\n  SREP: {\r\n    ROOT: Root,\r\n    MIDP: Timestamp,\r\n    RADI: uint32\r\n  }\r\n}\r\n```\r\nThere's a few reasons for this:\r\n* By having the time and cert signatures with distinct tags, implementers have a clearer delineation of what the tag represents, not based on it's placement in the structure\r\n* Removes a layer of nesting, which is a _tiny_ payload size improvement\r\n* Existing implementations could support this and old without exclusively depending on accurate version reporting - by checking for CSIG (and DELE), validation of CERT/DELE could be handled appropriately.",
+      "createdAt": "2024-09-18T09:16:23Z",
+      "updatedAt": "2024-10-07T20:12:02Z",
+      "closedAt": "2024-10-07T20:12:02Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "I'm happy with the way it currently is. If this is implemented, it should be detected through version reporting - anything else just adds complexity and weirdness.",
+          "createdAt": "2024-09-23T20:43:24Z",
+          "updatedAt": "2024-09-23T20:43:24Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I'm going to stick with as is. It's nice to have to signature with the delegation, and I don't think it saves a lot of implementation complexity",
+          "createdAt": "2024-10-07T19:59:36Z",
+          "updatedAt": "2024-10-07T19:59:36Z"
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "id": "I_kwDOMvYKEc6Zl71r",
+      "title": "Timescales finally",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/6",
+      "state": "OPEN",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Do we need to add some more text to clarify what's there?",
+      "createdAt": "2024-10-09T20:10:19Z",
+      "updatedAt": "2024-10-09T20:10:19Z",
+      "closedAt": null,
+      "comments": []
+    }
+  ],
+  "pulls": [
+    {
+      "number": 4,
+      "id": "PR_kwDOMvYKEc58bB48",
+      "title": "Copy-editing and fix of multiple issues",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/4",
       "state": "MERGED",
       "author": "dansarie",
       "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
-      "body": "This fixes a number of minor issues with the draft, including many mentioned in aanchal4/draft-roughtime#45. None of them should be controversial.\r\n\r\n* Update author name and organzation.\r\n* Fix misspellings and missing commas.\r\n* Many sections were mushed together into a single paragraph when the draft was converted to Markdown. They are now split up into separate paragraphs again.\r\n* Fix links to sections and figures.\r\n* Update description of radius in protocol overview to be consistent with new radius format.\r\n* Proper variable index subscript in \"The Guarantee\".\r\n* Replace PAD example with ZZZZ example.\r\n* Some clarifications in \"Root Value Validity Check Algorithm\"\r\n* Fix paragraphs in \"IANA Considerations\" that were cut off in the pdf version.\r\n* Move \"Privacy Considerations\" to come after \"Security Considerations\".\r\n* Reference RFCs for JSON and base64.",
-      "createdAt": "2024-03-31T14:48:00Z",
-      "updatedAt": "2024-06-16T18:53:51Z",
-      "baseRepository": "wbl/roughtime-draft",
+      "body": "This pull request should address most of Martin and Kristof's comments. It also adds and clarifies the text in a number of places and removes the definition of the now-unused int32 type. The acknowledgments section is also updated.\r\n\r\nThe version tag is frozen as requested in issue #1.\r\n\r\nThe description of grease is improved as requested in issue #2.",
+      "createdAt": "2024-09-23T20:36:53Z",
+      "updatedAt": "2024-09-23T21:34:52Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
-      "baseRefOid": "695381624a2478973d7f090dc60725746a4433d8",
-      "headRepository": "dansarie/roughtime-draft",
-      "headRefName": "nits",
-      "headRefOid": "71a271299a5ce6eb819d00f0877e6918e494ee26",
-      "closedAt": "2024-04-20T05:27:27Z",
-      "mergedAt": "2024-04-20T05:27:27Z",
+      "baseRefOid": "937de508c03e117086d2fa2f4a07c0e865de8df6",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "main",
+      "headRefOid": "d98c561373d805bed5041b8abfc7366c43a14184",
+      "closedAt": "2024-09-23T21:34:52Z",
+      "mergedAt": "2024-09-23T21:34:52Z",
       "mergedBy": "wbl",
       "mergeCommit": {
-        "oid": "1a2d2d12c088e129ac662db4790ab263abed1c3b"
+        "oid": "5ddbda5211b87588d1633145eb3066271b227094"
       },
       "comments": [],
       "reviews": [
         {
-          "id": "PRR_kwDOLYaY4c53HNfu",
+          "id": "PRR_kwDOMvYKEc6KfOYR",
           "commit": {
-            "abbreviatedOid": "d162e01"
-          },
-          "author": "lukevalenta",
-          "authorAssociation": "CONTRIBUTOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-04-12T20:27:41Z",
-          "updatedAt": "2024-04-12T20:27:41Z",
-          "comments": [
-            {
-              "originalPosition": 103,
-              "body": "As per https://github.com/wbl/roughtime-draft/issues/4\r\n```suggestion\r\nthe tag 0x434e4f4e and \"ZZZZ\" would correspond to 0x5a5a5a5a. Note\r\n```",
-              "createdAt": "2024-04-12T20:27:41Z",
-              "updatedAt": "2024-04-12T20:27:41Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c53_Ghk",
-          "commit": {
-            "abbreviatedOid": "71a2712"
+            "abbreviatedOid": "d98c561"
           },
           "author": "wbl",
-          "authorAssociation": "OWNER",
+          "authorAssociation": "COLLABORATOR",
           "state": "APPROVED",
           "body": "",
-          "createdAt": "2024-04-20T05:27:05Z",
-          "updatedAt": "2024-04-20T05:27:05Z",
+          "createdAt": "2024-09-23T21:34:47Z",
+          "updatedAt": "2024-09-23T21:34:47Z",
           "comments": []
         }
       ]
     },
     {
       "number": 5,
-      "id": "PR_kwDOLYaY4c5vkKh0",
-      "title": "Wladd/edit fix problems",
-      "url": "https://github.com/wbl/roughtime-draft/pull/5",
+      "id": "PR_kwDOMvYKEc5927D-",
+      "title": "Clarify VER in request after comments by David Venhoek.",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/5",
       "state": "MERGED",
-      "author": "wbl",
-      "authorAssociation": "OWNER",
+      "author": "dansarie",
+      "authorAssociation": "CONTRIBUTOR",
       "assignees": [],
       "labels": [],
       "body": "",
-      "createdAt": "2024-05-15T18:02:52Z",
-      "updatedAt": "2024-06-11T17:49:33Z",
-      "baseRepository": "wbl/roughtime-draft",
+      "createdAt": "2024-10-07T19:21:01Z",
+      "updatedAt": "2024-10-07T19:57:40Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
-      "baseRefOid": "243e6e16a941d8b0ee77292d13dbd165103a2665",
-      "headRepository": "wbl/roughtime-draft",
-      "headRefName": "wladd/edit-fix-problems",
-      "headRefOid": "4be47c837ac36c41bcd9b75878db7a1a9de9d9a2",
-      "closedAt": "2024-06-11T17:49:33Z",
-      "mergedAt": "2024-06-11T17:49:33Z",
+      "baseRefOid": "5ddbda5211b87588d1633145eb3066271b227094",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "main",
+      "headRefOid": "f5f8a54329993a8f1ef59d5922862227332a0172",
+      "closedAt": "2024-10-07T19:57:40Z",
+      "mergedAt": "2024-10-07T19:57:40Z",
       "mergedBy": "wbl",
       "mergeCommit": {
-        "oid": "0db7e872c3f13903b46291868885e627207eccf2"
+        "oid": "988b5daf6c25cb1fadb2a2d91afe989691572855"
       },
       "comments": [],
       "reviews": [
         {
-          "id": "PRR_kwDOLYaY4c59qKke",
+          "id": "PRR_kwDOMvYKEc6MPTen",
           "commit": {
-            "abbreviatedOid": "aad9875"
+            "abbreviatedOid": "f5f8a54"
           },
-          "author": "cjpatton",
+          "author": "wbl",
           "authorAssociation": "COLLABORATOR",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-06-10T16:02:15Z",
-          "updatedAt": "2024-06-10T16:04:19Z",
-          "comments": [
-            {
-              "originalPosition": 21,
-              "body": "Good clarification!",
-              "createdAt": "2024-06-10T16:02:15Z",
-              "updatedAt": "2024-06-10T16:04:20Z"
-            },
-            {
-              "originalPosition": 43,
-              "body": "I think this is better as its own paragraph. \r\n\r\n```suggestion\r\nresponse message.\r\n\r\nThe value of the RADI tag MUST be at least 3 seconds. Otherwise leap seconds will impact the\r\nobserved correctness of roughtime servers.\r\n```",
-              "createdAt": "2024-06-10T16:03:46Z",
-              "updatedAt": "2024-06-10T16:04:20Z"
-            },
-            {
-              "originalPosition": 52,
-              "body": "What's your thinking for this change?",
-              "createdAt": "2024-06-10T16:04:15Z",
-              "updatedAt": "2024-06-10T16:04:20Z"
-            }
-          ]
-        },
-        {
-          "id": "PRR_kwDOLYaY4c59szFG",
-          "commit": {
-            "abbreviatedOid": "aad9875"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "COMMENTED",
-          "body": "",
-          "createdAt": "2024-06-10T22:54:36Z",
-          "updatedAt": "2024-06-10T22:54:37Z",
-          "comments": [
-            {
-              "originalPosition": 52,
-              "body": "Follows conversation with Marcus.",
-              "createdAt": "2024-06-10T22:54:36Z",
-              "updatedAt": "2024-06-10T22:54:37Z"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "number": 7,
-      "id": "PR_kwDOLYaY4c5yJSRJ",
-      "title": "Fix draft 10 typos",
-      "url": "https://github.com/wbl/roughtime-draft/pull/7",
-      "state": "MERGED",
-      "author": "lukevalenta",
-      "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
-      "labels": [],
-      "body": "",
-      "createdAt": "2024-06-11T18:28:18Z",
-      "updatedAt": "2024-06-11T18:37:46Z",
-      "baseRepository": "wbl/roughtime-draft",
-      "baseRefName": "main",
-      "baseRefOid": "32dfd4b33c69799f563c2bf856ea861cfea29b13",
-      "headRepository": "lukevalenta/roughtime-draft",
-      "headRefName": "patch-1",
-      "headRefOid": "297bbfbccbe70d98e6bbb6e0fae3a1d553c111fd",
-      "closedAt": "2024-06-11T18:37:37Z",
-      "mergedAt": "2024-06-11T18:37:37Z",
-      "mergedBy": "wbl",
-      "mergeCommit": {
-        "oid": "cdcabb932b975a9b9ce34e15d5f6e196c981af64"
-      },
-      "comments": [
-        {
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "body": "Thanks! will hold off on an 11",
-          "createdAt": "2024-06-11T18:37:45Z",
-          "updatedAt": "2024-06-11T18:37:45Z"
-        }
-      ],
-      "reviews": [
-        {
-          "id": "PRR_kwDOLYaY4c591kYC",
-          "commit": {
-            "abbreviatedOid": "297bbfb"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
           "state": "APPROVED",
           "body": "",
-          "createdAt": "2024-06-11T18:37:29Z",
-          "updatedAt": "2024-06-11T18:37:29Z",
+          "createdAt": "2024-10-07T19:57:35Z",
+          "updatedAt": "2024-10-07T19:57:35Z",
           "comments": []
         }
       ]
-    },
-    {
-      "number": 8,
-      "id": "PR_kwDOLYaY4c5ynGTP",
-      "title": "Minor fixes to draft-10.",
-      "url": "https://github.com/wbl/roughtime-draft/pull/8",
-      "state": "MERGED",
-      "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
-      "labels": [],
-      "body": "",
-      "createdAt": "2024-06-16T13:49:43Z",
-      "updatedAt": "2024-06-16T17:48:59Z",
-      "baseRepository": "wbl/roughtime-draft",
-      "baseRefName": "main",
-      "baseRefOid": "cdcabb932b975a9b9ce34e15d5f6e196c981af64",
-      "headRepository": "dansarie/roughtime-draft",
-      "headRefName": "draft-10-fixes",
-      "headRefOid": "877e4d181c55c9e5c27e6b7c876126c9a5e7b7d9",
-      "closedAt": "2024-06-16T17:48:59Z",
-      "mergedAt": "2024-06-16T17:48:59Z",
-      "mergedBy": "wbl",
-      "mergeCommit": {
-        "oid": "21c60bdeabf99fdae0168a3f51ddd5249ee6a001"
-      },
-      "comments": [],
-      "reviews": [
-        {
-          "id": "PRR_kwDOLYaY4c5-c-Oi",
-          "commit": {
-            "abbreviatedOid": "877e4d1"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "APPROVED",
-          "body": "",
-          "createdAt": "2024-06-16T17:48:53Z",
-          "updatedAt": "2024-06-16T17:48:53Z",
-          "comments": []
-        }
-      ]
-    },
-    {
-      "number": 9,
-      "id": "PR_kwDOLYaY4c5ynnDb",
-      "title": "Fix typo and update definition of tags.",
-      "url": "https://github.com/wbl/roughtime-draft/pull/9",
-      "state": "MERGED",
-      "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
-      "assignees": [],
-      "labels": [],
-      "body": "",
-      "createdAt": "2024-06-16T19:28:30Z",
-      "updatedAt": "2024-06-17T20:51:53Z",
-      "baseRepository": "wbl/roughtime-draft",
-      "baseRefName": "main",
-      "baseRefOid": "21c60bdeabf99fdae0168a3f51ddd5249ee6a001",
-      "headRepository": "dansarie/roughtime-draft",
-      "headRefName": "draft-10-fixes",
-      "headRefOid": "ae1f2fcbbd5eaf4497c48fa1a34da7e390fd6bee",
-      "closedAt": "2024-06-17T20:51:52Z",
-      "mergedAt": "2024-06-17T20:51:52Z",
-      "mergedBy": "wbl",
-      "mergeCommit": {
-        "oid": "f20249e8daf9f960d3f5cbc1e648e3a03594fd17"
-      },
-      "comments": [],
-      "reviews": [
-        {
-          "id": "PRR_kwDOLYaY4c5-l9tB",
-          "commit": {
-            "abbreviatedOid": "ae1f2fc"
-          },
-          "author": "wbl",
-          "authorAssociation": "OWNER",
-          "state": "APPROVED",
-          "body": "",
-          "createdAt": "2024-06-17T20:51:33Z",
-          "updatedAt": "2024-06-17T20:51:33Z",
-          "comments": []
-        }
-      ]
-    },
-    {
-      "number": 10,
-      "id": "PR_kwDOLYaY4c52W2xe",
-      "title": "Table 2: Fix byte order of the SRV tag",
-      "url": "https://github.com/wbl/roughtime-draft/pull/10",
-      "state": "MERGED",
-      "author": "cjpatton",
-      "authorAssociation": "COLLABORATOR",
-      "assignees": [],
-      "labels": [],
-      "body": "",
-      "createdAt": "2024-07-24T15:22:17Z",
-      "updatedAt": "2024-07-26T19:22:50Z",
-      "baseRepository": "wbl/roughtime-draft",
-      "baseRefName": "main",
-      "baseRefOid": "f20249e8daf9f960d3f5cbc1e648e3a03594fd17",
-      "headRepository": "cjpatton/roughtime-draft",
-      "headRefName": "fix-table-2-SRV",
-      "headRefOid": "492e75b555e91dbece7fc4949176dbaceeb8638f",
-      "closedAt": "2024-07-26T19:22:50Z",
-      "mergedAt": "2024-07-26T19:22:50Z",
-      "mergedBy": "wbl",
-      "mergeCommit": {
-        "oid": "937de508c03e117086d2fa2f4a07c0e865de8df6"
-      },
-      "comments": [],
-      "reviews": []
     }
   ]
 }
