@@ -11,9 +11,9 @@ v: 3
 area: "Internet"
 workgroup: "Network Time Protocols"
 keyword:
- - next generation
- - unicorn
- - sparkling distributed ledger
+  - timing
+  - authenticity
+  - roughtime
 venue:
   group: "Network Time Protocols"
   type: "Working Group"
