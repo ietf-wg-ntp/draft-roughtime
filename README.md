@@ -2,10 +2,10 @@
 
 This is the working area for the IETF [NTP Working Group](https://datatracker.ietf.org/wg/ntp/documents/) Internet-Draft, "Roughtime".
 
-* [Editor's Copy](https://wbl.github.io/roughtime-draft/#go.draft-ietf-ntp-roughtime.html)
+* [Editor's Copy](https://ietf-wg-ntp.github.io/draft-roughtime/draft-ietf-ntp-roughtime.html)
 * [Datatracker Page](https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime)
 * [Working Group Draft](https://datatracker.ietf.org/doc/html/draft-ietf-ntp-roughtime)
-* [Compare Editor's Copy to Working Group Draft](https://wbl.github.io/roughtime-draft/#go.draft-ietf-ntp-roughtime.diff)
+* [Compare Editor's Copy to Working Group Draft](https://ietf-wg-ntp.github.io/draft-roughtime/#go.draft-ietf-ntp-roughtime.diff)
 
 
 ## Contributing
