@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Informational                               M. Dansarie
-Expires: 12 April 2025                                            Netnod
-                                                          9 October 2024
+Expires: 17 April 2025                                            Netnod
+                                                         14 October 2024
 
 
                                Roughtime
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 April 2025.
+   This Internet-Draft will expire on 17 April 2025.
 
 Copyright Notice
 
