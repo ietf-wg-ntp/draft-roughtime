@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-13T00:43:47.657360+00:00",
+  "timestamp": "2024-10-15T00:40:55.050252+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -244,6 +244,34 @@
           "comments": []
         }
       ]
+    },
+    {
+      "number": 7,
+      "id": "PR_kwDOMvYKEc5-kkvz",
+      "title": "Update draft-ietf-ntp-roughtime.md",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/7",
+      "state": "MERGED",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This fixes up some keywords",
+      "createdAt": "2024-10-14T16:59:12Z",
+      "updatedAt": "2024-10-14T16:59:22Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "988b5daf6c25cb1fadb2a2d91afe989691572855",
+      "headRepository": "ietf-wg-ntp/draft-roughtime",
+      "headRefName": "wbl-patch-1",
+      "headRefOid": "e87aed208c0b0e97bb45cf34d6b2493072dc4718",
+      "closedAt": "2024-10-14T16:59:22Z",
+      "mergedAt": "2024-10-14T16:59:22Z",
+      "mergedBy": "wbl",
+      "mergeCommit": {
+        "oid": "a4e0c0a473d960f9d9306472378e988583bddd7a"
+      },
+      "comments": [],
+      "reviews": []
     }
   ]
 }
