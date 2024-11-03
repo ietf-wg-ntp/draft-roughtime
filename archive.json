@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-10-31T00:41:32.509941+00:00",
+  "timestamp": "2024-11-03T00:44:30.411713+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -156,6 +156,38 @@
       "body": "Do we need to add some more text to clarify what's there?",
       "createdAt": "2024-10-09T20:10:19Z",
       "updatedAt": "2024-10-09T20:10:19Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOMvYKEc6czEWH",
+      "title": "Undefined variables in Sec. 7",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/8",
+      "state": "OPEN",
+      "author": "dsibold",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Section 7 introduces the time interval (t-delta-sigma, t-delta+sigma), in which neither delta nor sigma is defined. From the specification of the interval I would assume that delta is a systematic error whereas sigma is a statistical error. \r\n\r\nDelta and sigma should be explained in order to help the reader to understand the paragraph.",
+      "createdAt": "2024-11-02T17:12:56Z",
+      "updatedAt": "2024-11-02T17:12:56Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 9,
+      "id": "I_kwDOMvYKEc6cziTQ",
+      "title": "Regression between draft-07 and draft-08",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/9",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In draft-07, we changed the DELE signature context from `RoughTime v1 delegation signature--` to `RoughTime v1 delegation signature`. It then changed back in the following draft. Was this intentional or is it a regression? ",
+      "createdAt": "2024-11-02T19:55:58Z",
+      "updatedAt": "2024-11-02T19:55:58Z",
       "closedAt": null,
       "comments": []
     }
