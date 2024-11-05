@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-03T00:44:30.411713+00:00",
+  "timestamp": "2024-11-05T00:40:08.981986+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -188,6 +188,110 @@
       "body": "In draft-07, we changed the DELE signature context from `RoughTime v1 delegation signature--` to `RoughTime v1 delegation signature`. It then changed back in the following draft. Was this intentional or is it a regression? ",
       "createdAt": "2024-11-02T19:55:58Z",
       "updatedAt": "2024-11-02T19:55:58Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 10,
+      "id": "I_kwDOMvYKEc6c1SFd",
+      "title": "Signed response needs to include a hash over entire request and server's maximum supported version",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/10",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "To detect downgrade attacks, the signed response must include a hash of the entire request and the server's maximum supported version. The Merkle tree should be populated with hashes over the requests instead of nonces.",
+      "createdAt": "2024-11-03T13:38:59Z",
+      "updatedAt": "2024-11-03T14:02:44Z",
+      "closedAt": null,
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "CONTRIBUTOR",
+          "body": "The VER tag should also be included in the signed response.",
+          "createdAt": "2024-11-03T14:02:43Z",
+          "updatedAt": "2024-11-03T14:02:43Z"
+        }
+      ]
+    },
+    {
+      "number": 11,
+      "id": "I_kwDOMvYKEc6c1SLa",
+      "title": "Max tree height needs to be specified",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/11",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The maximum tree height should be specified. Currently, there is an implicit height due to the maximum packet size, but this should be made explicit.",
+      "createdAt": "2024-11-03T13:39:55Z",
+      "updatedAt": "2024-11-03T13:39:55Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 12,
+      "id": "I_kwDOMvYKEc6c1UKO",
+      "title": "Multiple version numbers in requests",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/12",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "CONTRIBUTOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Currently, sending multiple version numbers in requests is allowed. This complicates server implementations and it is unlikely that clients will send more than one version.",
+      "createdAt": "2024-11-03T13:51:54Z",
+      "updatedAt": "2024-11-03T13:51:54Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 13,
+      "id": "I_kwDOMvYKEc6c7GqS",
+      "title": "Sec. 3.2 (editorial)",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/13",
+      "state": "OPEN",
+      "author": "dsibold",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Sec 3.2, second paragraf, first sentense\r\nRemark: The timestamps t_1, t_2, and t_3 are not used anymore else in the document. I would therefore suggest removing them. This is a suggestion for how the sentence may be rephrased.\r\n\r\nA Roughtime server ensures that the timestamp included in the response to a query is generated after the reception of the query and prior to the transmission of the associated response.",
+      "createdAt": "2024-11-04T12:52:30Z",
+      "updatedAt": "2024-11-04T12:52:30Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 14,
+      "id": "I_kwDOMvYKEc6c7HNJ",
+      "title": "Sec. 5.4 (editorial)",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/14",
+      "state": "OPEN",
+      "author": "dsibold",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Sec. 5.4, third paragraph\r\nRemark: In my view, it should be described more precisely what \"consistent\" means in this sentence.\r\n\r\nSec. 5.4 last paragraph, second sentense. \r\nRemark: I suppose the promise of the server does not only includes that it started to compute the signature but also that it finished this computation. I would suggest rephrasing the sentence to make this more clear.  Here's a suggestion:\r\n\r\nValidity of a response does not prove that the timestamp's value in the response is correct, but merely that the server guarantees that it signed the timestamp and computed its signature during the time interval (MIDP-RADI, MIDP+RADI).",
+      "createdAt": "2024-11-04T12:53:35Z",
+      "updatedAt": "2024-11-04T12:53:35Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 15,
+      "id": "I_kwDOMvYKEc6c7HXW",
+      "title": "Sec. 8.2 (editorial)",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/15",
+      "state": "OPEN",
+      "author": "dsibold",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "Sec 8.2, fifth sentence.\r\nRemarks: I\u2019m not sure which delay the sentence is referencing. And also I would suggest not keeping the \u201esystem-provided parameter\" secret.\r\n\r\nSec 8.2, sixth sentence.\r\nRemarks: I'd suggest not only to write \"... not consistent\" but to be more specific about what that means.",
+      "createdAt": "2024-11-04T12:53:54Z",
+      "updatedAt": "2024-11-04T12:53:54Z",
       "closedAt": null,
       "comments": []
     }
