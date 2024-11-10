@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-07T00:40:22.383316+00:00",
+  "timestamp": "2024-11-10T00:43:15.169138+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -67,7 +67,7 @@
       "comments": [
         {
           "author": "dansarie",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "I just made a pull request (#4) that should address this.",
           "createdAt": "2024-09-23T20:38:50Z",
           "updatedAt": "2024-09-23T20:38:50Z"
@@ -80,7 +80,7 @@
       "title": "Grease support",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/2",
       "state": "CLOSED",
-      "author": "fiestajetsam",
+      "author": null,
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
@@ -91,14 +91,14 @@
       "comments": [
         {
           "author": "dansarie",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "I just made a pull request (#4) updating the grease section, which should hopefully be a step towards resolving this. I do not fully understand what the problem described in the first paragraph is. Will ask on the mailing list.",
           "createdAt": "2024-09-23T20:38:24Z",
           "updatedAt": "2024-09-23T20:38:24Z"
         },
         {
           "author": "dansarie",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "I just made another pull request (#5) clarifying the use of the VER tag in requests, to resolve the problem described in the first paragraph.",
           "createdAt": "2024-10-07T19:22:25Z",
           "updatedAt": "2024-10-07T19:22:25Z"
@@ -118,7 +118,7 @@
       "title": "Simplification of server response",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/3",
       "state": "CLOSED",
-      "author": "fiestajetsam",
+      "author": null,
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
@@ -129,7 +129,7 @@
       "comments": [
         {
           "author": "dansarie",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "I'm happy with the way it currently is. If this is implemented, it should be detected through version reporting - anything else just adds complexity and weirdness.",
           "createdAt": "2024-09-23T20:43:24Z",
           "updatedAt": "2024-09-23T20:43:24Z"
@@ -182,7 +182,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/9",
       "state": "OPEN",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In draft-07, we changed the DELE signature context from `RoughTime v1 delegation signature--` to `RoughTime v1 delegation signature`. It then changed back in the following draft. Was this intentional or is it a regression? ",
@@ -198,7 +198,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/10",
       "state": "OPEN",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "To detect downgrade attacks, the signed response must include a hash of the entire request and the server's maximum supported version. The Merkle tree should be populated with hashes over the requests instead of nonces.",
@@ -208,7 +208,7 @@
       "comments": [
         {
           "author": "dansarie",
-          "authorAssociation": "CONTRIBUTOR",
+          "authorAssociation": "COLLABORATOR",
           "body": "The VER tag should also be included in the signed response.",
           "createdAt": "2024-11-03T14:02:43Z",
           "updatedAt": "2024-11-03T14:02:43Z"
@@ -222,7 +222,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/11",
       "state": "OPEN",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The maximum tree height should be specified. Currently, there is an implicit height due to the maximum packet size, but this should be made explicit.",
@@ -238,7 +238,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/12",
       "state": "OPEN",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Currently, sending multiple version numbers in requests is allowed. This complicates server implementations and it is unlikely that clients will send more than one version.",
@@ -294,6 +294,22 @@
       "updatedAt": "2024-11-04T12:53:54Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 17,
+      "id": "I_kwDOMvYKEc6dp40k",
+      "title": "Wrong format for malfeasence reporting",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/17",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "The format for malfeasence reporting specifying in both draft-11 and the current version on Github can not be used to verify a chain of responses. Three values are required for each response:  \"nonce\", \"publicKey\", and \"response\". The random blind used to generate the nonce from the previous response also has to be specified.\r\n\r\nThe description of how clients can chain requests should probably also be improved.",
+      "createdAt": "2024-11-08T19:40:52Z",
+      "updatedAt": "2024-11-08T19:40:52Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -304,7 +320,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/4",
       "state": "MERGED",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "This pull request should address most of Martin and Kristof's comments. It also adds and clarifies the text in a number of places and removes the definition of the now-unused int32 type. The acknowledgments section is also updated.\r\n\r\nThe version tag is frozen as requested in issue #1.\r\n\r\nThe description of grease is improved as requested in issue #2.",
@@ -346,7 +362,7 @@
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/5",
       "state": "MERGED",
       "author": "dansarie",
-      "authorAssociation": "CONTRIBUTOR",
+      "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "",
@@ -406,6 +422,32 @@
       "mergeCommit": {
         "oid": "a4e0c0a473d960f9d9306472378e988583bddd7a"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 16,
+      "id": "PR_kwDOMvYKEc6BLEIh",
+      "title": "Correct order of tags in table",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/16",
+      "state": "OPEN",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Correct order of tags in table. This appears to have been the cause of a bug in Roughenough.",
+      "createdAt": "2024-11-07T11:15:24Z",
+      "updatedAt": "2024-11-07T11:15:25Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "fc05062531fff4fd8b5512a9bced7824aa60eb7d",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "tag-order",
+      "headRefOid": "606d7acee6d1bfef3c5613f9f92cf7251e0a6df0",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
