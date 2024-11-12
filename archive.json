@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-10T00:43:15.169138+00:00",
+  "timestamp": "2024-11-12T00:39:37.564911+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -187,9 +187,17 @@
       "labels": [],
       "body": "In draft-07, we changed the DELE signature context from `RoughTime v1 delegation signature--` to `RoughTime v1 delegation signature`. It then changed back in the following draft. Was this intentional or is it a regression? ",
       "createdAt": "2024-11-02T19:55:58Z",
-      "updatedAt": "2024-11-02T19:55:58Z",
+      "updatedAt": "2024-11-11T23:41:41Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Sounds like a regression. I plan to go through this week and address a bunch of these issues, forwarding ones that need more input to the list",
+          "createdAt": "2024-11-11T23:41:40Z",
+          "updatedAt": "2024-11-11T23:41:40Z"
+        }
+      ]
     },
     {
       "number": 10,
@@ -430,24 +438,26 @@
       "id": "PR_kwDOMvYKEc6BLEIh",
       "title": "Correct order of tags in table",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/16",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Correct order of tags in table. This appears to have been the cause of a bug in Roughenough.",
       "createdAt": "2024-11-07T11:15:24Z",
-      "updatedAt": "2024-11-07T11:15:25Z",
+      "updatedAt": "2024-11-11T15:59:57Z",
       "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
       "baseRefOid": "fc05062531fff4fd8b5512a9bced7824aa60eb7d",
       "headRepository": "dansarie/draft-roughtime-ietf",
       "headRefName": "tag-order",
       "headRefOid": "606d7acee6d1bfef3c5613f9f92cf7251e0a6df0",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "closedAt": "2024-11-11T15:59:57Z",
+      "mergedAt": "2024-11-11T15:59:57Z",
+      "mergedBy": "dansarie",
+      "mergeCommit": {
+        "oid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9"
+      },
       "comments": [],
       "reviews": []
     }
