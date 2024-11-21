@@ -525,7 +525,13 @@ timestamp and computed its signature during the time interval
 # Integration into NTP
 
 We assume that there is a bound PHI on the frequency error in the
-clock on the machine. Given a measurement taken at a local time t, we
+clock on the machine. Let delta be the time difference between the
+clock on the client and the clock on the server, and let sigma
+represent the error in the measured value of delta introduced by the
+measurement process.
+
+
+Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
 (t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
