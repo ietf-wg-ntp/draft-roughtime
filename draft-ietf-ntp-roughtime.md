@@ -436,6 +436,8 @@ using its nonce. These values are each 32 bytes and are stored one
 after the other with no additional padding or structure. The order in
 which they are stored is described in the next section.
 
+Merkle trees in Roughtime have a maximum height of 16.
+
 ### Root Value Validity Check Algorithm {#check-algorithm}
 
 This section describes how to compute the root hash of the Merkle tree
