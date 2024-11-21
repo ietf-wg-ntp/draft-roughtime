@@ -460,7 +460,8 @@ client through other means.
 
 The signature in CERT was made with the long-term key of the server.
 
-The DELE timestamps and the MIDP value are consistent.
+The DELE timestamps MAXT and MINT identify a range that MIDP falls
+within.
 
 The INDX and PATH values prove NONC was included in the Merkle tree
 with value ROOT using the algorithm in {{check-algorithm}}.
@@ -468,9 +469,10 @@ with value ROOT using the algorithm in {{check-algorithm}}.
 The signature of SREP in SIG validates with the public key in DELE.
 
 A response that passes these checks is said to be valid. Validity of a
-response does not prove the time is correct, but merely that the
-server signed it, and thus promises that it began to compute the
-signature at a time in the interval (MIDP-RADI, MIDP+RADI).
+response does not prove that the timestamp's value in the response is
+correct, but merely that the server guarantees that it signed the
+timestamp and computed its signature during the time interval
+(MIDP-RADI, MIDP+RADI).
 
 # Integration into NTP
 
