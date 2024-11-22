@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Informational                               M. Dansarie
-Expires: 25 May 2025                                              Netnod
-                                                        21 November 2024
+Expires: 26 May 2025                                              Netnod
+                                                        22 November 2024
 
 
                                Roughtime
@@ -47,7 +47,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 25 May 2025.
+   This Internet-Draft will expire on 26 May 2025.
 
 Copyright Notice
 
@@ -542,9 +542,9 @@ Table of Contents
 
    The signature of SREP in SIG validates with the public key in DELE.
 
-   A response that passes these checks is said to be valid.Validity of a
-   response does not prove that the timestamp's value in the response is
-   correct, but merely that the server guarantees that it signed the
+   A response that passes these checks is said to be valid.  Validity of
+   a response does not prove that the timestamp's value in the response
+   is correct, but merely that the server guarantees that it signed the
    timestamp and computed its signature during the time interval (MIDP-
    RADI, MIDP+RADI).
 
