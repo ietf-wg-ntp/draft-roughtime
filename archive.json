@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-21T00:42:43.126469+00:00",
+  "timestamp": "2024-11-24T00:46:34.127187+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -318,6 +318,22 @@
       "updatedAt": "2024-11-08T19:40:52Z",
       "closedAt": null,
       "comments": []
+    },
+    {
+      "number": 19,
+      "id": "I_kwDOMvYKEc6f0OaY",
+      "title": "Does delegation work?",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/19",
+      "state": "OPEN",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "In the current draft DELE identifies a range in which the actual signing key can be trusted. However, determining that this interval has expired poses a chicken-egg problem.",
+      "createdAt": "2024-11-21T23:17:32Z",
+      "updatedAt": "2024-11-21T23:17:33Z",
+      "closedAt": null,
+      "comments": []
     }
   ],
   "pulls": [
@@ -458,6 +474,136 @@
       "mergeCommit": {
         "oid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9"
       },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 18,
+      "id": "PR_kwDOMvYKEc6CvQV8",
+      "title": "Define sigma and delta",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/18",
+      "state": "OPEN",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes Issue #8",
+      "createdAt": "2024-11-21T23:04:22Z",
+      "updatedAt": "2024-11-21T23:04:39Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
+      "headRepository": "ietf-wg-ntp/draft-roughtime",
+      "headRefName": "wbl/issue-8",
+      "headRefOid": "d6e4f97ea28a9fe1ff3006e728a4e60f17ca6aae",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Hopefully this solves that issue.",
+          "createdAt": "2024-11-21T23:04:38Z",
+          "updatedAt": "2024-11-21T23:04:38Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 20,
+      "id": "PR_kwDOMvYKEc6CvUC0",
+      "title": "Clarify section 5.4",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/20",
+      "state": "MERGED",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes Issue #14",
+      "createdAt": "2024-11-21T23:20:07Z",
+      "updatedAt": "2024-11-23T00:43:57Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
+      "headRepository": "ietf-wg-ntp/draft-roughtime",
+      "headRefName": "wbl/issue-14-sec-5.4-revision",
+      "headRefOid": "f864feda3a16b3b7ceccf5678c293fc4604e626b",
+      "closedAt": "2024-11-23T00:43:57Z",
+      "mergedAt": "2024-11-23T00:43:57Z",
+      "mergedBy": "wbl",
+      "mergeCommit": {
+        "oid": "a6f6521973bd0ea0249f234c5f46273cf0018f29"
+      },
+      "comments": [
+        {
+          "author": "dsibold",
+          "authorAssociation": "NONE",
+          "body": "I agree with the suggested changes.",
+          "createdAt": "2024-11-22T16:22:38Z",
+          "updatedAt": "2024-11-22T16:22:38Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Nice catch, have fixed it",
+          "createdAt": "2024-11-22T18:49:57Z",
+          "updatedAt": "2024-11-22T18:49:57Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMvYKEc6SU9r0",
+          "commit": {
+            "abbreviatedOid": "78c0c67"
+          },
+          "author": "dsibold",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "I agree with the suggested changes. \r\nOne nit. In line 471, a space is missing after the dot.",
+          "createdAt": "2024-11-22T16:31:16Z",
+          "updatedAt": "2024-11-22T16:31:16Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMvYKEc6SXtzl",
+          "commit": {
+            "abbreviatedOid": "f864fed"
+          },
+          "author": "dsibold",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-11-22T21:20:35Z",
+          "updatedAt": "2024-11-22T21:20:35Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 21,
+      "id": "PR_kwDOMvYKEc6CvZJl",
+      "title": "Cap Merkle Tree heights at 16",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/21",
+      "state": "OPEN",
+      "author": "wbl",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Closes Issue #11",
+      "createdAt": "2024-11-21T23:44:05Z",
+      "updatedAt": "2024-11-21T23:44:11Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
+      "headRepository": "ietf-wg-ntp/draft-roughtime",
+      "headRefName": "wbl/cap-height",
+      "headRefOid": "66867026c8c8df4c13f4412c60f894a2604f9e26",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
       "comments": [],
       "reviews": []
     }
