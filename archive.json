@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-11-26T00:43:21.431032+00:00",
+  "timestamp": "2024-11-28T00:43:48.794800+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -489,7 +489,7 @@
       "labels": [],
       "body": "Closes Issue #8",
       "createdAt": "2024-11-21T23:04:22Z",
-      "updatedAt": "2024-11-21T23:04:39Z",
+      "updatedAt": "2024-11-26T19:23:41Z",
       "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
       "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
@@ -509,7 +509,21 @@
           "updatedAt": "2024-11-21T23:04:38Z"
         }
       ],
-      "reviews": []
+      "reviews": [
+        {
+          "id": "PRR_kwDOMvYKEc6SxsRz",
+          "commit": {
+            "abbreviatedOid": "d6e4f97"
+          },
+          "author": "dsibold",
+          "authorAssociation": "NONE",
+          "state": "CHANGES_REQUESTED",
+          "body": "Sure, I agree with the addition, but I\u2019d word it differently. What do you think of the following:\r\n\r\nWe assume that there is a bound PHI on the frequency error in the  clock on the machine.  Let delta be the time difference between the clock on the client  and the clock on the server, and let sigma represent the error in the measured value of delta introduced by the measurement process.\r\n",
+          "createdAt": "2024-11-26T19:23:41Z",
+          "updatedAt": "2024-11-26T19:23:41Z",
+          "comments": []
+        }
+      ]
     },
     {
       "number": 20,
