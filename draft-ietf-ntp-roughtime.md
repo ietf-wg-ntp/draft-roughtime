@@ -820,8 +820,8 @@ The initial contents of this registry SHALL be as follows:
 | Tag        | ASCII Representation | Reference     |
 +-----------:+----------------------+---------------|
 | 0x00474953 | SIG                  | [[this memo]] |
-| 0x00565253 | SRV                  | [[this memo]] |
 | 0x00524556 | VER                  | [[this memo]] |
+| 0x00565253 | SRV                  | [[this memo]] |
 | 0x434e4f4e | NONC                 | [[this memo]] |
 | 0x454c4544 | DELE                 | [[this memo]] |
 | 0x48544150 | PATH                 | [[this memo]] |
