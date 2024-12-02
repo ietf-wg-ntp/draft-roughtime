@@ -1910,7 +1910,11 @@ timestamp and computed its signature during the time interval
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-integration-into-ntp" class="section-name selfRef">Integration into NTP</a>
       </h2>
 <p id="section-6-1">We assume that there is a bound PHI on the frequency error in the
-clock on the machine. Given a measurement taken at a local time t, we
+clock on the machine. Let delta be the time difference between the
+clock on the client and the clock on the server, and let sigma
+represent the error in the measured value of delta introduced by the
+measurement process.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
 (t-delta-sigma-d<em>PHI, t-delta+sigma+d</em>PHI). A simple and effective way
@@ -1924,7 +1928,7 @@ window become too large, another Roughtime measurement is called for.
 The definition of "too large" is implementation defined.
 Implementations <span class="bcp14">MAY</span> use other, more sophisticated means of adjusting
 the clock respecting Roughtime information. Other applications such as
-X.509 verification may wish to apply different rules.<a href="#section-6-1" class="pilcrow">¶</a></p>
+X.509 verification may wish to apply different rules.<a href="#section-6-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="grease">
