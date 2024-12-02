@@ -107,7 +107,6 @@ Table of Contents
      9.5.  Quantum Resistance
      9.6.  Maintaining Lists of Servers
      9.7.  Amplification Attacks
-     9.8.  Generating Private Keys
    10. Privacy Considerations
    11. Operational Considerations
    12. IANA Considerations
@@ -807,8 +806,6 @@ Table of Contents
    attacks.  To prevent Roughtime from being used for such attacks,
    servers MUST NOT send response packets larger than the request
    packets sent by clients.
-
-9.8.  Generating Private Keys
 
 10.  Privacy Considerations
 
