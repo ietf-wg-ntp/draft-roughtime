@@ -741,8 +741,6 @@ To prevent Roughtime from being used for such attacks, servers MUST
 NOT send response packets larger than the request packets sent by
 clients.
 
-## Generating Private Keys
-
 # Privacy Considerations
 
 This protocol is designed to obscure all client identifiers. Servers
