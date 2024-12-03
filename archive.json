@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-01T00:53:47.044495+00:00",
+  "timestamp": "2024-12-03T00:45:15.738474+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -164,15 +164,15 @@
       "id": "I_kwDOMvYKEc6czEWH",
       "title": "Undefined variables in Sec. 7",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/8",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dsibold",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Section 7 introduces the time interval (t-delta-sigma, t-delta+sigma), in which neither delta nor sigma is defined. From the specification of the interval I would assume that delta is a systematic error whereas sigma is a statistical error. \r\n\r\nDelta and sigma should be explained in order to help the reader to understand the paragraph.",
       "createdAt": "2024-11-02T17:12:56Z",
-      "updatedAt": "2024-11-02T17:12:56Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-02T19:55:03Z",
+      "closedAt": "2024-12-02T19:55:03Z",
       "comments": []
     },
     {
@@ -180,15 +180,15 @@
       "id": "I_kwDOMvYKEc6cziTQ",
       "title": "Regression between draft-07 and draft-08",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/9",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In draft-07, we changed the DELE signature context from `RoughTime v1 delegation signature--` to `RoughTime v1 delegation signature`. It then changed back in the following draft. Was this intentional or is it a regression? ",
       "createdAt": "2024-11-02T19:55:58Z",
-      "updatedAt": "2024-11-11T23:41:41Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-02T07:31:15Z",
+      "closedAt": "2024-12-02T07:31:15Z",
       "comments": [
         {
           "author": "wbl",
@@ -196,6 +196,20 @@
           "body": "Sounds like a regression. I plan to go through this week and address a bunch of these issues, forwarding ones that need more input to the list",
           "createdAt": "2024-11-11T23:41:40Z",
           "updatedAt": "2024-11-11T23:41:40Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Reverted in PR #22.",
+          "createdAt": "2024-12-01T16:46:11Z",
+          "updatedAt": "2024-12-01T16:46:11Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:31:15Z",
+          "updatedAt": "2024-12-02T07:31:15Z"
         }
       ]
     },
@@ -204,15 +218,15 @@
       "id": "I_kwDOMvYKEc6c1SFd",
       "title": "Signed response needs to include a hash over entire request and server's maximum supported version",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/10",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "To detect downgrade attacks, the signed response must include a hash of the entire request and the server's maximum supported version. The Merkle tree should be populated with hashes over the requests instead of nonces.",
       "createdAt": "2024-11-03T13:38:59Z",
-      "updatedAt": "2024-11-03T14:02:44Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-02T07:31:41Z",
+      "closedAt": "2024-12-02T07:31:41Z",
       "comments": [
         {
           "author": "dansarie",
@@ -220,6 +234,13 @@
           "body": "The VER tag should also be included in the signed response.",
           "createdAt": "2024-11-03T14:02:43Z",
           "updatedAt": "2024-11-03T14:02:43Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:31:41Z",
+          "updatedAt": "2024-12-02T07:31:41Z"
         }
       ]
     },
@@ -228,16 +249,31 @@
       "id": "I_kwDOMvYKEc6c1SLa",
       "title": "Max tree height needs to be specified",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/11",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The maximum tree height should be specified. Currently, there is an implicit height due to the maximum packet size, but this should be made explicit.",
       "createdAt": "2024-11-03T13:39:55Z",
-      "updatedAt": "2024-11-03T13:39:55Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:32:05Z",
+      "closedAt": "2024-12-02T07:32:04Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "PR #22 proposes another solution to this. A max height of 32 is implicitly defined by the fact that INDX is a uint32. I have also added text saying that the practical max height is likely less than that, due to the maximum packet size, and that servers should adopt a suitable max height.",
+          "createdAt": "2024-12-01T16:48:16Z",
+          "updatedAt": "2024-12-01T16:48:16Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:32:04Z",
+          "updatedAt": "2024-12-02T07:32:04Z"
+        }
+      ]
     },
     {
       "number": 12,
@@ -251,89 +287,165 @@
       "labels": [],
       "body": "Currently, sending multiple version numbers in requests is allowed. This complicates server implementations and it is unlikely that clients will send more than one version.",
       "createdAt": "2024-11-03T13:51:54Z",
-      "updatedAt": "2024-11-03T13:51:54Z",
+      "updatedAt": "2024-12-01T20:55:11Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Multiple version numbers is implemented by several servers and clients and seems to be working fine. Maybe it should be kept as is.",
+          "createdAt": "2024-12-01T20:55:10Z",
+          "updatedAt": "2024-12-01T20:55:10Z"
+        }
+      ]
     },
     {
       "number": 13,
       "id": "I_kwDOMvYKEc6c7GqS",
       "title": "Sec. 3.2 (editorial)",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/13",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dsibold",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Sec 3.2, second paragraf, first sentense\r\nRemark: The timestamps t_1, t_2, and t_3 are not used anymore else in the document. I would therefore suggest removing them. This is a suggestion for how the sentence may be rephrased.\r\n\r\nA Roughtime server ensures that the timestamp included in the response to a query is generated after the reception of the query and prior to the transmission of the associated response.",
       "createdAt": "2024-11-04T12:52:30Z",
-      "updatedAt": "2024-11-04T12:52:30Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:32:25Z",
+      "closedAt": "2024-12-02T07:32:25Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Updated text in PR #22.",
+          "createdAt": "2024-12-01T16:48:30Z",
+          "updatedAt": "2024-12-01T16:48:30Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:32:25Z",
+          "updatedAt": "2024-12-02T07:32:25Z"
+        }
+      ]
     },
     {
       "number": 14,
       "id": "I_kwDOMvYKEc6c7HNJ",
       "title": "Sec. 5.4 (editorial)",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/14",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dsibold",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Sec. 5.4, third paragraph\r\nRemark: In my view, it should be described more precisely what \"consistent\" means in this sentence.\r\n\r\nSec. 5.4 last paragraph, second sentense. \r\nRemark: I suppose the promise of the server does not only includes that it started to compute the signature but also that it finished this computation. I would suggest rephrasing the sentence to make this more clear.  Here's a suggestion:\r\n\r\nValidity of a response does not prove that the timestamp's value in the response is correct, but merely that the server guarantees that it signed the timestamp and computed its signature during the time interval (MIDP-RADI, MIDP+RADI).",
       "createdAt": "2024-11-04T12:53:35Z",
-      "updatedAt": "2024-11-04T12:53:35Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:32:32Z",
+      "closedAt": "2024-12-02T07:32:32Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Updated text in PR #22.",
+          "createdAt": "2024-12-01T16:48:44Z",
+          "updatedAt": "2024-12-01T16:48:44Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:32:32Z",
+          "updatedAt": "2024-12-02T07:32:32Z"
+        }
+      ]
     },
     {
       "number": 15,
       "id": "I_kwDOMvYKEc6c7HXW",
       "title": "Sec. 8.2 (editorial)",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/15",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dsibold",
       "authorAssociation": "NONE",
       "assignees": [],
       "labels": [],
       "body": "Sec 8.2, fifth sentence.\r\nRemarks: I\u2019m not sure which delay the sentence is referencing. And also I would suggest not keeping the \u201esystem-provided parameter\" secret.\r\n\r\nSec 8.2, sixth sentence.\r\nRemarks: I'd suggest not only to write \"... not consistent\" but to be more specific about what that means.",
       "createdAt": "2024-11-04T12:53:54Z",
-      "updatedAt": "2024-11-04T12:53:54Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:32:40Z",
+      "closedAt": "2024-12-02T07:32:39Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Updated text in PR #22.",
+          "createdAt": "2024-12-01T16:48:49Z",
+          "updatedAt": "2024-12-01T16:48:49Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:32:39Z",
+          "updatedAt": "2024-12-02T07:32:39Z"
+        }
+      ]
     },
     {
       "number": 17,
       "id": "I_kwDOMvYKEc6dp40k",
       "title": "Wrong format for malfeasence reporting",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/17",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "The format for malfeasence reporting specifying in both draft-11 and the current version on Github can not be used to verify a chain of responses. Three values are required for each response:  \"nonce\", \"publicKey\", and \"response\". The random blind used to generate the nonce from the previous response also has to be specified.\r\n\r\nThe description of how clients can chain requests should probably also be improved.",
       "createdAt": "2024-11-08T19:40:52Z",
-      "updatedAt": "2024-11-08T19:40:52Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:32:57Z",
+      "closedAt": "2024-12-02T07:32:56Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:32:56Z",
+          "updatedAt": "2024-12-02T07:32:56Z"
+        }
+      ]
     },
     {
       "number": 19,
       "id": "I_kwDOMvYKEc6f0OaY",
       "title": "Does delegation work?",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/19",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "wbl",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "In the current draft DELE identifies a range in which the actual signing key can be trusted. However, determining that this interval has expired poses a chicken-egg problem.",
       "createdAt": "2024-11-21T23:17:32Z",
-      "updatedAt": "2024-11-21T23:17:33Z",
-      "closedAt": null,
-      "comments": []
+      "updatedAt": "2024-12-02T07:33:10Z",
+      "closedAt": "2024-12-02T07:33:10Z",
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "The primary mechanism for detecting this is querying more than one server. I added some text in the security considerations section addressing this.",
+          "createdAt": "2024-12-01T16:49:35Z",
+          "updatedAt": "2024-12-01T16:49:35Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Fixed by 333da4c5b08871ef99f187ba63a484b7f7c24361.",
+          "createdAt": "2024-12-02T07:33:10Z",
+          "updatedAt": "2024-12-02T07:33:10Z"
+        }
+      ]
     }
   ],
   "pulls": [
@@ -482,24 +594,26 @@
       "id": "PR_kwDOMvYKEc6CvQV8",
       "title": "Define sigma and delta",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/18",
-      "state": "OPEN",
+      "state": "MERGED",
       "author": "wbl",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes Issue #8",
       "createdAt": "2024-11-21T23:04:22Z",
-      "updatedAt": "2024-11-26T19:23:41Z",
+      "updatedAt": "2024-12-02T19:54:48Z",
       "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
-      "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
+      "baseRefOid": "5ca972c636b7f14e4411d763461625c5c51a6bd6",
       "headRepository": "ietf-wg-ntp/draft-roughtime",
       "headRefName": "wbl/issue-8",
-      "headRefOid": "d6e4f97ea28a9fe1ff3006e728a4e60f17ca6aae",
-      "closedAt": null,
-      "mergedAt": null,
-      "mergedBy": null,
-      "mergeCommit": null,
+      "headRefOid": "10f68dacf25ca5fef5c5407c06d8dba5393abe6c",
+      "closedAt": "2024-12-02T19:54:48Z",
+      "mergedAt": "2024-12-02T19:54:48Z",
+      "mergedBy": "wbl",
+      "mergeCommit": {
+        "oid": "19f069c7890d8cc9c136002d43ab75432c5b88e6"
+      },
       "comments": [
         {
           "author": "wbl",
@@ -507,6 +621,13 @@
           "body": "Hopefully this solves that issue.",
           "createdAt": "2024-11-21T23:04:38Z",
           "updatedAt": "2024-11-21T23:04:38Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I think that text works",
+          "createdAt": "2024-12-01T22:39:56Z",
+          "updatedAt": "2024-12-01T22:39:56Z"
         }
       ],
       "reviews": [
@@ -521,6 +642,19 @@
           "body": "Sure, I agree with the addition, but I\u2019d word it differently. What do you think of the following:\r\n\r\nWe assume that there is a bound PHI on the frequency error in the  clock on the machine.  Let delta be the time difference between the clock on the client  and the clock on the server, and let sigma represent the error in the measured value of delta introduced by the measurement process.\r\n",
           "createdAt": "2024-11-26T19:23:41Z",
           "updatedAt": "2024-11-26T19:23:41Z",
+          "comments": []
+        },
+        {
+          "id": "PRR_kwDOMvYKEc6TbZqH",
+          "commit": {
+            "abbreviatedOid": "10f68da"
+          },
+          "author": "dsibold",
+          "authorAssociation": "NONE",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-02T17:35:02Z",
+          "updatedAt": "2024-12-02T17:35:02Z",
           "comments": []
         }
       ]
@@ -600,24 +734,117 @@
       "id": "PR_kwDOMvYKEc6CvZJl",
       "title": "Cap Merkle Tree heights at 16",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/21",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "wbl",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Closes Issue #11",
       "createdAt": "2024-11-21T23:44:05Z",
-      "updatedAt": "2024-11-21T23:44:11Z",
+      "updatedAt": "2024-12-02T07:34:41Z",
       "baseRepository": "ietf-wg-ntp/draft-roughtime",
       "baseRefName": "main",
       "baseRefOid": "ac1684a2b3beb6579c67ee1b67501d9583adccc9",
       "headRepository": "ietf-wg-ntp/draft-roughtime",
       "headRefName": "wbl/cap-height",
       "headRefOid": "66867026c8c8df4c13f4412c60f894a2604f9e26",
-      "closedAt": null,
+      "closedAt": "2024-12-02T07:34:40Z",
       "mergedAt": null,
       "mergedBy": null,
       "mergeCommit": null,
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "PR #22 proposes another solution to this, see issue #11.",
+          "createdAt": "2024-12-01T16:50:45Z",
+          "updatedAt": "2024-12-01T16:50:45Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Merged PR #22 instead.",
+          "createdAt": "2024-12-02T07:34:40Z",
+          "updatedAt": "2024-12-02T07:34:40Z"
+        }
+      ],
+      "reviews": []
+    },
+    {
+      "number": 22,
+      "id": "PR_kwDOMvYKEc6DqzGj",
+      "title": "Major review of the draft",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/22",
+      "state": "MERGED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "This pull request aims to fix issue #9, #10, #11, #13, #14, #15, #17, #19.\r\n\r\nOther changes:\r\n- Copy-editing throughout the document.\r\n- New figure describing the structure of response messages.\r\n- Improved description of measurement sequence.\r\n- Added description of server list format.\r\n- Updated and improved malfeasance reporting format.\r\n- Updated security considerations.\r\n- Updated acknowledgments.",
+      "createdAt": "2024-12-01T16:45:31Z",
+      "updatedAt": "2024-12-02T07:29:37Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "a6f6521973bd0ea0249f234c5f46273cf0018f29",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "main",
+      "headRefOid": "370558a867406126d281f7710c3714555be32be6",
+      "closedAt": "2024-12-02T07:29:37Z",
+      "mergedAt": "2024-12-02T07:29:37Z",
+      "mergedBy": "dansarie",
+      "mergeCommit": {
+        "oid": "5ca972c636b7f14e4411d763461625c5c51a6bd6"
+      },
+      "comments": [
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Let's rebase and merge this soon",
+          "createdAt": "2024-12-02T01:40:53Z",
+          "updatedAt": "2024-12-02T01:40:53Z"
+        }
+      ],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMvYKEc6TUZ0d",
+          "commit": {
+            "abbreviatedOid": "370558a"
+          },
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2024-12-02T01:40:39Z",
+          "updatedAt": "2024-12-02T01:40:39Z",
+          "comments": []
+        }
+      ]
+    },
+    {
+      "number": 23,
+      "id": "PR_kwDOMvYKEc6Dzcs2",
+      "title": "Remove spurious heading.",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/23",
+      "state": "MERGED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2024-12-02T20:55:06Z",
+      "updatedAt": "2024-12-02T20:55:15Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "19f069c7890d8cc9c136002d43ab75432c5b88e6",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "main",
+      "headRefOid": "2d8e485cbcd537f04474fee26dc97af91a513f7a",
+      "closedAt": "2024-12-02T20:55:15Z",
+      "mergedAt": "2024-12-02T20:55:15Z",
+      "mergedBy": "dansarie",
+      "mergeCommit": {
+        "oid": "ab2b0b7ed263563f7d8dd2cce99475a139121f82"
+      },
       "comments": [],
       "reviews": []
     }
