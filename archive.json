@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-03T00:45:15.738474+00:00",
+  "timestamp": "2024-12-05T00:44:46.998376+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -155,9 +155,31 @@
       "labels": [],
       "body": "Do we need to add some more text to clarify what's there?",
       "createdAt": "2024-10-09T20:10:19Z",
-      "updatedAt": "2024-10-09T20:10:19Z",
+      "updatedAt": "2024-12-04T21:41:52Z",
       "closedAt": null,
-      "comments": []
+      "comments": [
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Which part of the draft are you referring to, use of UTC time in the timestamp (Section 4.1.4) or integration into NTP (Section 6)?",
+          "createdAt": "2024-12-04T21:28:18Z",
+          "updatedAt": "2024-12-04T21:28:18Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "Both potentially, but I was mainly thinking about the timestamp and leap seconds. Again.",
+          "createdAt": "2024-12-04T21:30:59Z",
+          "updatedAt": "2024-12-04T21:30:59Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I updated the text about that in Section 5.2.4 to say that implementations that don't have leap second info SHOULD use a RADI of at least 3. This allows those that know about leap seconds to use smaller RADI most of the time, and adjust accordingly during leap second events. There's probably no other way of doing it without changing the timestamp definition for the nth time. The one thing everyone appears to agree on is the use of UTC.\r\n\r\nIn any case, we should probably consider being a bit more explicit about our timestamp definition in the text and have a look at the timestamp specification template in RFC 8877.",
+          "createdAt": "2024-12-04T21:41:51Z",
+          "updatedAt": "2024-12-04T21:41:51Z"
+        }
+      ]
     },
     {
       "number": 8,
@@ -287,7 +309,7 @@
       "labels": [],
       "body": "Currently, sending multiple version numbers in requests is allowed. This complicates server implementations and it is unlikely that clients will send more than one version.",
       "createdAt": "2024-11-03T13:51:54Z",
-      "updatedAt": "2024-12-01T20:55:11Z",
+      "updatedAt": "2024-12-04T21:20:11Z",
       "closedAt": null,
       "comments": [
         {
@@ -296,6 +318,20 @@
           "body": "Multiple version numbers is implemented by several servers and clients and seems to be working fine. Maybe it should be kept as is.",
           "createdAt": "2024-12-01T20:55:10Z",
           "updatedAt": "2024-12-01T20:55:10Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "If it works fine, I think keep it. But I think we needed a change in what is covered in the query to ensure secure negotiation?",
+          "createdAt": "2024-12-04T20:21:04Z",
+          "updatedAt": "2024-12-04T20:21:04Z"
+        },
+        {
+          "author": "dansarie",
+          "authorAssociation": "COLLABORATOR",
+          "body": "We already fixed that by using the hash of the entire query in the Merkle tree, see Section 5.3:\r\n```\r\nFor leaf nodes, the byte 0x00 is prepended to the full value of the client's request packet, including the \"ROUGHTIM\" header, before applying the hash function.\r\n```\r\nThis ensures that the root of the tree depends on every bit in all queries.",
+          "createdAt": "2024-12-04T21:20:10Z",
+          "updatedAt": "2024-12-04T21:20:10Z"
         }
       ]
     },
