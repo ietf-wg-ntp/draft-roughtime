@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2024-12-19T00:43:29.238131+00:00",
+  "timestamp": "2024-12-22T00:44:50.855375+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -148,15 +148,15 @@
       "id": "I_kwDOMvYKEc6Zl71r",
       "title": "Timescales finally",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/6",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "wbl",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Do we need to add some more text to clarify what's there?",
       "createdAt": "2024-10-09T20:10:19Z",
-      "updatedAt": "2024-12-04T21:41:52Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-20T20:04:20Z",
+      "closedAt": "2024-12-20T20:04:20Z",
       "comments": [
         {
           "author": "dansarie",
@@ -178,6 +178,13 @@
           "body": "I updated the text about that in Section 5.2.4 to say that implementations that don't have leap second info SHOULD use a RADI of at least 3. This allows those that know about leap seconds to use smaller RADI most of the time, and adjust accordingly during leap second events. There's probably no other way of doing it without changing the timestamp definition for the nth time. The one thing everyone appears to agree on is the use of UTC.\r\n\r\nIn any case, we should probably consider being a bit more explicit about our timestamp definition in the text and have a look at the timestamp specification template in RFC 8877.",
           "createdAt": "2024-12-04T21:41:51Z",
           "updatedAt": "2024-12-04T21:41:51Z"
+        },
+        {
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "body": "I don't think RFC 8877 covers the issue here, but I think your text is fine. Will reopen if it's a problem",
+          "createdAt": "2024-12-20T20:04:20Z",
+          "updatedAt": "2024-12-20T20:04:20Z"
         }
       ]
     },
@@ -302,15 +309,15 @@
       "id": "I_kwDOMvYKEc6c1UKO",
       "title": "Multiple version numbers in requests",
       "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/12",
-      "state": "OPEN",
+      "state": "CLOSED",
       "author": "dansarie",
       "authorAssociation": "COLLABORATOR",
       "assignees": [],
       "labels": [],
       "body": "Currently, sending multiple version numbers in requests is allowed. This complicates server implementations and it is unlikely that clients will send more than one version.",
       "createdAt": "2024-11-03T13:51:54Z",
-      "updatedAt": "2024-12-04T21:20:11Z",
-      "closedAt": null,
+      "updatedAt": "2024-12-20T20:03:44Z",
+      "closedAt": "2024-12-20T20:03:44Z",
       "comments": [
         {
           "author": "dansarie",
