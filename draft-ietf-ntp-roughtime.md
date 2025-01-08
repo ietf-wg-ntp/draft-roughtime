@@ -293,9 +293,9 @@ requests they are replying to, see {{amplification-attacks}}.
 
 In a request, the VER tag contains a list of uint32 version numbers.
 The VER tag MUST include at least one Roughtime version supported by
-the client. The client MUST ensure that the version numbers and tags
-included in the request are not incompatible with each other or the
-packet contents.
+the client and MUST NOT contain more than 32 version numbers. The
+client MUST ensure that the version numbers and tags included in the
+request are not incompatible with each other or the packet contents.
 
 The version numbers MUST NOT repeat and MUST be sorted in ascending
 numerical order.
@@ -396,10 +396,10 @@ implementations SHOULD select a maximum Merkle tree height (see
 The SREP tag contains a signed response. Its value MUST be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
-The VER tag MUST contain a single version number. It SHOULD be one of
-the version numbers supplied by the client in its request. The server
-MUST ensure that the version number corresponds with the rest of the
-packet contents.
+The VER tag, when used in a response, MUST contain a single version
+number. It SHOULD be one of the version numbers supplied by the client
+in its request. The server MUST ensure that the version number
+corresponds with the rest of the packet contents.
 
 The RADI tag value MUST be a uint32 representing the server's estimate
 of the accuracy of MIDP in seconds. Servers MUST ensure that the true
@@ -416,7 +416,8 @@ The MIDP tag value MUST be the timestamp of the moment of processing.
 
 The VERS tag value MUST contain a list of uint32 version numbers
 supported by the server, sorted in ascending numerical order. It MUST
-contain the version number specified in the VER tag.
+contain the version number specified in the VER tag. It MUST NOT
+contain more than 32 version numbers.
 
 The ROOT tag MUST contain a 32-byte value of a Merkle tree root as
 described in {{merkle-tree}}.
