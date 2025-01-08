@@ -393,7 +393,7 @@ implementations SHOULD select a maximum Merkle tree height (see
 
 ### SREP {#response-srep}
 
-The SREP tag contains a time response. Its value MUST be a Roughtime
+The SREP tag contains a signed response. Its value MUST be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
 The VER tag MUST contain a single version number. It SHOULD be one of
