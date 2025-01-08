@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Informational                               M. Dansarie
-Expires: 5 June 2025                                              Netnod
-                                                         2 December 2024
+Expires: 12 July 2025                                             Netnod
+                                                          8 January 2025
 
 
                                Roughtime
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 5 June 2025.
+   This Internet-Draft will expire on 12 July 2025.
 
 Copyright Notice
 
-   Copyright (c) 2024 IETF Trust and the persons identified as the
+   Copyright (c) 2025 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -459,8 +459,8 @@ Table of Contents
 
 5.2.4.  SREP
 
-   The SREP tag contains a time response.  Its value MUST be a Roughtime
-   message with the tags VER, RADI, MIDP, VERS, and ROOT.
+   The SREP tag contains a signed response.  Its value MUST be a
+   Roughtime message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
    The VER tag MUST contain a single version number.  It SHOULD be one
    of the version numbers supplied by the client in its request.  The
@@ -711,11 +711,11 @@ Table of Contents
    The value of "sources", if present, MUST be a list of strings
    indicating where updated versions of the list may be aquired.  Each
    string MUST be a URL [RFC1738] pointing to a list in the format
-   specified here.  The URL scheme MUST be HTTPS [RFC9110].
+   specified here.  The URI scheme MUST be HTTPS [RFC9110].
 
    The value of "reports", if present, MUST be a string indicating a URL
    [RFC1738] where malfeasance reports can be sent by clients using the
-   HTTP POST method [RFC9110].  The URL scheme MUST be HTTPS [RFC9110].
+   HTTP POST method [RFC9110].  The URI scheme MUST be HTTPS [RFC9110].
 
 8.4.  Malfeasance Reporting
 
