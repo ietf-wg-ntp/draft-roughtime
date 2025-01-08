@@ -393,7 +393,7 @@ implementations SHOULD select a maximum Merkle tree height (see
 
 ### SREP {#response-srep}
 
-The SREP tag contains a time response. Its value MUST be a Roughtime
+The SREP tag contains a signed response. Its value MUST be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
 The VER tag MUST contain a single version number. It SHOULD be one of
@@ -645,11 +645,11 @@ a decimal integer representing a valid port number, i.e. in the range
 The value of "sources", if present, MUST be a list of strings
 indicating where updated versions of the list may be aquired. Each
 string MUST be a URL {{!RFC1738}} pointing to a list in the format
-specified here. The URL scheme MUST be HTTPS {{!RFC9110}}.
+specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 The value of "reports", if present, MUST be a string indicating a URL
 {{!RFC1738}} where malfeasance reports can be sent by clients using
-the HTTP POST method {{!RFC9110}}. The URL scheme MUST be HTTPS
+the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
 ## Malfeasance Reporting
