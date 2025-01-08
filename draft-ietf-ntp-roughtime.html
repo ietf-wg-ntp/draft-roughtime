@@ -1635,9 +1635,9 @@ requests they are replying to, see <a href="#amplification-attacks" class="auto 
           </h4>
 <p id="section-5.1.1-1">In a request, the VER tag contains a list of uint32 version numbers.
 The VER tag <span class="bcp14">MUST</span> include at least one Roughtime version supported by
-the client. The client <span class="bcp14">MUST</span> ensure that the version numbers and tags
-included in the request are not incompatible with each other or the
-packet contents.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
+the client and <span class="bcp14">MUST NOT</span> contain more than 32 version numbers. The
+client <span class="bcp14">MUST</span> ensure that the version numbers and tags included in the
+request are not incompatible with each other or the packet contents.<a href="#section-5.1.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-2">The version numbers <span class="bcp14">MUST NOT</span> repeat and <span class="bcp14">MUST</span> be sorted in ascending
 numerical order.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-3">Servers <span class="bcp14">SHOULD</span> ignore any unknown version numbers in the list supplied
@@ -1774,10 +1774,10 @@ implementations <span class="bcp14">SHOULD</span> select a maximum Merkle tree h
           </h4>
 <p id="section-5.2.4-1">The SREP tag contains a signed response. Its value <span class="bcp14">MUST</span> be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-2">The VER tag <span class="bcp14">MUST</span> contain a single version number. It <span class="bcp14">SHOULD</span> be one of
-the version numbers supplied by the client in its request. The server
-<span class="bcp14">MUST</span> ensure that the version number corresponds with the rest of the
-packet contents.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-2">The VER tag, when used in a response, <span class="bcp14">MUST</span> contain a single version
+number. It <span class="bcp14">SHOULD</span> be one of the version numbers supplied by the client
+in its request. The server <span class="bcp14">MUST</span> ensure that the version number
+corresponds with the rest of the packet contents.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-3">The RADI tag value <span class="bcp14">MUST</span> be a uint32 representing the server's estimate
 of the accuracy of MIDP in seconds. Servers <span class="bcp14">MUST</span> ensure that the true
 time is within <code>(MIDP-RADI, MIDP+RADI)</code> at the moment of processing.
@@ -1791,7 +1791,8 @@ reports.<a href="#section-5.2.4-3" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-4">The MIDP tag value <span class="bcp14">MUST</span> be the timestamp of the moment of processing.<a href="#section-5.2.4-4" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-5">The VERS tag value <span class="bcp14">MUST</span> contain a list of uint32 version numbers
 supported by the server, sorted in ascending numerical order. It <span class="bcp14">MUST</span>
-contain the version number specified in the VER tag.<a href="#section-5.2.4-5" class="pilcrow">¶</a></p>
+contain the version number specified in the VER tag. It <span class="bcp14">MUST NOT</span>
+contain more than 32 version numbers.<a href="#section-5.2.4-5" class="pilcrow">¶</a></p>
 <p id="section-5.2.4-6">The ROOT tag <span class="bcp14">MUST</span> contain a 32-byte value of a Merkle tree root as
 described in <a href="#merkle-tree" class="auto internal xref">Section 5.3</a>.<a href="#section-5.2.4-6" class="pilcrow">¶</a></p>
 </section>
