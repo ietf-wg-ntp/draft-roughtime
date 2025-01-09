@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2025-01-07T00:41:38.022053+00:00",
+  "timestamp": "2025-01-09T00:41:24.275601+00:00",
   "repo": "ietf-wg-ntp/draft-roughtime",
   "labels": [
     {
@@ -489,6 +489,60 @@
           "updatedAt": "2024-12-02T07:33:10Z"
         }
       ]
+    },
+    {
+      "number": 24,
+      "id": "I_kwDOMvYKEc6lZKcC",
+      "title": "No limit to length of VERS field",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/24",
+      "state": "CLOSED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dansarie"
+      ],
+      "labels": [],
+      "body": "The VERS field can contain any positive number of entries. This should be limited to a reasonable number, like with the PATH field. 32 seems reasonable.",
+      "createdAt": "2025-01-08T09:35:46Z",
+      "updatedAt": "2025-01-08T17:55:15Z",
+      "closedAt": "2025-01-08T17:55:15Z",
+      "comments": []
+    },
+    {
+      "number": 25,
+      "id": "I_kwDOMvYKEc6lZMog",
+      "title": "Nit: Description of SREP tag",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/25",
+      "state": "CLOSED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dansarie"
+      ],
+      "labels": [],
+      "body": "Section 5.2.4. starts with \"The SREP tag contains a time response.\" This is no longer entirely true after the VER and VERS tags were introduced to the tag and the recommendation in Section 9.2. that new tags SHOULD be added to SREP whenever possible. A reasonable fix would be to change the sentence to \"The SREP tag contains a signed response.\"",
+      "createdAt": "2025-01-08T09:38:44Z",
+      "updatedAt": "2025-01-08T17:31:54Z",
+      "closedAt": "2025-01-08T17:31:54Z",
+      "comments": []
+    },
+    {
+      "number": 26,
+      "id": "I_kwDOMvYKEc6lZTtx",
+      "title": "Nit: \"URL scheme\"",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/issues/26",
+      "state": "CLOSED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [
+        "dansarie"
+      ],
+      "labels": [],
+      "body": "In Section 8.3, the term \"URL scheme\" is used twice. It should be \"URI scheme\".",
+      "createdAt": "2025-01-08T09:48:06Z",
+      "updatedAt": "2025-01-08T17:31:55Z",
+      "closedAt": "2025-01-08T17:31:55Z",
+      "comments": []
     }
   ],
   "pulls": [
@@ -890,6 +944,76 @@
       },
       "comments": [],
       "reviews": []
+    },
+    {
+      "number": 27,
+      "id": "PR_kwDOMvYKEc6HGv8x",
+      "title": "Nits",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/27",
+      "state": "MERGED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fix #25 and #26.",
+      "createdAt": "2025-01-08T17:31:21Z",
+      "updatedAt": "2025-01-08T17:31:53Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "ab2b0b7ed263563f7d8dd2cce99475a139121f82",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "nits",
+      "headRefOid": "a4b124947ded762c072c4ddca84b22d5a75f94cc",
+      "closedAt": "2025-01-08T17:31:53Z",
+      "mergedAt": "2025-01-08T17:31:53Z",
+      "mergedBy": "dansarie",
+      "mergeCommit": {
+        "oid": "432bdd82bb2f377cf0f3cc253a84a56557fd1bb4"
+      },
+      "comments": [],
+      "reviews": []
+    },
+    {
+      "number": 28,
+      "id": "PR_kwDOMvYKEc6HG3PO",
+      "title": "Limit the number of versions that may be included in a VER or VERS tag",
+      "url": "https://github.com/ietf-wg-ntp/draft-roughtime/pull/28",
+      "state": "MERGED",
+      "author": "dansarie",
+      "authorAssociation": "COLLABORATOR",
+      "assignees": [],
+      "labels": [],
+      "body": "Fixes #24.\r\n\r\n@wbl Please have a look at this to see if it look ok.",
+      "createdAt": "2025-01-08T17:48:54Z",
+      "updatedAt": "2025-01-08T17:55:14Z",
+      "baseRepository": "ietf-wg-ntp/draft-roughtime",
+      "baseRefName": "main",
+      "baseRefOid": "432bdd82bb2f377cf0f3cc253a84a56557fd1bb4",
+      "headRepository": "dansarie/draft-roughtime-ietf",
+      "headRefName": "vers-field-length",
+      "headRefOid": "78d0d4a7fd0f4c64e3c8964afa11defbd57dd1a9",
+      "closedAt": "2025-01-08T17:55:14Z",
+      "mergedAt": "2025-01-08T17:55:14Z",
+      "mergedBy": "wbl",
+      "mergeCommit": {
+        "oid": "055ae1567449d2c21cd4b6ce717fdd9e61d815ff"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOMvYKEc6XRBaI",
+          "commit": {
+            "abbreviatedOid": "78d0d4a"
+          },
+          "author": "wbl",
+          "authorAssociation": "COLLABORATOR",
+          "state": "APPROVED",
+          "body": "",
+          "createdAt": "2025-01-08T17:55:04Z",
+          "updatedAt": "2025-01-08T17:55:04Z",
+          "comments": []
+        }
+      ]
     }
   ]
 }
