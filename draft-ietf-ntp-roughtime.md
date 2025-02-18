@@ -17,7 +17,7 @@ keyword:
 venue:
   group: "Network Time Protocols"
   type: "Working Group"
-  github: "wbl/roughtime-draft"
+  github: "ietf-wg-ntp/draft-roughtime"
 
 author:
  -
