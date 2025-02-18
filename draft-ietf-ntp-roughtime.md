@@ -1,6 +1,6 @@
 ---
 title: "Roughtime"
-category: info
+category: exp
 
 docname: draft-ietf-ntp-roughtime-latest
 submissiontype: IETF  # also: "independent", "editorial", "IAB", or "IRTF"
