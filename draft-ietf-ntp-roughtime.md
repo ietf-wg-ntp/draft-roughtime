@@ -147,7 +147,7 @@ Roughtime message.
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                   Number of pairs (uint32)                    |
+|                   Number of pairs, N (uint32)                 |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
@@ -209,7 +209,7 @@ the header is the uint32 number of tags N, and hence of (tag, value)
 pairs.
 
 The following 4\*(N-1) bytes are offsets, each a uint32. The last 4\*N
-bytes in the header are tags.  Offsets refer to the positions of the
+bytes in the header are tags. Offsets refer to the positions of the
 values in the message values section. All offsets MUST be multiples of
 four and placed in increasing order. The first post-header byte is at
 offset 0. The offset array is considered to have a not explicitly
@@ -538,10 +538,10 @@ seconds have elapsed we know the true time is within
 (t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
 to mix with NTP or Precision Time Protocol (PTP) discipline of the
 clock is to trim the observed intervals in NTP to fit entirely within
-this window or reject measurements that fall to far outside. This
+this window or reject measurements that fall too far outside. This
 assumes time has not been stepped. If the NTP process decides to step
-the time, it MUST use Roughtime to ensure the new truetime estimate
-that will be stepped to is consistent with the true time.  Should this
+the time, it MUST use Roughtime to ensure the new true time estimate
+that will be stepped to is consistent with the true time. Should this
 window become too large, another Roughtime measurement is called for.
 The definition of "too large" is implementation defined.
 Implementations MAY use other, more sophisticated means of adjusting
