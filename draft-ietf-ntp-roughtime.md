@@ -72,9 +72,17 @@ correctly. Furthermore, clients may lack even a basic idea of the
 time, creating bootstrapping problems.
 
 The primary design goal of Roughtime is to permit devices to obtain a
-rough idea of the current time from fairly static configuration
-consisting of a key and a server, and to enable them to report any
-inconsistencies they observe between time servers.
+rough idea of the current time from fairly static configuration and to
+enable them to report any inconsistencies they observe between
+servers. The configuration consists of a list of servers and their
+associated long-term keys, which ideally remain unchanged throughout a
+server's lifetime. This makes the long-term public keys the roots of
+trust in Roughtime. With a sufficiently long list of trusted servers
+and keys, a client will be able to acquire authenticated time with
+high probability, even after long periods of inactivity. Proofs of
+malfeasance constructed by chaining together responses from different
+trusted servers can be used to prove misbehavior by a server, thereby
+revoking trust in that particular key.
 
 This memo is limited to describing the Roughtime on-wire protocol.
 Apart from describing the server list and malfeasance report formats,
@@ -278,10 +286,11 @@ used.
 
 ## Requests {#requests}
 
-A request MUST contain the tags VER and NONC. It SHOULD include the
-tag SRV. Other tags SHOULD be ignored by the server. A future version
-of this protocol may mandate additional tags in the message and assign
-them semantic meaning.
+A request MUST contain the tags VER, NONC, and TYPE. It SHOULD include
+the tag SRV. Other tags SHOULD be ignored by the server. Requests not
+containing the three mandatory tags MUST be ignored by servers. A
+future version of this protocol may mandate additional tags in the
+message and assign them semantic meaning.
 
 The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
@@ -311,6 +320,13 @@ The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
 in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
 contains specific guidelines regarding this.
 
+### TYPE
+
+The TYPE tag is used to unambiguously distinguish between request and
+response messages. In a request, it MUST contain a uint32 with value
+0. Requests containing a TYPE tag with any other value MUST be ignored
+by servers.
+
 ### SRV
 
 The SRV tag is used by the client to indicate which long-term public
@@ -338,13 +354,14 @@ procedure:
    long-term key, it SHOULD select that key. Otherwise, if the server
    has multiple long-term keys, then it MUST ignore the request.
 
-A response MUST contain the tags SIG, NONC, PATH, SREP, CERT, and
-INDX. The structure of a response message is illustrated in
+A response MUST contain the tags SIG, NONC, TYPE, PATH, SREP, CERT,
+and INDX. The structure of a response message is illustrated in
 {{figresponse}}.
 
 ~~~~~
 |--SIG
 |--NONC
+|--TYPE
 |--PATH
 |--SREP
 |  |--VER
@@ -377,6 +394,12 @@ MUST be "RoughTime v1 response signature".
 
 The NONC tag MUST contain the nonce of the message being responded to.
 
+### TYPE
+
+In a response, the TYPE tag MUST contain a uint32 with value 1.
+Responses containing a TYPE tag with any other value MUST be ignored
+by clients.
+
 ### PATH
 
 The PATH tag value MUST be a multiple of 32 bytes long and represent a
@@ -396,10 +419,10 @@ implementations SHOULD select a maximum Merkle tree height (see
 The SREP tag contains a signed response. Its value MUST be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
-The VER tag, when used in a response, MUST contain a single version
-number. It SHOULD be one of the version numbers supplied by the client
-in its request. The server MUST ensure that the version number
-corresponds with the rest of the packet contents.
+The VER tag, when used in a response, MUST contain a single uint32
+version number. It SHOULD be one of the version numbers supplied by
+the client in its request. The server MUST ensure that the version
+number corresponds with the rest of the packet contents.
 
 The RADI tag value MUST be a uint32 representing the server's estimate
 of the accuracy of MIDP in seconds. Servers MUST ensure that the true
@@ -531,7 +554,6 @@ clock on the client and the clock on the server, and let sigma
 represent the error in the measured value of delta introduced by the
 measurement process.
 
-
 Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
@@ -547,6 +569,12 @@ The definition of "too large" is implementation defined.
 Implementations MAY use other, more sophisticated means of adjusting
 the clock respecting Roughtime information. Other applications such as
 X.509 verification may wish to apply different rules.
+
+If an NTP server uses a Roughtime server as a time source for
+synchronisation (and not only for filtering its NTP measurements), the
+root dispersion SHOULD include the server's RADI value and root delay
+SHOULD include the interval between sending the Roughtime request and
+receiving the response.
 
 # Grease
 
@@ -829,6 +857,7 @@ The initial contents of this registry SHALL be as follows:
 | 0x00565253 | SRV                  | [[this memo]] |
 | 0x434e4f4e | NONC                 | [[this memo]] |
 | 0x454c4544 | DELE                 | [[this memo]] |
+| 0x45505954 | TYPE                 | [[this memo]] |
 | 0x48544150 | PATH                 | [[this memo]] |
 | 0x49444152 | RADI                 | [[this memo]] |
 | 0x4b425550 | PUBK                 | [[this memo]] |
@@ -851,6 +880,6 @@ Aanchal Malhotra and Adam Langley authored early drafts of this memo.
 Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
 Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
 Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
-David Venhoek, Ulrich Windl, and the other members of the NTP working
-group contributed comments and suggestions as well as pointed out
-errors.
+Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
+the NTP working group contributed comments and suggestions as well as
+pointed out errors.
