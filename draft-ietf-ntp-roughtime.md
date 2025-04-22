@@ -546,7 +546,6 @@ clock on the client and the clock on the server, and let sigma
 represent the error in the measured value of delta introduced by the
 measurement process.
 
-
 Given a measurement taken at a local time t, we
 know the true time is in (t-delta-sigma, t-delta+sigma). After d
 seconds have elapsed we know the true time is within
@@ -562,6 +561,12 @@ The definition of "too large" is implementation defined.
 Implementations MAY use other, more sophisticated means of adjusting
 the clock respecting Roughtime information. Other applications such as
 X.509 verification may wish to apply different rules.
+
+If an NTP server uses a Roughtime server as a time source for
+synchronisation (and not only for filtering its NTP measurements), the
+root dispersion SHOULD include the server's RADI value and root delay
+SHOULD include the interval between sending the Roughtime request and
+receiving the response.
 
 # Grease
 
