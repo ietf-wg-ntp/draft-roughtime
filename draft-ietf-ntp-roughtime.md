@@ -411,10 +411,10 @@ implementations SHOULD select a maximum Merkle tree height (see
 The SREP tag contains a signed response. Its value MUST be a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
-The VER tag, when used in a response, MUST contain a single version
-number. It SHOULD be one of the version numbers supplied by the client
-in its request. The server MUST ensure that the version number
-corresponds with the rest of the packet contents.
+The VER tag, when used in a response, MUST contain a single uint32
+version number. It SHOULD be one of the version numbers supplied by
+the client in its request. The server MUST ensure that the version
+number corresponds with the rest of the packet contents.
 
 The RADI tag value MUST be a uint32 representing the server's estimate
 of the accuracy of MIDP in seconds. Servers MUST ensure that the true
