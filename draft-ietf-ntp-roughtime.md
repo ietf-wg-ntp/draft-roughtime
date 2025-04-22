@@ -72,9 +72,17 @@ correctly. Furthermore, clients may lack even a basic idea of the
 time, creating bootstrapping problems.
 
 The primary design goal of Roughtime is to permit devices to obtain a
-rough idea of the current time from fairly static configuration
-consisting of a key and a server, and to enable them to report any
-inconsistencies they observe between time servers.
+rough idea of the current time from fairly static configuration and to
+enable them to report any inconsistencies they observe between
+servers. The configuration consists of a list of servers and their
+associated long-term keys, which ideally remain unchanged throughout a
+server's lifetime. This makes the long-term public keys the roots of
+trust in Roughtime. With a sufficiently long list of trusted servers
+and keys, a client will be able to acquire authenticated time with
+high probability, even after long periods of inactivity. Proofs of
+malfeasance constructed by chaining together responses from different
+trusted servers can be used to prove misbehavior by a server, thereby
+revoking trust in that particular key.
 
 This memo is limited to describing the Roughtime on-wire protocol.
 Apart from describing the server list and malfeasance report formats,
