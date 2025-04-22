@@ -851,6 +851,6 @@ Aanchal Malhotra and Adam Langley authored early drafts of this memo.
 Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
 Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
 Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
-David Venhoek, Ulrich Windl, and the other members of the NTP working
-group contributed comments and suggestions as well as pointed out
-errors.
+Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
+the NTP working group contributed comments and suggestions as well as
+pointed out errors.
