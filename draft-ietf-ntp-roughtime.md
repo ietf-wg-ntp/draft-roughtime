@@ -278,10 +278,11 @@ used.
 
 ## Requests {#requests}
 
-A request MUST contain the tags VER and NONC. It SHOULD include the
-tag SRV. Other tags SHOULD be ignored by the server. A future version
-of this protocol may mandate additional tags in the message and assign
-them semantic meaning.
+A request MUST contain the tags VER, NONC, and TYPE. It SHOULD include
+the tag SRV. Other tags SHOULD be ignored by the server. Requests not
+containing the three mandatory tags MUST be ignored by servers. A
+future version of this protocol may mandate additional tags in the
+message and assign them semantic meaning.
 
 The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
@@ -311,6 +312,13 @@ The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
 in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
 contains specific guidelines regarding this.
 
+### TYPE
+
+The TYPE tag is used to unambiguously distinguish between request and
+response messages. In a request, it MUST contain a uint32 with value
+0. Requests containing a TYPE tag with any other value MUST be ignored
+by servers.
+
 ### SRV
 
 The SRV tag is used by the client to indicate which long-term public
@@ -338,13 +346,14 @@ procedure:
    long-term key, it SHOULD select that key. Otherwise, if the server
    has multiple long-term keys, then it MUST ignore the request.
 
-A response MUST contain the tags SIG, NONC, PATH, SREP, CERT, and
-INDX. The structure of a response message is illustrated in
+A response MUST contain the tags SIG, NONC, TYPE, PATH, SREP, CERT,
+and INDX. The structure of a response message is illustrated in
 {{figresponse}}.
 
 ~~~~~
 |--SIG
 |--NONC
+|--TYPE
 |--PATH
 |--SREP
 |  |--VER
@@ -376,6 +385,12 @@ MUST be "RoughTime v1 response signature".
 ### NONC
 
 The NONC tag MUST contain the nonce of the message being responded to.
+
+### TYPE
+
+In a response, the TYPE tag MUST contain a uint32 with value 1.
+Responses containing a TYPE tag with any other value MUST be ignored
+by clients.
 
 ### PATH
 
@@ -829,6 +844,7 @@ The initial contents of this registry SHALL be as follows:
 | 0x00565253 | SRV                  | [[this memo]] |
 | 0x434e4f4e | NONC                 | [[this memo]] |
 | 0x454c4544 | DELE                 | [[this memo]] |
+| 0x45505954 | TYPE                 | [[this memo]] |
 | 0x48544150 | PATH                 | [[this memo]] |
 | 0x49444152 | RADI                 | [[this memo]] |
 | 0x4b425550 | PUBK                 | [[this memo]] |
