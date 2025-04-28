@@ -571,7 +571,7 @@ the clock respecting Roughtime information. Other applications such as
 X.509 verification may wish to apply different rules.
 
 If an NTP server uses a Roughtime server as a time source for
-synchronisation (and not only for filtering its NTP measurements), the
+synchronization (and not only for filtering its NTP measurements), the
 root dispersion SHOULD include the server's RADI value and root delay
 SHOULD include the interval between sending the Roughtime request and
 receiving the response.
