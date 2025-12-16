@@ -84,6 +84,11 @@ malfeasance constructed by chaining together responses from different
 trusted servers can be used to prove misbehavior by a server, thereby
 revoking trust in that particular key.
 
+Unlike Khronos {{?RFC9523}} Roughtime produces external evidence that
+timeservers are reporting incompatible times. This requires changes
+to the format of the timestamps and hence cannot be a mere extension to
+NTP.
+
 This memo is limited to describing the Roughtime on-wire protocol.
 Apart from describing the server list and malfeasance report formats,
 this memo does not describe the ecosystem required for maintaining
@@ -199,7 +204,9 @@ byte. ASCII strings shorter than four characters can be unambiguously
 converted to tags by padding them with zero bytes. Tags MUST NOT
 contain any other bytes than capital letters (A-Z) or padding zero
 bytes. For example, the ASCII string "NONC" would correspond to the
-tag 0x434e4f4e and "VER" would correspond to 0x00524556.
+tag 0x434e4f4e and "VER" would correspond to 0x00524556. On the wire
+VER would be serialized as {0x56, 0x45, 0x52, 0x00} because of the
+little-endian encoding of uint32.
 
 ### Timestamp
 
@@ -447,13 +454,13 @@ described in {{merkle-tree}}.
 
 ### CERT
 
-The CERT tag contains a public-key certificate signed with the
+The CERT tag contains a public key certificate signed with the
 server's private long-term key. Its value MUST be a Roughtime message
 with the tags DELE and SIG, where SIG is a signature over the DELE
 value. The context string used to generate SIG MUST be "RoughTime v1
 delegation signature".
 
-The DELE tag contains a delegated public-key certificate used by the
+The DELE tag contains a delegated public key certificate used by the
 server to sign the SREP tag. Its value MUST be a Roughtime message
 with the tags MINT, MAXT, and PUBK. The purpose of the DELE tag is to
 enable separation of a long-term public key from keys on devices
@@ -671,6 +678,9 @@ MUST NOT include zone identifiers {{!RFC6874}}. The port part SHALL be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.
 
+To disambiguate IPv6 addresses from ports when zero compression happens,
+IPv6 addresses MUST be encapsulated within [].
+
 The value of "sources", if present, MUST be a list of strings
 indicating where updated versions of the list may be aquired. Each
 string MUST be a URL {{!RFC1738}} pointing to a list in the format
@@ -784,7 +794,8 @@ It is expected that clients identify a server by its long-term public
 key. In multi-tenancy environments, where multiple servers may be
 listening on the same IP or port space, the protocol is designed so
 that the client indicates which server it expects to respond. This is
-done with the SRV tag.
+done with the SRV tag. Additional recommendations for clients are listed in
+{{roughtime-clients}}.
 
 # IANA Considerations
 
