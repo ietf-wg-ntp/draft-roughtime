@@ -674,7 +674,7 @@ and a port number, separated by a colon character, for example
 address, an IPv6 address, or a fully qualified domain name (FQDN).
 IPv4 addresses MUST be in dotted decimal notation. IPv6 addresses MUST
 conform to the "Text Representation of Addresses" {{!RFC4291}} and
-MUST NOT include zone identifiers {{!RFC6874}}. The port part SHALL be
+MUST NOT include zone identifiers {{!RFC9844}}. The port part SHALL be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.
 
@@ -683,7 +683,7 @@ IPv6 addresses MUST be encapsulated within [].
 
 The value of "sources", if present, MUST be a list of strings
 indicating where updated versions of the list may be aquired. Each
-string MUST be a URL {{!RFC1738}} pointing to a list in the format
+string MUST be a URL {{!RFC398}} pointing to a list in the format
 specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 The value of "reports", if present, MUST be a string indicating a URL
