@@ -4,9 +4,9 @@
 
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
-Intended status: Informational                               M. Dansarie
-Expires: 12 July 2025                                             Netnod
-                                                          8 January 2025
+Intended status: Experimental                                M. Dansarie
+Expires: 20 June 2026                                             Netnod
+                                                        17 December 2025
 
 
                                Roughtime
@@ -29,7 +29,7 @@ About This Document
    https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime/.
 
    Source for this draft and an issue tracker can be found at
-   https://github.com/wbl/roughtime-draft.
+   https://github.com/ietf-wg-ntp/draft-roughtime.
 
 Status of This Memo
 
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 July 2025.
+   This Internet-Draft will expire on 20 June 2026.
 
 Copyright Notice
 
@@ -80,15 +80,17 @@ Table of Contents
      5.1.  Requests
        5.1.1.  VER
        5.1.2.  NONC
-       5.1.3.  SRV
-       5.1.4.  ZZZZ
+       5.1.3.  TYPE
+       5.1.4.  SRV
+       5.1.5.  ZZZZ
      5.2.  Responses
        5.2.1.  SIG
        5.2.2.  NONC
-       5.2.3.  PATH
-       5.2.4.  SREP
-       5.2.5.  CERT
-       5.2.6.  INDX
+       5.2.3.  TYPE
+       5.2.4.  PATH
+       5.2.5.  SREP
+       5.2.6.  CERT
+       5.2.7.  INDX
      5.3.  The Merkle Tree
        5.3.1.  Root Value Validity Check Algorithm
      5.4.  Validity of Response
@@ -131,9 +133,22 @@ Table of Contents
    time, creating bootstrapping problems.
 
    The primary design goal of Roughtime is to permit devices to obtain a
-   rough idea of the current time from fairly static configuration
-   consisting of a key and a server, and to enable them to report any
-   inconsistencies they observe between time servers.
+   rough idea of the current time from fairly static configuration and
+   to enable them to report any inconsistencies they observe between
+   servers.  The configuration consists of a list of servers and their
+   associated long-term keys, which ideally remain unchanged throughout
+   a server's lifetime.  This makes the long-term public keys the roots
+   of trust in Roughtime.  With a sufficiently long list of trusted
+   servers and keys, a client will be able to acquire authenticated time
+   with high probability, even after long periods of inactivity.  Proofs
+   of malfeasance constructed by chaining together responses from
+   different trusted servers can be used to prove misbehavior by a
+   server, thereby revoking trust in that particular key.
+
+   Unlike Khronos [RFC9523] Roughtime produces external evidence that
+   timeservers are reporting incompatible times.  This requires changes
+   to the format of the timestamps and hence cannot be a mere extension
+   to NTP.
 
    This memo is limited to describing the Roughtime on-wire protocol.
    Apart from describing the server list and malfeasance report formats,
@@ -212,7 +227,7 @@ Table of Contents
     0                   1                   2                   3
     0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-   |                   Number of pairs (uint32)                    |
+   |                   Number of pairs, N (uint32)                 |
    +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
    |                                                               |
    .                                                               .
@@ -257,7 +272,8 @@ Table of Contents
    Tags MUST NOT contain any other bytes than capital letters (A-Z) or
    padding zero bytes.  For example, the ASCII string "NONC" would
    correspond to the tag 0x434e4f4e and "VER" would correspond to
-   0x00524556.
+   0x00524556.  On the wire VER would be serialized as {0x56, 0x45,
+   0x52, 0x00} because of the little-endian encoding of uint32.
 
 4.1.4.  Timestamp
 
@@ -343,10 +359,11 @@ Table of Contents
 
 5.1.  Requests
 
-   A request MUST contain the tags VER and NONC.  It SHOULD include the
-   tag SRV.  Other tags SHOULD be ignored by the server.  A future
-   version of this protocol may mandate additional tags in the message
-   and assign them semantic meaning.
+   A request MUST contain the tags VER, NONC, and TYPE.  It SHOULD
+   include the tag SRV.  Other tags SHOULD be ignored by the server.
+   Requests not containing the three mandatory tags MUST be ignored by
+   servers.  A future version of this protocol may mandate additional
+   tags in the message and assign them semantic meaning.
 
    The size of the request message SHOULD be at least 1024 bytes when
    the UDP transport mode is used.  To attain this size the ZZZZ tag
@@ -368,7 +385,7 @@ Table of Contents
    Servers SHOULD ignore any unknown version numbers in the list
    supplied by the client.  If the list contains no version numbers
    supported by the server, it MAY respond with another version or
-   ignore the request entirely, see Section 5.2.4.
+   ignore the request entirely, see Section 5.2.5.
 
 5.1.2.  NONC
 
@@ -376,7 +393,14 @@ Table of Contents
    in a manner indistinguishable from random.  BCP 106 [RFC4086]
    contains specific guidelines regarding this.
 
-5.1.3.  SRV
+5.1.3.  TYPE
+
+   The TYPE tag is used to unambiguously distinguish between request and
+   response messages.  In a request, it MUST contain a uint32 with value
+   0.  Requests containing a TYPE tag with any other value MUST be
+   ignored by servers.
+
+5.1.4.  SRV
 
    The SRV tag is used by the client to indicate which long-term public
    key it expects to verify the response with.  The value of the SRV tag
@@ -384,7 +408,7 @@ Table of Contents
    32-byte Ed25519 public key and H is SHA-512 truncated to the first 32
    bytes.
 
-5.1.4.  ZZZZ
+5.1.5.  ZZZZ
 
    The ZZZZ tag is used to expand the response to the minimum required
    length.  Its value MUST be all zero bytes.
@@ -404,12 +428,13 @@ Table of Contents
        server has multiple long-term keys, then it MUST ignore the
        request.
 
-   A response MUST contain the tags SIG, NONC, PATH, SREP, CERT, and
-   INDX.  The structure of a response message is illustrated in
+   A response MUST contain the tags SIG, NONC, TYPE, PATH, SREP, CERT,
+   and INDX.  The structure of a response message is illustrated in
    Figure 3.
 
    |--SIG
    |--NONC
+   |--TYPE
    |--PATH
    |--SREP
    |  |--VER
@@ -443,7 +468,13 @@ Table of Contents
    The NONC tag MUST contain the nonce of the message being responded
    to.
 
-5.2.3.  PATH
+5.2.3.  TYPE
+
+   In a response, the TYPE tag MUST contain a uint32 with value 1.
+   Responses containing a TYPE tag with any other value MUST be ignored
+   by clients.
+
+5.2.4.  PATH
 
    The PATH tag value MUST be a multiple of 32 bytes long and represent
    a path of 32-byte hash values in the Merkle tree used to generate the
@@ -457,14 +488,14 @@ Table of Contents
    implementations SHOULD select a maximum Merkle tree height (see
    Section 5.3) that ensures this.
 
-5.2.4.  SREP
+5.2.5.  SREP
 
    The SREP tag contains a signed response.  Its value MUST be a
    Roughtime message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
-   The VER tag, when used in a response, MUST contain a single version
-   number.  It SHOULD be one of the version numbers supplied by the
-   client in its request.  The server MUST ensure that the version
+   The VER tag, when used in a response, MUST contain a single uint32
+   version number.  It SHOULD be one of the version numbers supplied by
+   the client in its request.  The server MUST ensure that the version
    number corresponds with the rest of the packet contents.
 
    The RADI tag value MUST be a uint32 representing the server's
@@ -488,15 +519,15 @@ Table of Contents
    The ROOT tag MUST contain a 32-byte value of a Merkle tree root as
    described in Section 5.3.
 
-5.2.5.  CERT
+5.2.6.  CERT
 
-   The CERT tag contains a public-key certificate signed with the
+   The CERT tag contains a public key certificate signed with the
    server's private long-term key.  Its value MUST be a Roughtime
    message with the tags DELE and SIG, where SIG is a signature over the
    DELE value.  The context string used to generate SIG MUST be
    "RoughTime v1 delegation signature".
 
-   The DELE tag contains a delegated public-key certificate used by the
+   The DELE tag contains a delegated public key certificate used by the
    server to sign the SREP tag.  Its value MUST be a Roughtime message
    with the tags MINT, MAXT, and PUBK.  The purpose of the DELE tag is
    to enable separation of a long-term public key from keys on devices
@@ -513,7 +544,7 @@ Table of Contents
    The PUBK tag MUST contain a temporary 32-byte Ed25519 public key
    which is used to sign the SREP tag.
 
-5.2.6.  INDX
+5.2.7.  INDX
 
    The INDX tag value MUST be a uint32 determining the position of NONC
    in the Merkle tree used to generate the ROOT value as described in
@@ -603,15 +634,21 @@ Table of Contents
    t-delta+sigma+d_PHI).  A simple and effective way to mix with NTP or
    Precision Time Protocol (PTP) discipline of the clock is to trim the
    observed intervals in NTP to fit entirely within this window or
-   reject measurements that fall to far outside.  This assumes time has
+   reject measurements that fall too far outside.  This assumes time has
    not been stepped.  If the NTP process decides to step the time, it
-   MUST use Roughtime to ensure the new truetime estimate that will be
+   MUST use Roughtime to ensure the new true time estimate that will be
    stepped to is consistent with the true time.  Should this window
    become too large, another Roughtime measurement is called for.  The
    definition of "too large" is implementation defined.  Implementations
    MAY use other, more sophisticated means of adjusting the clock
    respecting Roughtime information.  Other applications such as X.509
    verification may wish to apply different rules.
+
+   If an NTP server uses a Roughtime server as a time source for
+   synchronization (and not only for filtering its NTP measurements),
+   the root dispersion SHOULD include the server's RADI value and root
+   delay SHOULD include the interval between sending the Roughtime
+   request and receiving the response.
 
 7.  Grease
 
@@ -708,6 +745,9 @@ Table of Contents
    [RFC4291] and MUST NOT include zone identifiers [RFC6874].  The port
    part SHALL be a decimal integer representing a valid port number,
    i.e. in the range 0-65535.
+
+   To disambiguate IPv6 addresses from ports when zero compression
+   happens, IPv6 addresses MUST be encapsulated within [].
 
    The value of "sources", if present, MUST be a list of strings
    indicating where updated versions of the list may be aquired.  Each
@@ -822,7 +862,8 @@ Table of Contents
    key.  In multi-tenancy environments, where multiple servers may be
    listening on the same IP or port space, the protocol is designed so
    that the client indicates which server it expects to respond.  This
-   is done with the SRV tag.
+   is done with the SRV tag.  Additional recommendations for clients are
+   listed in Section 8.
 
 12.  IANA Considerations
 
@@ -908,6 +949,8 @@ Table of Contents
            | 0x434e4f4e | NONC                 | [[this memo]] |
            +------------+----------------------+---------------+
            | 0x454c4544 | DELE                 | [[this memo]] |
+           +------------+----------------------+---------------+
+           | 0x45505954 | TYPE                 | [[this memo]] |
            +------------+----------------------+---------------+
            | 0x48544150 | PATH                 | [[this memo]] |
            +------------+----------------------+---------------+
@@ -1025,15 +1068,21 @@ Table of Contents
               Protocol", RFC 8915, DOI 10.17487/RFC8915, September 2020,
               <https://www.rfc-editor.org/rfc/rfc8915>.
 
+   [RFC9523]  Rozen-Schiff, N., Dolev, D., Mizrahi, T., and M. Schapira,
+              "A Secure Selection and Filtering Mechanism for the
+              Network Time Protocol with Khronos", RFC 9523,
+              DOI 10.17487/RFC9523, February 2024,
+              <https://www.rfc-editor.org/rfc/rfc9523>.
+
 Acknowledgments
 
    Aanchal Malhotra and Adam Langley authored early drafts of this memo.
    Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter
    Löthberg, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton,
    Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof
-   Teichel, David Venhoek, Ulrich Windl, and the other members of the
-   NTP working group contributed comments and suggestions as well as
-   pointed out errors.
+   Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the other
+   members of the NTP working group contributed comments and suggestions
+   as well as pointed out errors.
 
 Authors' Addresses
 

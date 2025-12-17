@@ -15,25 +15,24 @@ which to report any inconsistencies they observe between time servers.
 This document specifies the on-wire protocol required for these goals,
 and discusses aspects of the ecosystem needed for it to work. 
     " name="description">
-<meta content="xml2rfc 3.25.0" name="generator">
+<meta content="xml2rfc 3.31.0" name="generator">
 <meta content="timing" name="keyword">
 <meta content="authenticity" name="keyword">
 <meta content="roughtime" name="keyword">
 <meta content="draft-ietf-ntp-roughtime-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.25.0
-    Python 3.12.8
+  xml2rfc 3.31.0
+    Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.1.0
-    Jinja2 3.1.5
-    lxml 5.3.0
-    platformdirs 4.3.6
+    Jinja2 3.1.6
+    lxml 5.3.1
+    platformdirs 4.5.0
     pycountry 24.6.1
     PyYAML 6.0.2
-    requests 2.32.3
-    setuptools 70.3.0
-    wcwidth 0.2.13
+    requests 2.32.5
+    wcwidth 0.2.14
 -->
 <link href="draft-ietf-ntp-roughtime.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -443,7 +442,7 @@ dl {
     margin-bottom: 0;
   }
 }
-dl > dt {
+dl:not(.dlNewline) > dt {
   float: left;
   margin-right: 2ch;
   min-width: 8ch;
@@ -1052,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Roughtime</td>
-<td class="right">January 2025</td>
+<td class="right">December 2025</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 12 July 2025</td>
+<td class="center">Expires 20 June 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-01-08" class="published">8 January 2025</time>
+<time datetime="2025-12-17" class="published">17 December 2025</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
-<dd class="intended-status">Informational</dd>
+<dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2025-07-12">12 July 2025</time></dd>
+<dd class="expires"><time datetime="2026-06-20">20 June 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1106,7 +1105,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
 <p id="section-note.1-2">
         Status information for this document may be found at <span><a href="https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime/">https://datatracker.ietf.org/doc/draft-ietf-ntp-roughtime/</a></span>.<a href="#section-note.1-2" class="pilcrow">¶</a></p>
 <p id="section-note.1-3">Source for this draft and an issue tracker can be found at
-        <span><a href="https://github.com/wbl/roughtime-draft">https://github.com/wbl/roughtime-draft</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
+        <span><a href="https://github.com/ietf-wg-ntp/draft-roughtime">https://github.com/ietf-wg-ntp/draft-roughtime</a></span>.<a href="#section-note.1-3" class="pilcrow">¶</a></p>
 </section>
 <div id="status-of-memo">
 <section id="section-boilerplate.1">
@@ -1127,7 +1126,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 12 July 2025.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 20 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1211,10 +1210,13 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
                     <p id="section-toc.1-1.5.2.1.2.2.1"><a href="#section-5.1.2" class="auto internal xref">5.1.2</a>.  <a href="#name-nonc" class="internal xref">NONC</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.3">
-                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-srv" class="internal xref">SRV</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.3.1"><a href="#section-5.1.3" class="auto internal xref">5.1.3</a>.  <a href="#name-type" class="internal xref">TYPE</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.4">
-                    <p id="section-toc.1-1.5.2.1.2.4.1"><a href="#section-5.1.4" class="auto internal xref">5.1.4</a>.  <a href="#name-zzzz" class="internal xref">ZZZZ</a></p>
+                    <p id="section-toc.1-1.5.2.1.2.4.1"><a href="#section-5.1.4" class="auto internal xref">5.1.4</a>.  <a href="#name-srv" class="internal xref">SRV</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.1.2.5">
+                    <p id="section-toc.1-1.5.2.1.2.5.1"><a href="#section-5.1.5" class="auto internal xref">5.1.5</a>.  <a href="#name-zzzz" class="internal xref">ZZZZ</a></p>
 </li>
                 </ul>
 </li>
@@ -1228,16 +1230,19 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
                     <p id="section-toc.1-1.5.2.2.2.2.1"><a href="#section-5.2.2" class="auto internal xref">5.2.2</a>.  <a href="#name-nonc-2" class="internal xref">NONC</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.3">
-                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-path" class="internal xref">PATH</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.3.1"><a href="#section-5.2.3" class="auto internal xref">5.2.3</a>.  <a href="#name-type-2" class="internal xref">TYPE</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.4">
-                    <p id="section-toc.1-1.5.2.2.2.4.1"><a href="#section-5.2.4" class="auto internal xref">5.2.4</a>.  <a href="#name-srep" class="internal xref">SREP</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.4.1"><a href="#section-5.2.4" class="auto internal xref">5.2.4</a>.  <a href="#name-path" class="internal xref">PATH</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.5">
-                    <p id="section-toc.1-1.5.2.2.2.5.1"><a href="#section-5.2.5" class="auto internal xref">5.2.5</a>.  <a href="#name-cert" class="internal xref">CERT</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.5.1"><a href="#section-5.2.5" class="auto internal xref">5.2.5</a>.  <a href="#name-srep" class="internal xref">SREP</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.6">
-                    <p id="section-toc.1-1.5.2.2.2.6.1"><a href="#section-5.2.6" class="auto internal xref">5.2.6</a>.  <a href="#name-indx" class="internal xref">INDX</a></p>
+                    <p id="section-toc.1-1.5.2.2.2.6.1"><a href="#section-5.2.6" class="auto internal xref">5.2.6</a>.  <a href="#name-cert" class="internal xref">CERT</a></p>
+</li>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5.2.2.2.7">
+                    <p id="section-toc.1-1.5.2.2.2.7.1"><a href="#section-5.2.7" class="auto internal xref">5.2.7</a>.  <a href="#name-indx" class="internal xref">INDX</a></p>
 </li>
                 </ul>
 </li>
@@ -1358,13 +1363,25 @@ features, and even newer protocols like Network Time Security (NTS)
 correctly. Furthermore, clients may lack even a basic idea of the
 time, creating bootstrapping problems.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The primary design goal of Roughtime is to permit devices to obtain a
-rough idea of the current time from fairly static configuration
-consisting of a key and a server, and to enable them to report any
-inconsistencies they observe between time servers.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">This memo is limited to describing the Roughtime on-wire protocol.
+rough idea of the current time from fairly static configuration and to
+enable them to report any inconsistencies they observe between
+servers. The configuration consists of a list of servers and their
+associated long-term keys, which ideally remain unchanged throughout a
+server's lifetime. This makes the long-term public keys the roots of
+trust in Roughtime. With a sufficiently long list of trusted servers
+and keys, a client will be able to acquire authenticated time with
+high probability, even after long periods of inactivity. Proofs of
+malfeasance constructed by chaining together responses from different
+trusted servers can be used to prove misbehavior by a server, thereby
+revoking trust in that particular key.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">Unlike Khronos <span>[<a href="#RFC9523" class="cite xref">RFC9523</a>]</span> Roughtime produces external evidence that
+timeservers are reporting incompatible times. This requires changes
+to the format of the timestamps and hence cannot be a mere extension to
+NTP.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This memo is limited to describing the Roughtime on-wire protocol.
 Apart from describing the server list and malfeasance report formats,
 this memo does not describe the ecosystem required for maintaining
-lists of trusted servers and processing malfeasance reports.<a href="#section-1-3" class="pilcrow">¶</a></p>
+lists of trusted servers and processing malfeasance reports.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1455,7 +1472,7 @@ Roughtime message.<a href="#section-4-2" class="pilcrow">¶</a></p>
  0                   1                   2                   3
  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-|                   Number of pairs (uint32)                    |
+|                   Number of pairs, N (uint32)                 |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
@@ -1516,7 +1533,9 @@ byte. ASCII strings shorter than four characters can be unambiguously
 converted to tags by padding them with zero bytes. Tags <span class="bcp14">MUST NOT</span>
 contain any other bytes than capital letters (A-Z) or padding zero
 bytes. For example, the ASCII string "NONC" would correspond to the
-tag 0x434e4f4e and "VER" would correspond to 0x00524556.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
+tag 0x434e4f4e and "VER" would correspond to 0x00524556. On the wire
+VER would be serialized as {0x56, 0x45, 0x52, 0x00} because of the
+little-endian encoding of uint32.<a href="#section-4.1.3-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="timestamp">
@@ -1543,7 +1562,7 @@ attainable accuracy and setting of the RADI tag.<a href="#section-4.1.4-1" class
 the header is the uint32 number of tags N, and hence of (tag, value)
 pairs.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
 <p id="section-4.2-2">The following 4*(N-1) bytes are offsets, each a uint32. The last 4*N
-bytes in the header are tags.  Offsets refer to the positions of the
+bytes in the header are tags. Offsets refer to the positions of the
 values in the message values section. All offsets <span class="bcp14">MUST</span> be multiples of
 four and placed in increasing order. The first post-header byte is at
 offset 0. The offset array is considered to have a not explicitly
@@ -1619,10 +1638,11 @@ used.<a href="#section-5-7" class="pilcrow">¶</a></p>
         <h3 id="name-requests">
 <a href="#section-5.1" class="section-number selfRef">5.1. </a><a href="#name-requests" class="section-name selfRef">Requests</a>
         </h3>
-<p id="section-5.1-1">A request <span class="bcp14">MUST</span> contain the tags VER and NONC. It <span class="bcp14">SHOULD</span> include the
-tag SRV. Other tags <span class="bcp14">SHOULD</span> be ignored by the server. A future version
-of this protocol may mandate additional tags in the message and assign
-them semantic meaning.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
+<p id="section-5.1-1">A request <span class="bcp14">MUST</span> contain the tags VER, NONC, and TYPE. It <span class="bcp14">SHOULD</span> include
+the tag SRV. Other tags <span class="bcp14">SHOULD</span> be ignored by the server. Requests not
+containing the three mandatory tags <span class="bcp14">MUST</span> be ignored by servers. A
+future version of this protocol may mandate additional tags in the
+message and assign them semantic meaning.<a href="#section-5.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.1-2">The size of the request message <span class="bcp14">SHOULD</span> be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag <span class="bcp14">SHOULD</span> be
 added to the message. Responding to requests shorter than 1024 bytes
@@ -1643,7 +1663,7 @@ numerical order.<a href="#section-5.1.1-2" class="pilcrow">¶</a></p>
 <p id="section-5.1.1-3">Servers <span class="bcp14">SHOULD</span> ignore any unknown version numbers in the list supplied
 by the client. If the list contains no version numbers supported by
 the server, it <span class="bcp14">MAY</span> respond with another version or ignore the request
-entirely, see <a href="#response-srep" class="auto internal xref">Section 5.2.4</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
+entirely, see <a href="#response-srep" class="auto internal xref">Section 5.2.5</a>.<a href="#section-5.1.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="nonc">
@@ -1656,25 +1676,36 @@ in a manner indistinguishable from random. BCP 106 <span>[<a href="#RFC4086" cla
 contains specific guidelines regarding this.<a href="#section-5.1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="srv">
+<div id="type">
 <section id="section-5.1.3">
-          <h4 id="name-srv">
-<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-srv" class="section-name selfRef">SRV</a>
+          <h4 id="name-type">
+<a href="#section-5.1.3" class="section-number selfRef">5.1.3. </a><a href="#name-type" class="section-name selfRef">TYPE</a>
           </h4>
-<p id="section-5.1.3-1">The SRV tag is used by the client to indicate which long-term public
+<p id="section-5.1.3-1">The TYPE tag is used to unambiguously distinguish between request and
+response messages. In a request, it <span class="bcp14">MUST</span> contain a uint32 with value
+0. Requests containing a TYPE tag with any other value <span class="bcp14">MUST</span> be ignored
+by servers.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="srv">
+<section id="section-5.1.4">
+          <h4 id="name-srv">
+<a href="#section-5.1.4" class="section-number selfRef">5.1.4. </a><a href="#name-srv" class="section-name selfRef">SRV</a>
+          </h4>
+<p id="section-5.1.4-1">The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is <code>H(0xff || public_key)</code> where <code>public_key</code> is the server's
 long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
-the first 32 bytes.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
+the first 32 bytes.<a href="#section-5.1.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="zzzz">
-<section id="section-5.1.4">
+<section id="section-5.1.5">
           <h4 id="name-zzzz">
-<a href="#section-5.1.4" class="section-number selfRef">5.1.4. </a><a href="#name-zzzz" class="section-name selfRef">ZZZZ</a>
+<a href="#section-5.1.5" class="section-number selfRef">5.1.5. </a><a href="#name-zzzz" class="section-name selfRef">ZZZZ</a>
           </h4>
-<p id="section-5.1.4-1">The ZZZZ tag is used to expand the response to the minimum required
-length. Its value <span class="bcp14">MUST</span> be all zero bytes.<a href="#section-5.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.1.5-1">The ZZZZ tag is used to expand the response to the minimum required
+length. Its value <span class="bcp14">MUST</span> be all zero bytes.<a href="#section-5.1.5-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1699,8 +1730,8 @@ long-term key, it <span class="bcp14">SHOULD</span> select that key. Otherwise, 
 has multiple long-term keys, then it <span class="bcp14">MUST</span> ignore the request.<a href="#section-5.2-2.2.1" class="pilcrow">¶</a></p>
 </li>
         </ol>
-<p id="section-5.2-3">A response <span class="bcp14">MUST</span> contain the tags SIG, NONC, PATH, SREP, CERT, and
-INDX. The structure of a response message is illustrated in
+<p id="section-5.2-3">A response <span class="bcp14">MUST</span> contain the tags SIG, NONC, TYPE, PATH, SREP, CERT,
+and INDX. The structure of a response message is illustrated in
 <a href="#figresponse" class="auto internal xref">Figure 3</a>.<a href="#section-5.2-3" class="pilcrow">¶</a></p>
 <span id="name-roughtime-response-message-"></span><div id="figresponse">
 <figure id="figure-3">
@@ -1708,6 +1739,7 @@ INDX. The structure of a response message is illustrated in
 <pre>
 |--SIG
 |--NONC
+|--TYPE
 |--PATH
 |--SREP
 |  |--VER
@@ -1750,35 +1782,45 @@ SREP value using the public key contained in CERT. The context string
 <p id="section-5.2.2-1">The NONC tag <span class="bcp14">MUST</span> contain the nonce of the message being responded to.<a href="#section-5.2.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="path">
+<div id="type-1">
 <section id="section-5.2.3">
-          <h4 id="name-path">
-<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-path" class="section-name selfRef">PATH</a>
+          <h4 id="name-type-2">
+<a href="#section-5.2.3" class="section-number selfRef">5.2.3. </a><a href="#name-type-2" class="section-name selfRef">TYPE</a>
           </h4>
-<p id="section-5.2.3-1">The PATH tag value <span class="bcp14">MUST</span> be a multiple of 32 bytes long and represent a
+<p id="section-5.2.3-1">In a response, the TYPE tag <span class="bcp14">MUST</span> contain a uint32 with value 1.
+Responses containing a TYPE tag with any other value <span class="bcp14">MUST</span> be ignored
+by clients.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="path">
+<section id="section-5.2.4">
+          <h4 id="name-path">
+<a href="#section-5.2.4" class="section-number selfRef">5.2.4. </a><a href="#name-path" class="section-name selfRef">PATH</a>
+          </h4>
+<p id="section-5.2.4-1">The PATH tag value <span class="bcp14">MUST</span> be a multiple of 32 bytes long and represent a
 path of 32-byte hash values in the Merkle tree used to generate the
 ROOT value as described in a <a href="#merkle-tree" class="auto internal xref">Section 5.3</a>. In the case where a
 response is prepared for a single request and the Merkle tree contains
-only the root node, the size of PATH <span class="bcp14">MUST</span> be zero.<a href="#section-5.2.3-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.3-2">The PATH <span class="bcp14">MUST NOT</span> contain more than 32 hash values. The maximum length
+only the root node, the size of PATH <span class="bcp14">MUST</span> be zero.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.4-2">The PATH <span class="bcp14">MUST NOT</span> contain more than 32 hash values. The maximum length
 of PATH is normally limited by the maximum size of the response
 message, see <a href="#requests" class="auto internal xref">Section 5.1</a> and <a href="#amplification-attacks" class="auto internal xref">Section 9.7</a>. Server
 implementations <span class="bcp14">SHOULD</span> select a maximum Merkle tree height (see
-<a href="#merkle-tree" class="auto internal xref">Section 5.3</a>) that ensures this.<a href="#section-5.2.3-2" class="pilcrow">¶</a></p>
+<a href="#merkle-tree" class="auto internal xref">Section 5.3</a>) that ensures this.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="response-srep">
-<section id="section-5.2.4">
+<section id="section-5.2.5">
           <h4 id="name-srep">
-<a href="#section-5.2.4" class="section-number selfRef">5.2.4. </a><a href="#name-srep" class="section-name selfRef">SREP</a>
+<a href="#section-5.2.5" class="section-number selfRef">5.2.5. </a><a href="#name-srep" class="section-name selfRef">SREP</a>
           </h4>
-<p id="section-5.2.4-1">The SREP tag contains a signed response. Its value <span class="bcp14">MUST</span> be a Roughtime
-message with the tags VER, RADI, MIDP, VERS, and ROOT.<a href="#section-5.2.4-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-2">The VER tag, when used in a response, <span class="bcp14">MUST</span> contain a single version
-number. It <span class="bcp14">SHOULD</span> be one of the version numbers supplied by the client
-in its request. The server <span class="bcp14">MUST</span> ensure that the version number
-corresponds with the rest of the packet contents.<a href="#section-5.2.4-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-3">The RADI tag value <span class="bcp14">MUST</span> be a uint32 representing the server's estimate
+<p id="section-5.2.5-1">The SREP tag contains a signed response. Its value <span class="bcp14">MUST</span> be a Roughtime
+message with the tags VER, RADI, MIDP, VERS, and ROOT.<a href="#section-5.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.5-2">The VER tag, when used in a response, <span class="bcp14">MUST</span> contain a single uint32
+version number. It <span class="bcp14">SHOULD</span> be one of the version numbers supplied by
+the client in its request. The server <span class="bcp14">MUST</span> ensure that the version
+number corresponds with the rest of the packet contents.<a href="#section-5.2.5-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.5-3">The RADI tag value <span class="bcp14">MUST</span> be a uint32 representing the server's estimate
 of the accuracy of MIDP in seconds. Servers <span class="bcp14">MUST</span> ensure that the true
 time is within <code>(MIDP-RADI, MIDP+RADI)</code> at the moment of processing.
 The value of RADI <span class="bcp14">MUST NOT</span> be zero. Since leap seconds can not be
@@ -1787,49 +1829,49 @@ this into account when setting the RADI value during leap second
 events. Servers that do not have any leap second information <span class="bcp14">SHOULD</span>
 set the value of RADI to at least 3. Failure to do so will impact the
 observed correctness of Roughtime servers and can lead to malfeasance
-reports.<a href="#section-5.2.4-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-4">The MIDP tag value <span class="bcp14">MUST</span> be the timestamp of the moment of processing.<a href="#section-5.2.4-4" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-5">The VERS tag value <span class="bcp14">MUST</span> contain a list of uint32 version numbers
+reports.<a href="#section-5.2.5-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.5-4">The MIDP tag value <span class="bcp14">MUST</span> be the timestamp of the moment of processing.<a href="#section-5.2.5-4" class="pilcrow">¶</a></p>
+<p id="section-5.2.5-5">The VERS tag value <span class="bcp14">MUST</span> contain a list of uint32 version numbers
 supported by the server, sorted in ascending numerical order. It <span class="bcp14">MUST</span>
 contain the version number specified in the VER tag. It <span class="bcp14">MUST NOT</span>
-contain more than 32 version numbers.<a href="#section-5.2.4-5" class="pilcrow">¶</a></p>
-<p id="section-5.2.4-6">The ROOT tag <span class="bcp14">MUST</span> contain a 32-byte value of a Merkle tree root as
-described in <a href="#merkle-tree" class="auto internal xref">Section 5.3</a>.<a href="#section-5.2.4-6" class="pilcrow">¶</a></p>
+contain more than 32 version numbers.<a href="#section-5.2.5-5" class="pilcrow">¶</a></p>
+<p id="section-5.2.5-6">The ROOT tag <span class="bcp14">MUST</span> contain a 32-byte value of a Merkle tree root as
+described in <a href="#merkle-tree" class="auto internal xref">Section 5.3</a>.<a href="#section-5.2.5-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="cert">
-<section id="section-5.2.5">
+<section id="section-5.2.6">
           <h4 id="name-cert">
-<a href="#section-5.2.5" class="section-number selfRef">5.2.5. </a><a href="#name-cert" class="section-name selfRef">CERT</a>
+<a href="#section-5.2.6" class="section-number selfRef">5.2.6. </a><a href="#name-cert" class="section-name selfRef">CERT</a>
           </h4>
-<p id="section-5.2.5-1">The CERT tag contains a public-key certificate signed with the
+<p id="section-5.2.6-1">The CERT tag contains a public key certificate signed with the
 server's private long-term key. Its value <span class="bcp14">MUST</span> be a Roughtime message
 with the tags DELE and SIG, where SIG is a signature over the DELE
 value. The context string used to generate SIG <span class="bcp14">MUST</span> be "RoughTime v1
-delegation signature".<a href="#section-5.2.5-1" class="pilcrow">¶</a></p>
-<p id="section-5.2.5-2">The DELE tag contains a delegated public-key certificate used by the
+delegation signature".<a href="#section-5.2.6-1" class="pilcrow">¶</a></p>
+<p id="section-5.2.6-2">The DELE tag contains a delegated public key certificate used by the
 server to sign the SREP tag. Its value <span class="bcp14">MUST</span> be a Roughtime message
 with the tags MINT, MAXT, and PUBK. The purpose of the DELE tag is to
 enable separation of a long-term public key from keys on devices
-exposed to the public Internet.<a href="#section-5.2.5-2" class="pilcrow">¶</a></p>
-<p id="section-5.2.5-3">The MINT tag is the minimum timestamp for which the key in PUBK is
+exposed to the public Internet.<a href="#section-5.2.6-2" class="pilcrow">¶</a></p>
+<p id="section-5.2.6-3">The MINT tag is the minimum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP <span class="bcp14">MUST</span> be more than or equal to MINT for
-a response to be considered valid.<a href="#section-5.2.5-3" class="pilcrow">¶</a></p>
-<p id="section-5.2.5-4">The MAXT tag is the maximum timestamp for which the key in PUBK is
+a response to be considered valid.<a href="#section-5.2.6-3" class="pilcrow">¶</a></p>
+<p id="section-5.2.6-4">The MAXT tag is the maximum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP <span class="bcp14">MUST</span> be less than or equal to MAXT for
-a response to be considered valid.<a href="#section-5.2.5-4" class="pilcrow">¶</a></p>
-<p id="section-5.2.5-5">The PUBK tag <span class="bcp14">MUST</span> contain a temporary 32-byte Ed25519 public key which
-is used to sign the SREP tag.<a href="#section-5.2.5-5" class="pilcrow">¶</a></p>
+a response to be considered valid.<a href="#section-5.2.6-4" class="pilcrow">¶</a></p>
+<p id="section-5.2.6-5">The PUBK tag <span class="bcp14">MUST</span> contain a temporary 32-byte Ed25519 public key which
+is used to sign the SREP tag.<a href="#section-5.2.6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="indx">
-<section id="section-5.2.6">
+<section id="section-5.2.7">
           <h4 id="name-indx">
-<a href="#section-5.2.6" class="section-number selfRef">5.2.6. </a><a href="#name-indx" class="section-name selfRef">INDX</a>
+<a href="#section-5.2.7" class="section-number selfRef">5.2.7. </a><a href="#name-indx" class="section-name selfRef">INDX</a>
           </h4>
-<p id="section-5.2.6-1">The INDX tag value <span class="bcp14">MUST</span> be a uint32 determining the position of NONC
+<p id="section-5.2.7-1">The INDX tag value <span class="bcp14">MUST</span> be a uint32 determining the position of NONC
 in the Merkle tree used to generate the ROOT value as described in
-<a href="#merkle-tree" class="auto internal xref">Section 5.3</a>.<a href="#section-5.2.6-1" class="pilcrow">¶</a></p>
+<a href="#merkle-tree" class="auto internal xref">Section 5.3</a>.<a href="#section-5.2.7-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1922,15 +1964,20 @@ seconds have elapsed we know the true time is within
 (t-delta-sigma-d<em>PHI, t-delta+sigma+d</em>PHI). A simple and effective way
 to mix with NTP or Precision Time Protocol (PTP) discipline of the
 clock is to trim the observed intervals in NTP to fit entirely within
-this window or reject measurements that fall to far outside. This
+this window or reject measurements that fall too far outside. This
 assumes time has not been stepped. If the NTP process decides to step
-the time, it <span class="bcp14">MUST</span> use Roughtime to ensure the new truetime estimate
-that will be stepped to is consistent with the true time.  Should this
+the time, it <span class="bcp14">MUST</span> use Roughtime to ensure the new true time estimate
+that will be stepped to is consistent with the true time. Should this
 window become too large, another Roughtime measurement is called for.
 The definition of "too large" is implementation defined.
 Implementations <span class="bcp14">MAY</span> use other, more sophisticated means of adjusting
 the clock respecting Roughtime information. Other applications such as
 X.509 verification may wish to apply different rules.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">If an NTP server uses a Roughtime server as a time source for
+synchronization (and not only for filtering its NTP measurements), the
+root dispersion <span class="bcp14">SHOULD</span> include the server's RADI value and root delay
+<span class="bcp14">SHOULD</span> include the interval between sending the Roughtime request and
+receiving the response.<a href="#section-6-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="grease">
@@ -2036,14 +2083,16 @@ conform to the "Text Representation of Addresses" <span>[<a href="#RFC4291" clas
 <span class="bcp14">MUST NOT</span> include zone identifiers <span>[<a href="#RFC6874" class="cite xref">RFC6874</a>]</span>. The port part <span class="bcp14">SHALL</span> be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.<a href="#section-8.3-8" class="pilcrow">¶</a></p>
-<p id="section-8.3-9">The value of "sources", if present, <span class="bcp14">MUST</span> be a list of strings
+<p id="section-8.3-9">To disambiguate IPv6 addresses from ports when zero compression happens,
+IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-9" class="pilcrow">¶</a></p>
+<p id="section-8.3-10">The value of "sources", if present, <span class="bcp14">MUST</span> be a list of strings
 indicating where updated versions of the list may be aquired. Each
 string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC1738" class="cite xref">RFC1738</a>]</span> pointing to a list in the format
-specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-9" class="pilcrow">¶</a></p>
-<p id="section-8.3-10">The value of "reports", if present, <span class="bcp14">MUST</span> be a string indicating a URL
+specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
+<p id="section-8.3-11">The value of "reports", if present, <span class="bcp14">MUST</span> be a string indicating a URL
 <span>[<a href="#RFC1738" class="cite xref">RFC1738</a>]</span> where malfeasance reports can be sent by clients using
 the HTTP POST method <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. The URI scheme <span class="bcp14">MUST</span> be HTTPS
-<span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
+<span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-11" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="malfeasance-reporting">
@@ -2187,7 +2236,8 @@ move between networks.<a href="#section-10-1" class="pilcrow">¶</a></p>
 key. In multi-tenancy environments, where multiple servers may be
 listening on the same IP or port space, the protocol is designed so
 that the client indicates which server it expects to respond. This is
-done with the SRV tag.<a href="#section-11-1" class="pilcrow">¶</a></p>
+done with the SRV tag. Additional recommendations for clients are listed in
+<a href="#roughtime-clients" class="auto internal xref">Section 8</a>.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -2322,6 +2372,11 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
             <tr>
               <td class="text-right" rowspan="1" colspan="1">0x454c4544</td>
               <td class="text-left" rowspan="1" colspan="1">DELE</td>
+              <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
+            </tr>
+            <tr>
+              <td class="text-right" rowspan="1" colspan="1">0x45505954</td>
+              <td class="text-left" rowspan="1" colspan="1">TYPE</td>
               <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
             </tr>
             <tr>
@@ -2479,8 +2534,12 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
 <span class="refAuthor">Harrenstien, K.</span>, <span class="refTitle">"Time server"</span>, <span class="seriesInfo">RFC 738</span>, <span class="seriesInfo">DOI 10.17487/RFC0738</span>, <time datetime="1977-10" class="refDate">October 1977</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc738">https://www.rfc-editor.org/rfc/rfc738</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8915">[RFC8915]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Franke, D.</span>, <span class="refAuthor">Sibold, D.</span>, <span class="refAuthor">Teichel, K.</span>, <span class="refAuthor">Dansarie, M.</span>, and <span class="refAuthor">R. Sundblad</span>, <span class="refTitle">"Network Time Security for the Network Time Protocol"</span>, <span class="seriesInfo">RFC 8915</span>, <span class="seriesInfo">DOI 10.17487/RFC8915</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8915">https://www.rfc-editor.org/rfc/rfc8915</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9523">[RFC9523]</dt>
+      <dd>
+<span class="refAuthor">Rozen-Schiff, N.</span>, <span class="refAuthor">Dolev, D.</span>, <span class="refAuthor">Mizrahi, T.</span>, and <span class="refAuthor">M. Schapira</span>, <span class="refTitle">"A Secure Selection and Filtering Mechanism for the Network Time Protocol with Khronos"</span>, <span class="seriesInfo">RFC 9523</span>, <span class="seriesInfo">DOI 10.17487/RFC9523</span>, <time datetime="2024-02" class="refDate">February 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9523">https://www.rfc-editor.org/rfc/rfc9523</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
@@ -2496,9 +2555,9 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
 Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
 Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
 Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
-David Venhoek, Ulrich Windl, and the other members of the NTP working
-group contributed comments and suggestions as well as pointed out
-errors.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
+the NTP working group contributed comments and suggestions as well as
+pointed out errors.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
