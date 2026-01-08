@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 20 June 2026                                             Netnod
-                                                        17 December 2025
+Expires: 12 July 2026                                             Netnod
+                                                          8 January 2026
 
 
                                Roughtime
@@ -46,11 +46,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 20 June 2026.
+   This Internet-Draft will expire on 12 July 2026.
 
 Copyright Notice
 
-   Copyright (c) 2025 IETF Trust and the persons identified as the
+   Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -742,7 +742,7 @@ Table of Contents
    either an IPv4 address, an IPv6 address, or a fully qualified domain
    name (FQDN).  IPv4 addresses MUST be in dotted decimal notation.
    IPv6 addresses MUST conform to the "Text Representation of Addresses"
-   [RFC4291] and MUST NOT include zone identifiers [RFC6874].  The port
+   [RFC4291] and MUST NOT include zone identifiers [RFC9844].  The port
    part SHALL be a decimal integer representing a valid port number,
    i.e. in the range 0-65535.
 
@@ -751,7 +751,7 @@ Table of Contents
 
    The value of "sources", if present, MUST be a list of strings
    indicating where updated versions of the list may be aquired.  Each
-   string MUST be a URL [RFC1738] pointing to a list in the format
+   string MUST be a URL [RFC398] pointing to a list in the format
    specified here.  The URI scheme MUST be HTTPS [RFC9110].
 
    The value of "reports", if present, MUST be a string indicating a URL
@@ -996,6 +996,10 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
+   [RFC398]   Pickens, J. and E. Faeh, "UCSB Online Graphics", RFC 398,
+              DOI 10.17487/RFC0398, September 1972,
+              <https://www.rfc-editor.org/rfc/rfc398>.
+
    [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
               "Randomness Requirements for Security", BCP 106, RFC 4086,
               DOI 10.17487/RFC4086, June 2005,
@@ -1013,11 +1017,6 @@ Table of Contents
               (SHA and SHA-based HMAC and HKDF)", RFC 6234,
               DOI 10.17487/RFC6234, May 2011,
               <https://www.rfc-editor.org/rfc/rfc6234>.
-
-   [RFC6874]  Carpenter, B., Cheshire, S., and R. Hinden, "Representing
-              IPv6 Zone Identifiers in Address Literals and Uniform
-              Resource Identifiers", RFC 6874, DOI 10.17487/RFC6874,
-              February 2013, <https://www.rfc-editor.org/rfc/rfc6874>.
 
    [RFC791]   Postel, J., "Internet Protocol", STD 5, RFC 791,
               DOI 10.17487/RFC0791, September 1981,
@@ -1045,6 +1044,11 @@ Table of Contents
    [RFC9170]  Thomson, M. and T. Pauly, "Long-Term Viability of Protocol
               Extension Mechanisms", RFC 9170, DOI 10.17487/RFC9170,
               December 2021, <https://www.rfc-editor.org/rfc/rfc9170>.
+
+   [RFC9844]  Carpenter, B. and R. Hinden, "Entering IPv6 Zone
+              Identifiers in User Interfaces", RFC 9844,
+              DOI 10.17487/RFC9844, August 2025,
+              <https://www.rfc-editor.org/rfc/rfc9844>.
 
 13.2.  Informative References
 

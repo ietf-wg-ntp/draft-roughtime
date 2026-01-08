@@ -25,12 +25,12 @@ and discusses aspects of the ecosystem needed for it to work.
     Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
-    intervaltree 3.1.0
+    intervaltree 3.2.1
     Jinja2 3.1.6
-    lxml 5.3.1
-    platformdirs 4.5.0
+    lxml 6.0.2
+    platformdirs 4.5.1
     pycountry 24.6.1
-    PyYAML 6.0.2
+    PyYAML 6.0.3
     requests 2.32.5
     wcwidth 0.2.14
 -->
@@ -1051,11 +1051,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Roughtime</td>
-<td class="right">December 2025</td>
+<td class="right">January 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 20 June 2026</td>
+<td class="center">Expires 12 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1068,12 +1068,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2025-12-17" class="published">17 December 2025</time>
+<time datetime="2026-01-08" class="published">8 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-06-20">20 June 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-12">12 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1126,7 +1126,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 20 June 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 12 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1135,7 +1135,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
 <a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
         </h2>
 <p id="section-boilerplate.2-1">
-            Copyright (c) 2025 IETF Trust and the persons identified as the
+            Copyright (c) 2026 IETF Trust and the persons identified as the
             document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.2-2">
             This document is subject to BCP 78 and the IETF Trust's Legal
@@ -2080,14 +2080,14 @@ and a port number, separated by a colon character, for example
 address, an IPv6 address, or a fully qualified domain name (FQDN).
 IPv4 addresses <span class="bcp14">MUST</span> be in dotted decimal notation. IPv6 addresses <span class="bcp14">MUST</span>
 conform to the "Text Representation of Addresses" <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span> and
-<span class="bcp14">MUST NOT</span> include zone identifiers <span>[<a href="#RFC6874" class="cite xref">RFC6874</a>]</span>. The port part <span class="bcp14">SHALL</span> be
+<span class="bcp14">MUST NOT</span> include zone identifiers <span>[<a href="#RFC9844" class="cite xref">RFC9844</a>]</span>. The port part <span class="bcp14">SHALL</span> be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.<a href="#section-8.3-8" class="pilcrow">¶</a></p>
 <p id="section-8.3-9">To disambiguate IPv6 addresses from ports when zero compression happens,
 IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-9" class="pilcrow">¶</a></p>
 <p id="section-8.3-10">The value of "sources", if present, <span class="bcp14">MUST</span> be a list of strings
 indicating where updated versions of the list may be aquired. Each
-string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC1738" class="cite xref">RFC1738</a>]</span> pointing to a list in the format
+string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC398" class="cite xref">RFC398</a>]</span> pointing to a list in the format
 specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
 <p id="section-8.3-11">The value of "reports", if present, <span class="bcp14">MUST</span> be a string indicating a URL
 <span>[<a href="#RFC1738" class="cite xref">RFC1738</a>]</span> where malfeasance reports can be sent by clients using
@@ -2468,6 +2468,10 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
         <dd>
 <span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc2119">https://www.rfc-editor.org/rfc/rfc2119</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC398">[RFC398]</dt>
+        <dd>
+<span class="refAuthor">Pickens, J.</span> and <span class="refAuthor">E. Faeh</span>, <span class="refTitle">"UCSB Online Graphics"</span>, <span class="seriesInfo">RFC 398</span>, <span class="seriesInfo">DOI 10.17487/RFC0398</span>, <time datetime="1972-09" class="refDate">September 1972</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc398">https://www.rfc-editor.org/rfc/rfc398</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC4086">[RFC4086]</dt>
         <dd>
 <span class="refAuthor">Eastlake 3rd, D.</span>, <span class="refAuthor">Schiller, J.</span>, and <span class="refAuthor">S. Crocker</span>, <span class="refTitle">"Randomness Requirements for Security"</span>, <span class="seriesInfo">BCP 106</span>, <span class="seriesInfo">RFC 4086</span>, <span class="seriesInfo">DOI 10.17487/RFC4086</span>, <time datetime="2005-06" class="refDate">June 2005</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4086">https://www.rfc-editor.org/rfc/rfc4086</a>&gt;</span>. </dd>
@@ -2483,10 +2487,6 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
 <dt id="RFC6234">[RFC6234]</dt>
         <dd>
 <span class="refAuthor">Eastlake 3rd, D.</span> and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)"</span>, <span class="seriesInfo">RFC 6234</span>, <span class="seriesInfo">DOI 10.17487/RFC6234</span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6234">https://www.rfc-editor.org/rfc/rfc6234</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC6874">[RFC6874]</dt>
-        <dd>
-<span class="refAuthor">Carpenter, B.</span>, <span class="refAuthor">Cheshire, S.</span>, and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Representing IPv6 Zone Identifiers in Address Literals and Uniform Resource Identifiers"</span>, <span class="seriesInfo">RFC 6874</span>, <span class="seriesInfo">DOI 10.17487/RFC6874</span>, <time datetime="2013-02" class="refDate">February 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6874">https://www.rfc-editor.org/rfc/rfc6874</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC791">[RFC791]</dt>
         <dd>
@@ -2509,8 +2509,12 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
 <span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP Semantics"</span>, <span class="seriesInfo">STD 97</span>, <span class="seriesInfo">RFC 9110</span>, <span class="seriesInfo">DOI 10.17487/RFC9110</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9110">https://www.rfc-editor.org/rfc/rfc9110</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9170">[RFC9170]</dt>
-      <dd>
+        <dd>
 <span class="refAuthor">Thomson, M.</span> and <span class="refAuthor">T. Pauly</span>, <span class="refTitle">"Long-Term Viability of Protocol Extension Mechanisms"</span>, <span class="seriesInfo">RFC 9170</span>, <span class="seriesInfo">DOI 10.17487/RFC9170</span>, <time datetime="2021-12" class="refDate">December 2021</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9170">https://www.rfc-editor.org/rfc/rfc9170</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9844">[RFC9844]</dt>
+      <dd>
+<span class="refAuthor">Carpenter, B.</span> and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"Entering IPv6 Zone Identifiers in User Interfaces"</span>, <span class="seriesInfo">RFC 9844</span>, <span class="seriesInfo">DOI 10.17487/RFC9844</span>, <time datetime="2025-08" class="refDate">August 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9844">https://www.rfc-editor.org/rfc/rfc9844</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 </dl>
 </section>
