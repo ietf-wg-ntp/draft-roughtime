@@ -69,7 +69,8 @@ the Network Time Protocol (NTP) {{?RFC5905}} lack essential security
 features, and even newer protocols like Network Time Security (NTS)
 {{?RFC8915}} lack mechanisms to observe that the servers behave
 correctly. Furthermore, clients may lack even a basic idea of the
-time, creating bootstrapping problems.
+time, creating bootstrapping problems as a time is required for
+X509 certificate validation.
 
 The primary design goal of Roughtime is to permit devices to obtain a
 rough idea of the current time from fairly static configuration and to
@@ -81,8 +82,8 @@ trust in Roughtime. With a sufficiently long list of trusted servers
 and keys, a client will be able to acquire authenticated time with
 high probability, even after long periods of inactivity. Proofs of
 malfeasance constructed by chaining together responses from different
-trusted servers can be used to prove misbehavior by a server, thereby
-revoking trust in that particular key.
+trusted servers can be used to prove misbehavior by a server, and
+after analysis result in revoking trust in that particular key.
 
 Unlike Khronos {{?RFC9523}} Roughtime produces external evidence that
 timeservers are reporting incompatible times. This requires changes
@@ -92,7 +93,9 @@ NTP.
 This memo is limited to describing the Roughtime on-wire protocol.
 Apart from describing the server list and malfeasance report formats,
 this memo does not describe the ecosystem required for maintaining
-lists of trusted servers and processing malfeasance reports.
+lists of trusted servers and processing malfeasance reports, nor the
+means by which the server list is maintained and distributed or the
+policies to apply to such a list.
 
 # Conventions and Definitions
 
@@ -273,23 +276,38 @@ contains a Roughtime message as specified in {{message-format}}.
 
 Roughtime request and response packets MUST be transmitted in a single
 datagram when the UDP transport mode is used. Setting the packet's
-don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks.
+don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
+it may cause packets to get dropped, but not setting it could lead to
+long delays due to reconstruction and dropped fragments.
+
+
+A Roughtime packet may exceed the maximum deliverable length of a UDP
+packet. A client SHOULD deliver the request over TCP if it cannot be
+delivered over UDP, as evinced by repeated nonresponse. MTU issues
+may lead to persistent nonresponse due to network devices between
+client and server.
+
+Clients SHOULD implement exponential backoff in establishing TCP
+connections and making requests over UDP ala {{!RFC8085}}.
 
 Multiple requests and responses can be exchanged over an established
-TCP connection. Clients MAY send multiple requests at once and servers
-MAY send responses out of order. The connection SHOULD be closed by
-the client when it has no more requests to send and has received all
-expected responses. Either side SHOULD close the connection in
-response to synchronization, format, implementation-defined timeouts,
-or other errors.
+TCP connection. Clients MAY send multiple outstanding requests and
+servers MAY send responses out of order. The connection SHOULD be
+closed by the client when it has no more requests to send and has
+received all expected responses. Either side SHOULD close the
+connection in response to synchronization, format,
+implementation-defined timeouts, or other errors.
 
 All requests and responses MUST contain the VER tag. It contains a
 list of one or more uint32 version numbers. The version of Roughtime
-specified by this memo has version number 1.
+specified by this  has version number 1.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
-testing this draft of the memo, a version number of 0x8000000c is
+testing this draft of the document, a version number of 0x8000000c is
 used.
+
+## Transport considerations.
+
 
 ## Requests {#requests}
 
@@ -651,7 +669,7 @@ The value of "version" MUST be an integer that indicates the highest
 Roughtime version number supported by the server.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. To
-indicate compatibility with drafts of this memo, a decimal
+indicate compatibility with drafts of this document, a decimal
 representation of the version number indicated in {{protocol-details}}
 SHOULD be used. For indicating compatibility with pre-IETF
 specifications of Roughtime, the version number 3000600613 SHOULD be
@@ -763,8 +781,9 @@ query multiple servers in accordance with the procedure described in
 ## Quantum Resistance
 
 Since the only supported signature scheme, Ed25519, is not quantum
-resistant, the Roughtime version described in this memo will not
-survive the advent of quantum computers.
+resistant, the Roughtime version described in this document will not
+survive the advent of quantum computers. A later version will have to
+be devised and implemented before then.
 
 ## Maintaining Lists of Servers
 
@@ -814,13 +833,13 @@ Name and Transport Protocol Port Number Registry:
 
       Description: Roughtime time synchronization
 
-      Reference: [[this memo]]
+      Reference: [[this document]]
 
       Port Number: [[TBD1]], selected by IANA from the User Port range
 
 ## Roughtime Version Registry
 
- IANA is requested to create a new registry entitled "Roughtime
+ IANA is requested to create a new top-level registry entitled "Roughtime
  Version Registry".  Entries shall have the following fields:
 
 Version ID (REQUIRED): a 32-bit unsigned integer
@@ -845,7 +864,7 @@ The initial contents of this registry shall be as follows:
 
 ## Roughtime Tag Registry
 
-IANA is requested to create a new registry entitled "Roughtime Tag
+IANA is requested to create a new top-level registry entitled "Roughtime Tag
 Registry".  Entries SHALL have the following fields:
 
 Tag (REQUIRED): A 32-bit unsigned integer in hexadecimal format.
@@ -893,4 +912,6 @@ Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
 Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
 Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
 the NTP working group contributed comments and suggestions as well as
-pointed out errors.
+pointed out errors. We appreciate the last call commentators,
+especially Colin Perkins for providing advice on transport
+considerations.
