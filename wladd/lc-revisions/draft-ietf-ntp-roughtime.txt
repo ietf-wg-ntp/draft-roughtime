@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 13 July 2026                                             Netnod
-                                                          9 January 2026
+Expires: 16 July 2026                                             Netnod
+                                                         12 January 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 13 July 2026.
+   This Internet-Draft will expire on 16 July 2026.
 
 Copyright Notice
 
@@ -102,6 +102,8 @@ Table of Contents
      8.2.  Measurement Sequence
      8.3.  Server Lists
      8.4.  Malfeasance Reporting
+       8.4.1.  Malfeasence report structure
+       8.4.2.  Reporting
    9.  Security Considerations
      9.1.  Confidentiality
      9.2.  Integrity and Authenticity
@@ -116,6 +118,7 @@ Table of Contents
      12.1.  Service Name and Transport Protocol Port Number Registry
      12.2.  Roughtime Version Registry
      12.3.  Roughtime Tag Registry
+     12.4.  Roughtime Malfeasence MIME type
    13. References
      13.1.  Normative References
      13.2.  Informative References
@@ -776,11 +779,16 @@ Table of Contents
    [RFC1738] where malfeasance reports can be sent by clients using the
    HTTP POST method [RFC9110].  The URI scheme MUST be HTTPS [RFC9110].
 
+   IANA is requested to register the "application/roughtime-server+json"
+   media type.
+
 8.4.  Malfeasance Reporting
 
    A malfeasance report is cryptographic proof that a sequence of
    responses arrived in that order.  It can be used to demonstrate that
    at least one server sent the wrong time.
+
+8.4.1.  Malfeasence report structure
 
    A malfeasance report MUST be formatted as a JSON [RFC8259] object and
    contain the key "responses".  Its value MUST be an ordered list of
@@ -802,16 +810,21 @@ Table of Contents
    The value of "publicKey" MUST be the long-term key that the server
    was expected to use for deriving the response signature.
 
+   IANA is requested to register the "application/roughtime-
+   malfeasence+json" media type.
+
+8.4.2.  Reporting
+
    When the client's list of servers has an associated URL for
-   malfeasance reports, it SHOULD send a report whenever it has
-   performed a measurement sequence in accordance with Section 8.2 and
-   detected that at least one of the responses is inconsistent with
-   causal ordering.  Since the failure of a popular Roughtime server can
-   cause numerous clients to send malfeasance reports at the same time,
-   clients MUST use a reporting mechanism that avoids overloading the
-   server receiving the reports.  Clients SHOULD use exponential backoff
-   for this purpose, with an initial and minimum retry interval of at
-   least 10 seconds.
+   malfeasance reports, it SHOULD post a malfeasence report to the URL
+   whenever it has performed a measurement sequence in accordance with
+   Section 8.2 and detected that at least one of the responses is
+   inconsistent with causal ordering.  Since the failure of a popular
+   Roughtime server can cause numerous clients to send malfeasance
+   reports at the same time, clients MUST use a reporting mechanism that
+   avoids overloading the server receiving the reports.  Clients SHOULD
+   use exponential backoff for this purpose, with an initial and minimum
+   retry interval of at least 10 seconds.
 
    Clients MUST NOT send malfeasance reports in response to signature
    verification failures or any other protocol errors.
@@ -998,6 +1011,8 @@ Table of Contents
            +------------+----------------------+---------------+
 
                                   Table 2
+
+12.4.  Roughtime Malfeasence MIME type
 
 13.  References
 
