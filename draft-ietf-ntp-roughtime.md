@@ -658,6 +658,7 @@ MUST be formatted as JSON {{!RFC8259}} objects and contain the key
 "servers". Client lists MAY also contain the keys "sources" and
 "reports".
 
+
 The value of the "servers" key MUST be a list of server objects, each
 containing the keys "name", "version", "publicKeyType", "publicKey",
 and "addresses".
@@ -709,11 +710,16 @@ The value of "reports", if present, MUST be a string indicating a URL
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
+IANA is requested to register the "application/roughtime-server+json" media
+type.
+
 ## Malfeasance Reporting
 
 A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.
+
+### Malfeasence report structure
 
 A malfeasance report MUST be formatted as a JSON {{!RFC8259}} object
 and contain the key "responses". Its value MUST be an ordered list of
@@ -734,16 +740,21 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
+IANA is requested to register the "application/roughtime-malfeasence+json" media
+type.
+
+### Reporting
+
 When the client's list of servers has an associated URL for
-malfeasance reports, it SHOULD send a report whenever it has performed
-a measurement sequence in accordance with {{measurement-sequence}} and
-detected that at least one of the responses is inconsistent with
-causal ordering. Since the failure of a popular Roughtime server can
-cause numerous clients to send malfeasance reports at the same time,
-clients MUST use a reporting mechanism that avoids overloading the
-server receiving the reports. Clients SHOULD use exponential backoff
-for this purpose, with an initial and minimum retry interval of at
-least 10 seconds.
+malfeasance reports, it SHOULD post a malfeasence report to the URL
+whenever it has performed a measurement sequence in accordance with
+{{measurement-sequence}} and detected that at least one of the
+responses is inconsistent with causal ordering. Since the failure of a
+popular Roughtime server can cause numerous clients to send
+malfeasance reports at the same time, clients MUST use a reporting
+mechanism that avoids overloading the server receiving the
+reports. Clients SHOULD use exponential backoff for this purpose, with
+an initial and minimum retry interval of at least 10 seconds.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
@@ -900,6 +911,8 @@ The initial contents of this registry SHALL be as follows:
 | 0x5458414d | MAXT                 | [[this memo]] |
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
+
+## Roughtime Malfeasence MIME type
 
 --- back
 
