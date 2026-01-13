@@ -710,7 +710,7 @@ The value of "reports", if present, MUST be a string indicating a URL
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
-IANA is requested to register the "application/roughtime-server+json" media
+This document has the "application/roughtime-server+json" media
 type.
 
 ## Malfeasance Reporting
@@ -719,7 +719,7 @@ A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.
 
-### Malfeasence report structure
+### Malfeasance report structure
 
 A malfeasance report MUST be formatted as a JSON {{!RFC8259}} object
 and contain the key "responses". Its value MUST be an ordered list of
@@ -740,13 +740,13 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
-IANA is requested to register the "application/roughtime-malfeasence+json" media
+This document has the "application/roughtime-malfeasence+json" media
 type.
 
 ### Reporting
 
 When the client's list of servers has an associated URL for
-malfeasance reports, it SHOULD post a malfeasence report to the URL
+malfeasance reports, it SHOULD post a malfeasance report to the URL
 whenever it has performed a measurement sequence in accordance with
 {{measurement-sequence}} and detected that at least one of the
 responses is inconsistent with causal ordering. Since the failure of a
@@ -794,7 +794,9 @@ query multiple servers in accordance with the procedure described in
 Since the only supported signature scheme, Ed25519, is not quantum
 resistant, the Roughtime version described in this document will not
 survive the advent of quantum computers. A later version will have to
-be devised and implemented before then.
+be devised and implemented before then. The use of a single version
+number as negotiation point rather than defining a suite of acceptable
+signatures is intended to prevent fragmentation and misconfiguration.
 
 ## Maintaining Lists of Servers
 
@@ -912,7 +914,14 @@ The initial contents of this registry SHALL be as follows:
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
 
-## Roughtime Malfeasence MIME type
+## Roughtime Malfeasance MIME type
+IANA is requested to register the "application/roughtime-malfeasance+json" media
+type.
+
+## Roughtime Server List MIME type
+
+IANA is requested to register the "application/roughtime-server+json" media
+type.
 
 --- back
 
