@@ -522,13 +522,13 @@ first 32 bytes of the SHA-512 hash digest of x and `||` denotes
 concatenation.
 
 The algorithm maintains a current value `h`. At initialization, `h` is
-set to `H(0x00 || request_packet)`. When no more entries remain in
-PATH, `h` is the value of the root of the Merkle tree. All remaining
-bits of INDX MUST be zero at that time. Otherwise, let node be the
-next 32 bytes in PATH. If the current bit in INDX is 0 then `h =
-H(0x01 || node || hash)`, else `h = H(0x01 || hash || node)`.
-
-PATH is thus the siblings from the leaf to the root.
+set to `H(0x00 || request_packet)`. For each step of the algorithm,
+let node be the next 32 bytes in PATH. If the current bit in INDX is 0
+then `h = H(0x01 || h || node)`, else `h = H(0x01 || node || h)`.
+When no more entries remain in PATH, `h` is compared to the value of
+the root of the Merkle tree contained in ROOT. If they are equal, the
+algorithm succeeds. If they are not, or if any of the remaining bits
+of INDX is non-zero, the algorithm fails.
 
 ## Validity of Response
 
@@ -889,8 +889,8 @@ The initial contents of this registry SHALL be as follows:
 
 Aanchal Malhotra and Adam Langley authored early drafts of this memo.
 Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
-Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
-Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
-Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
-the NTP working group contributed comments and suggestions as well as
-pointed out errors.
+Michael McCourt, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher
+Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
+Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
+other members of the NTP working group contributed comments and
+suggestions as well as pointed out errors.
