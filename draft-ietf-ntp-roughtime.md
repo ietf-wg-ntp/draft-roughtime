@@ -637,7 +637,7 @@ measurement succeeds.
 To facilitate regular updates of lists of trusted servers, clients
 SHOULD implement the server list format specified here. Server lists
 MUST be formatted as JSON {{!RFC8259}} objects and contain the key
-"servers". Client lists MAY also contain the keys "sources" and
+"servers". Server lists MAY also contain the keys "sources" and
 "reports".
 
 The value of the "servers" key MUST be a list of server objects, each
