@@ -740,7 +740,7 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
-This document has the "application/roughtime-malfeasence+json" media
+Malfeasance reports have the "application/roughtime-malfeasence+json" media
 type.
 
 ### Reporting
