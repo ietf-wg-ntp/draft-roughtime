@@ -710,7 +710,7 @@ The value of "reports", if present, MUST be a string indicating a URL
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
-This document has the "application/roughtime-server+json" media
+Server lists have the "application/roughtime-server+json" media
 type.
 
 ## Malfeasance Reporting
