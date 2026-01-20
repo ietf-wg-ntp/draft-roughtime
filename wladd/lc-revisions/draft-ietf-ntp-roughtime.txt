@@ -780,7 +780,7 @@ Table of Contents
    [RFC1738] where malfeasance reports can be sent by clients using the
    HTTP POST method [RFC9110].  The URI scheme MUST be HTTPS [RFC9110].
 
-   This document has the "application/roughtime-server+json" media type.
+   Server lists have the "application/roughtime-server+json" media type.
 
 8.4.  Malfeasance Reporting
 
