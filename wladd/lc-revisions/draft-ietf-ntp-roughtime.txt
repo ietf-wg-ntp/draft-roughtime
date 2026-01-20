@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 17 July 2026                                             Netnod
-                                                         13 January 2026
+Expires: 24 July 2026                                             Netnod
+                                                         20 January 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 17 July 2026.
+   This Internet-Draft will expire on 24 July 2026.
 
 Copyright Notice
 
@@ -354,7 +354,7 @@ Table of Contents
 
    A Roughtime packet may exceed the maximum deliverable length of a UDP
    packet.  A client SHOULD deliver the request over TCP if it cannot be
-   delivered over UDP, as evinced by repeated nonresponse.  MTU issues
+   delivered over UDP, as evidenced by repeated nonresponse.  MTU issues
    may lead to persistent nonresponse due to network devices between
    client and server.
 
