@@ -1950,12 +1950,13 @@ of INDX are ordered from least to most significant. <code>H(x)</code> denotes th
 first 32 bytes of the SHA-512 hash digest of x and <code>||</code> denotes
 concatenation.<a href="#section-5.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.4.1-2">The algorithm maintains a current value <code>h</code>. At initialization, <code>h</code> is
-set to <code>H(0x00 || request_packet)</code>. When no more entries remain in
-PATH, <code>h</code> is the value of the root of the Merkle tree. All remaining
-bits of INDX <span class="bcp14">MUST</span> be zero at that time. Otherwise, let node be the
-next 32 bytes in PATH. If the current bit in INDX is 0 then <code>h =
-H(0x01 || node || hash)</code>, else <code>h = H(0x01 || hash || node)</code>.<a href="#section-5.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-5.4.1-3">PATH is thus the siblings from the leaf to the root.<a href="#section-5.4.1-3" class="pilcrow">¶</a></p>
+set to <code>H(0x00 || request_packet)</code>. For each step of the algorithm,
+let node be the next 32 bytes in PATH. If the current bit in INDX is 0
+then <code>h = H(0x01 || h || node)</code>, else <code>h = H(0x01 || node || h)</code>.
+When no more entries remain in PATH, <code>h</code> is compared to the value of
+the root of the Merkle tree contained in ROOT. If they are equal, the
+algorithm succeeds. If they are not, or if any of the remaining bits
+of INDX is non-zero, the algorithm fails.<a href="#section-5.4.1-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2086,7 +2087,7 @@ measurement succeeds.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 <p id="section-8.3-1">To facilitate regular updates of lists of trusted servers, clients
 <span class="bcp14">SHOULD</span> implement the server list format specified here. Server lists
 <span class="bcp14">MUST</span> be formatted as JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> objects and contain the key
-"servers". Client lists <span class="bcp14">MAY</span> also contain the keys "sources" and
+"servers". Server lists <span class="bcp14">MAY</span> also contain the keys "sources" and
 "reports".<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3-2">The value of the "servers" key <span class="bcp14">MUST</span> be a list of server objects, each
 containing the keys "name", "version", "publicKeyType", "publicKey",
@@ -2160,7 +2161,7 @@ including the "ROUGHTIM" header.<a href="#section-8.4.1-3" class="pilcrow">¶</a
 including the "ROUGHTIM" header.<a href="#section-8.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-5">The value of "publicKey" <span class="bcp14">MUST</span> be the long-term key that the server was
 expected to use for deriving the response signature.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-6">This document has the "application/roughtime-malfeasence+json" media
+<p id="section-8.4.1-6">Malfeasance reports have the "application/roughtime-malfeasence+json" media
 type.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -2636,12 +2637,12 @@ type.<a href="#section-12.5-1" class="pilcrow">¶</a></p>
       </h2>
 <p id="appendix-A-1">Aanchal Malhotra and Adam Langley authored early drafts of this memo.
 Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
-Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton, Thomas
-Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof Teichel,
-Luke Valenta, David Venhoek, Ulrich Windl, and the other members of
-the NTP working group contributed comments and suggestions as well as
-pointed out errors. We appreciate the last call commentators,
-especially Colin Perkins for providing advice on transport
+Michael McCourt, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher
+Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
+Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
+other members of the NTP working group contributed comments and
+suggestions as well as pointed out errors. We appreciate the last call
+commentators, especially Colin Perkins for providing advice on transport
 considerations.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
