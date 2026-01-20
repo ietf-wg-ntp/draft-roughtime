@@ -283,7 +283,7 @@ long delays due to reconstruction and dropped fragments.
 
 A Roughtime packet may exceed the maximum deliverable length of a UDP
 packet. A client SHOULD deliver the request over TCP if it cannot be
-delivered over UDP, as evinced by repeated nonresponse. MTU issues
+delivered over UDP, as evidenced by repeated nonresponse. MTU issues
 may lead to persistent nonresponse due to network devices between
 client and server.
 
