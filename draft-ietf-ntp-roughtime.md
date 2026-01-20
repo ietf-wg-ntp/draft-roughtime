@@ -70,7 +70,7 @@ features, and even newer protocols like Network Time Security (NTS)
 {{?RFC8915}} lack mechanisms to observe that the servers behave
 correctly. Furthermore, clients may lack even a basic idea of the
 time, creating bootstrapping problems as a time is required for
-X509 certificate validation.
+X.509 certificate validation.
 
 The primary design goal of Roughtime is to permit devices to obtain a
 rough idea of the current time from fairly static configuration and to
