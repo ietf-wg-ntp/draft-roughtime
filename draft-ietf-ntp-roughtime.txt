@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 23 July 2026                                             Netnod
-                                                         19 January 2026
+Expires: 24 July 2026                                             Netnod
+                                                         20 January 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 23 July 2026.
+   This Internet-Draft will expire on 24 July 2026.
 
 Copyright Notice
 
@@ -589,13 +589,13 @@ Table of Contents
    denotes concatenation.
 
    The algorithm maintains a current value h.  At initialization, h is
-   set to H(0x00 || request_packet).  When no more entries remain in
-   PATH, h is the value of the root of the Merkle tree.  All remaining
-   bits of INDX MUST be zero at that time.  Otherwise, let node be the
-   next 32 bytes in PATH.  If the current bit in INDX is 0 then h =
-   H(0x01 || node || hash), else h = H(0x01 || hash || node).
-
-   PATH is thus the siblings from the leaf to the root.
+   set to H(0x00 || request_packet).  For each step of the algorithm,
+   let node be the next 32 bytes in PATH.  If the current bit in INDX is
+   0 then h = H(0x01 || h || node), else h = H(0x01 || node || h).  When
+   no more entries remain in PATH, h is compared to the value of the
+   root of the Merkle tree contained in ROOT.  If they are equal, the
+   algorithm succeeds.  If they are not, or if any of the remaining bits
+   of INDX is non-zero, the algorithm fails.
 
 5.4.  Validity of Response
 
@@ -1082,11 +1082,11 @@ Acknowledgments
 
    Aanchal Malhotra and Adam Langley authored early drafts of this memo.
    Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter
-   Löthberg, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher Patton,
-   Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad, Kristof
-   Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the other
-   members of the NTP working group contributed comments and suggestions
-   as well as pointed out errors.
+   Löthberg, Michael McCourt, Hal Murray, Tal Mizrahi, Ruben Nijveld,
+   Christopher Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar
+   Sundblad, Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl,
+   and the other members of the NTP working group contributed comments
+   and suggestions as well as pointed out errors.
 
 Authors' Addresses
 
