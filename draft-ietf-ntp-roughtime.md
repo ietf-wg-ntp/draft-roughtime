@@ -288,7 +288,14 @@ may lead to persistent nonresponse due to network devices between
 client and server.
 
 Clients SHOULD implement exponential backoff in establishing TCP
-connections and making requests over UDP ala {{!RFC8085}}.
+connections and making requests over UDP ala {{!RFC8085}}. It is
+RECOMMENDED that clients use an initial interval of 10 seconds,
+a maximum interval of 24 hours, and a base of 1.5. Therefore the
+minimum interval for retry after n failures
+in seconds is min(10*1.5^{n}, 84600).
+
+Clients MUST NOT reset the retry interval until they receive a properly
+signed response.
 
 Multiple requests and responses can be exchanged over an established
 TCP connection. Clients MAY send multiple outstanding requests and
