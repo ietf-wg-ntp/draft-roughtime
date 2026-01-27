@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 24 July 2026                                             Netnod
-                                                         20 January 2026
+Expires: 31 July 2026                                             Netnod
+                                                         27 January 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 24 July 2026.
+   This Internet-Draft will expire on 31 July 2026.
 
 Copyright Notice
 
@@ -77,23 +77,24 @@ Table of Contents
        4.1.4.  Timestamp
      4.2.  Header
    5.  Protocol Details
-     5.1.  Requests
-       5.1.1.  VER
-       5.1.2.  NONC
-       5.1.3.  TYPE
-       5.1.4.  SRV
-       5.1.5.  ZZZZ
-     5.2.  Responses
-       5.2.1.  SIG
+     5.1.  Transport considerations.
+     5.2.  Requests
+       5.2.1.  VER
        5.2.2.  NONC
        5.2.3.  TYPE
-       5.2.4.  PATH
-       5.2.5.  SREP
-       5.2.6.  CERT
-       5.2.7.  INDX
-     5.3.  The Merkle Tree
-       5.3.1.  Root Value Validity Check Algorithm
-     5.4.  Validity of Response
+       5.2.4.  SRV
+       5.2.5.  ZZZZ
+     5.3.  Responses
+       5.3.1.  SIG
+       5.3.2.  NONC
+       5.3.3.  TYPE
+       5.3.4.  PATH
+       5.3.5.  SREP
+       5.3.6.  CERT
+       5.3.7.  INDX
+     5.4.  The Merkle Tree
+       5.4.1.  Root Value Validity Check Algorithm
+     5.5.  Validity of Response
    6.  Integration into NTP
    7.  Grease
    8.  Roughtime Clients
@@ -101,6 +102,8 @@ Table of Contents
      8.2.  Measurement Sequence
      8.3.  Server Lists
      8.4.  Malfeasance Reporting
+       8.4.1.  Malfeasance report structure
+       8.4.2.  Reporting
    9.  Security Considerations
      9.1.  Confidentiality
      9.2.  Integrity and Authenticity
@@ -115,6 +118,8 @@ Table of Contents
      12.1.  Service Name and Transport Protocol Port Number Registry
      12.2.  Roughtime Version Registry
      12.3.  Roughtime Tag Registry
+     12.4.  Roughtime Malfeasance MIME type
+     12.5.  Roughtime Server List MIME type
    13. References
      13.1.  Normative References
      13.2.  Informative References
@@ -130,7 +135,8 @@ Table of Contents
    features, and even newer protocols like Network Time Security (NTS)
    [RFC8915] lack mechanisms to observe that the servers behave
    correctly.  Furthermore, clients may lack even a basic idea of the
-   time, creating bootstrapping problems.
+   time, creating bootstrapping problems as a time is required for X.509
+   certificate validation.
 
    The primary design goal of Roughtime is to permit devices to obtain a
    rough idea of the current time from fairly static configuration and
@@ -143,7 +149,8 @@ Table of Contents
    with high probability, even after long periods of inactivity.  Proofs
    of malfeasance constructed by chaining together responses from
    different trusted servers can be used to prove misbehavior by a
-   server, thereby revoking trust in that particular key.
+   server, and after analysis result in revoking trust in that
+   particular key.
 
    Unlike Khronos [RFC9523] Roughtime produces external evidence that
    timeservers are reporting incompatible times.  This requires changes
@@ -153,7 +160,9 @@ Table of Contents
    This memo is limited to describing the Roughtime on-wire protocol.
    Apart from describing the server list and malfeasance report formats,
    this memo does not describe the ecosystem required for maintaining
-   lists of trusted servers and processing malfeasance reports.
+   lists of trusted servers and processing malfeasance reports, nor the
+   means by which the server list is maintained and distributed or the
+   policies to apply to such a list.
 
 2.  Conventions and Definitions
 
@@ -340,9 +349,27 @@ Table of Contents
    Roughtime request and response packets MUST be transmitted in a
    single datagram when the UDP transport mode is used.  Setting the
    packet's don't fragment bit [RFC791] is OPTIONAL in IPv4 networks.
+   Setting it may cause packets to get dropped, but not setting it could
+   lead to long delays due to reconstruction and dropped fragments.
+
+   A Roughtime packet may exceed the maximum deliverable length of a UDP
+   packet.  A client SHOULD deliver the request over TCP if it cannot be
+   delivered over UDP, as evidenced by repeated nonresponse.  MTU issues
+   may lead to persistent nonresponse due to network devices between
+   client and server.
+
+   Clients SHOULD implement exponential backoff in establishing TCP
+   connections and making requests over UDP as per [RFC8085].  It is
+   RECOMMENDED that clients use an initial interval of 1 seconds, a
+   maximum interval of 24 hours, and a base of 1.5.  Therefore the
+   minimum interval for retry after n failures in seconds is
+   min(*1.5^{n-1}, 84600).
+
+   Clients MUST NOT reset the retry interval until they receive a
+   properly signed response.
 
    Multiple requests and responses can be exchanged over an established
-   TCP connection.  Clients MAY send multiple requests at once and
+   TCP connection.  Clients MAY send multiple outstanding requests and
    servers MAY send responses out of order.  The connection SHOULD be
    closed by the client when it has no more requests to send and has
    received all expected responses.  Either side SHOULD close the
@@ -351,13 +378,15 @@ Table of Contents
 
    All requests and responses MUST contain the VER tag.  It contains a
    list of one or more uint32 version numbers.  The version of Roughtime
-   specified by this memo has version number 1.
+   specified by this has version number 1.
 
    NOTE TO RFC EDITOR: remove this paragraph before publication.  For
-   testing this draft of the memo, a version number of 0x8000000c is
+   testing this draft of the document, a version number of 0x8000000c is
    used.
 
-5.1.  Requests
+5.1.  Transport considerations.
+
+5.2.  Requests
 
    A request MUST contain the tags VER, NONC, and TYPE.  It SHOULD
    include the tag SRV.  Other tags SHOULD be ignored by the server.
@@ -371,7 +400,7 @@ Table of Contents
    1024 bytes is OPTIONAL and servers MUST NOT send responses larger
    than the requests they are replying to, see Section 9.7.
 
-5.1.1.  VER
+5.2.1.  VER
 
    In a request, the VER tag contains a list of uint32 version numbers.
    The VER tag MUST include at least one Roughtime version supported by
@@ -385,22 +414,22 @@ Table of Contents
    Servers SHOULD ignore any unknown version numbers in the list
    supplied by the client.  If the list contains no version numbers
    supported by the server, it MAY respond with another version or
-   ignore the request entirely, see Section 5.2.5.
+   ignore the request entirely, see Section 5.3.5.
 
-5.1.2.  NONC
+5.2.2.  NONC
 
    The value of the NONC tag is a 32-byte nonce.  It SHOULD be generated
    in a manner indistinguishable from random.  BCP 106 [RFC4086]
    contains specific guidelines regarding this.
 
-5.1.3.  TYPE
+5.2.3.  TYPE
 
    The TYPE tag is used to unambiguously distinguish between request and
    response messages.  In a request, it MUST contain a uint32 with value
    0.  Requests containing a TYPE tag with any other value MUST be
    ignored by servers.
 
-5.1.4.  SRV
+5.2.4.  SRV
 
    The SRV tag is used by the client to indicate which long-term public
    key it expects to verify the response with.  The value of the SRV tag
@@ -408,12 +437,12 @@ Table of Contents
    32-byte Ed25519 public key and H is SHA-512 truncated to the first 32
    bytes.
 
-5.1.5.  ZZZZ
+5.2.5.  ZZZZ
 
    The ZZZZ tag is used to expand the response to the minimum required
    length.  Its value MUST be all zero bytes.
 
-5.2.  Responses
+5.3.  Responses
 
    The server begins the request handling process with a set of long-
    term keys.  It resolves which long-term key to use with the following
@@ -452,7 +481,7 @@ Table of Contents
 
               Figure 3: Roughtime response message structure.
 
-5.2.1.  SIG
+5.3.1.  SIG
 
    In general, a SIG tag value is a 64-byte Ed25519 signature [RFC8032]
    over a concatenation of a signature context ASCII string and the
@@ -463,32 +492,32 @@ Table of Contents
    SREP value using the public key contained in CERT.  The context
    string MUST be "RoughTime v1 response signature".
 
-5.2.2.  NONC
+5.3.2.  NONC
 
    The NONC tag MUST contain the nonce of the message being responded
    to.
 
-5.2.3.  TYPE
+5.3.3.  TYPE
 
    In a response, the TYPE tag MUST contain a uint32 with value 1.
    Responses containing a TYPE tag with any other value MUST be ignored
    by clients.
 
-5.2.4.  PATH
+5.3.4.  PATH
 
    The PATH tag value MUST be a multiple of 32 bytes long and represent
    a path of 32-byte hash values in the Merkle tree used to generate the
-   ROOT value as described in a Section 5.3.  In the case where a
+   ROOT value as described in a Section 5.4.  In the case where a
    response is prepared for a single request and the Merkle tree
    contains only the root node, the size of PATH MUST be zero.
 
    The PATH MUST NOT contain more than 32 hash values.  The maximum
    length of PATH is normally limited by the maximum size of the
-   response message, see Section 5.1 and Section 9.7.  Server
+   response message, see Section 5.2 and Section 9.7.  Server
    implementations SHOULD select a maximum Merkle tree height (see
-   Section 5.3) that ensures this.
+   Section 5.4) that ensures this.
 
-5.2.5.  SREP
+5.3.5.  SREP
 
    The SREP tag contains a signed response.  Its value MUST be a
    Roughtime message with the tags VER, RADI, MIDP, VERS, and ROOT.
@@ -517,9 +546,9 @@ Table of Contents
    NOT contain more than 32 version numbers.
 
    The ROOT tag MUST contain a 32-byte value of a Merkle tree root as
-   described in Section 5.3.
+   described in Section 5.4.
 
-5.2.6.  CERT
+5.3.6.  CERT
 
    The CERT tag contains a public key certificate signed with the
    server's private long-term key.  Its value MUST be a Roughtime
@@ -544,13 +573,13 @@ Table of Contents
    The PUBK tag MUST contain a temporary 32-byte Ed25519 public key
    which is used to sign the SREP tag.
 
-5.2.7.  INDX
+5.3.7.  INDX
 
    The INDX tag value MUST be a uint32 determining the position of NONC
    in the Merkle tree used to generate the ROOT value as described in
-   Section 5.3.
+   Section 5.4.
 
-5.3.  The Merkle Tree
+5.4.  The Merkle Tree
 
    A Merkle tree [Merkle] is a binary tree where the value of each non-
    leaf node is a hash value derived from its two children.  The root of
@@ -580,7 +609,7 @@ Table of Contents
    after the other with no additional padding or structure.  The order
    in which they are stored is described in the next section.
 
-5.3.1.  Root Value Validity Check Algorithm
+5.4.1.  Root Value Validity Check Algorithm
 
    This section describes how to compute the value of the root of the
    Merkle tree from the values in the tags PATH, INDX, and NONC.  The
@@ -597,7 +626,7 @@ Table of Contents
    algorithm succeeds.  If they are not, or if any of the remaining bits
    of INDX is non-zero, the algorithm fails.
 
-5.4.  Validity of Response
+5.5.  Validity of Response
 
    A client MUST check the following properties when it receives a
    response.  We assume the long-term server public key is known to the
@@ -610,7 +639,7 @@ Table of Contents
 
    The INDX and PATH values prove a hash value derived from the request
    packet was included in the Merkle tree with value ROOT using the
-   algorithm in Section 5.3.1.
+   algorithm in Section 5.4.1.
 
    The signature of SREP in SIG validates with the public key in DELE.
 
@@ -689,7 +718,7 @@ Table of Contents
    resp is the entire response to the first probe, including the
    "ROUGHTIM" header.  Each subsequent query uses H(resp || rand) for
    the previous response and a different 32-byte rand value.  H(x)
-   and || are defined as in Section 5.3.1.
+   and || are defined as in Section 5.4.1.
 
    For each pair of responses (i, j), where i was received before j, the
    client MUST check that MIDP_i-RADI_i is less than or equal to
@@ -720,7 +749,7 @@ Table of Contents
    Roughtime version number supported by the server.
 
    NOTE TO RFC EDITOR: remove this paragraph before publication.  To
-   indicate compatibility with drafts of this memo, a decimal
+   indicate compatibility with drafts of this document, a decimal
    representation of the version number indicated in Section 5 SHOULD be
    used.  For indicating compatibility with pre-IETF specifications of
    Roughtime, the version number 3000600613 SHOULD be used.
@@ -758,11 +787,15 @@ Table of Contents
    [RFC1738] where malfeasance reports can be sent by clients using the
    HTTP POST method [RFC9110].  The URI scheme MUST be HTTPS [RFC9110].
 
+   Server lists have the "application/roughtime-server+json" media type.
+
 8.4.  Malfeasance Reporting
 
    A malfeasance report is cryptographic proof that a sequence of
    responses arrived in that order.  It can be used to demonstrate that
    at least one server sent the wrong time.
+
+8.4.1.  Malfeasance report structure
 
    A malfeasance report MUST be formatted as a JSON [RFC8259] object and
    contain the key "responses".  Its value MUST be an ordered list of
@@ -784,16 +817,21 @@ Table of Contents
    The value of "publicKey" MUST be the long-term key that the server
    was expected to use for deriving the response signature.
 
+   Malfeasance reports have the "application/roughtime-malfeasence+json"
+   media type.
+
+8.4.2.  Reporting
+
    When the client's list of servers has an associated URL for
-   malfeasance reports, it SHOULD send a report whenever it has
-   performed a measurement sequence in accordance with Section 8.2 and
-   detected that at least one of the responses is inconsistent with
-   causal ordering.  Since the failure of a popular Roughtime server can
-   cause numerous clients to send malfeasance reports at the same time,
-   clients MUST use a reporting mechanism that avoids overloading the
-   server receiving the reports.  Clients SHOULD use exponential backoff
-   for this purpose, with an initial and minimum retry interval of at
-   least 10 seconds.
+   malfeasance reports, it SHOULD post a malfeasance report to the URL
+   whenever it has performed a measurement sequence in accordance with
+   Section 8.2 and detected that at least one of the responses is
+   inconsistent with causal ordering.  Since the failure of a popular
+   Roughtime server can cause numerous clients to send malfeasance
+   reports at the same time, clients MUST use a reporting mechanism that
+   avoids overloading the server receiving the reports.  Clients SHOULD
+   use exponential backoff for this purpose, with an initial and minimum
+   retry interval of at least 10 seconds.
 
    Clients MUST NOT send malfeasance reports in response to signature
    verification failures or any other protocol errors.
@@ -831,8 +869,12 @@ Table of Contents
 9.5.  Quantum Resistance
 
    Since the only supported signature scheme, Ed25519, is not quantum
-   resistant, the Roughtime version described in this memo will not
-   survive the advent of quantum computers.
+   resistant, the Roughtime version described in this document will not
+   survive the advent of quantum computers.  A later version will have
+   to be devised and implemented before then.  The use of a single
+   version number as negotiation point rather than defining a suite of
+   acceptable signatures is intended to prevent fragmentation and
+   misconfiguration.
 
 9.6.  Maintaining Lists of Servers
 
@@ -882,14 +924,15 @@ Table of Contents
 
      Description: Roughtime time synchronization
 
-     Reference: [[this memo]]
+     Reference: [[this document]]
 
      Port Number: [[TBD1]], selected by IANA from the User Port range
 
 12.2.  Roughtime Version Registry
 
-   IANA is requested to create a new registry entitled "Roughtime
-   Version Registry".  Entries shall have the following fields:
+   IANA is requested to create a new top-level registry entitled
+   "Roughtime Version Registry".  Entries shall have the following
+   fields:
 
    Version ID (REQUIRED): a 32-bit unsigned integer
 
@@ -921,8 +964,8 @@ Table of Contents
 
 12.3.  Roughtime Tag Registry
 
-   IANA is requested to create a new registry entitled "Roughtime Tag
-   Registry".  Entries SHALL have the following fields:
+   IANA is requested to create a new top-level registry entitled
+   "Roughtime Tag Registry".  Entries SHALL have the following fields:
 
    Tag (REQUIRED): A 32-bit unsigned integer in hexadecimal format.
 
@@ -979,6 +1022,16 @@ Table of Contents
 
                                   Table 2
 
+12.4.  Roughtime Malfeasance MIME type
+
+   IANA is requested to register the "application/roughtime-
+   malfeasance+json" media type.
+
+12.5.  Roughtime Server List MIME type
+
+   IANA is requested to register the "application/roughtime-server+json"
+   media type.
+
 13.  References
 
 13.1.  Normative References
@@ -1026,6 +1079,10 @@ Table of Contents
               Signature Algorithm (EdDSA)", RFC 8032,
               DOI 10.17487/RFC8032, January 2017,
               <https://www.rfc-editor.org/rfc/rfc8032>.
+
+   [RFC8085]  Eggert, L., Fairhurst, G., and G. Shepherd, "UDP Usage
+              Guidelines", BCP 145, RFC 8085, DOI 10.17487/RFC8085,
+              March 2017, <https://www.rfc-editor.org/rfc/rfc8085>.
 
    [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
@@ -1086,7 +1143,9 @@ Acknowledgments
    Christopher Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar
    Sundblad, Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl,
    and the other members of the NTP working group contributed comments
-   and suggestions as well as pointed out errors.
+   and suggestions as well as pointed out errors.  We appreciate the
+   last call commentators, especially Colin Perkins for providing advice
+   on transport considerations.
 
 Authors' Addresses
 
