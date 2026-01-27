@@ -1056,7 +1056,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 28 July 2026</td>
+<td class="center">Expires 31 July 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1069,12 +1069,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-01-24" class="published">24 January 2026</time>
+<time datetime="2026-01-27" class="published">27 January 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-07-28">28 July 2026</time></dd>
+<dd class="expires"><time datetime="2026-07-31">31 July 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1127,7 +1127,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 28 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 31 July 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1649,11 +1649,11 @@ delivered over UDP, as evidenced by repeated nonresponse. MTU issues
 may lead to persistent nonresponse due to network devices between
 client and server.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">Clients <span class="bcp14">SHOULD</span> implement exponential backoff in establishing TCP
-connections and making requests over UDP ala <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. It is
-<span class="bcp14">RECOMMENDED</span> that clients use an initial interval of 10 seconds,
+connections and making requests over UDP as per <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. It is
+<span class="bcp14">RECOMMENDED</span> that clients use an initial interval of 1 seconds,
 a maximum interval of 24 hours, and a base of 1.5. Therefore the
 minimum interval for retry after n failures
-in seconds is min(10*1.5^{n}, 84600).<a href="#section-5-6" class="pilcrow">¶</a></p>
+in seconds is min(*1.5^{n-1}, 84600).<a href="#section-5-6" class="pilcrow">¶</a></p>
 <p id="section-5-7">Clients <span class="bcp14">MUST NOT</span> reset the retry interval until they receive a properly
 signed response.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">Multiple requests and responses can be exchanged over an established

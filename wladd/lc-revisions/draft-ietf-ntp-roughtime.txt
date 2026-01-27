@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 28 July 2026                                             Netnod
-                                                         24 January 2026
+Expires: 31 July 2026                                             Netnod
+                                                         27 January 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 28 July 2026.
+   This Internet-Draft will expire on 31 July 2026.
 
 Copyright Notice
 
@@ -359,11 +359,11 @@ Table of Contents
    client and server.
 
    Clients SHOULD implement exponential backoff in establishing TCP
-   connections and making requests over UDP ala [RFC8085].  It is
-   RECOMMENDED that clients use an initial interval of 10 seconds, a
+   connections and making requests over UDP as per [RFC8085].  It is
+   RECOMMENDED that clients use an initial interval of 1 seconds, a
    maximum interval of 24 hours, and a base of 1.5.  Therefore the
    minimum interval for retry after n failures in seconds is
-   min(10*1.5^{n}, 84600).
+   min(*1.5^{n-1}, 84600).
 
    Clients MUST NOT reset the retry interval until they receive a
    properly signed response.
