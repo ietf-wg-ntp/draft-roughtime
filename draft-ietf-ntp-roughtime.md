@@ -292,7 +292,7 @@ connections and making requests over UDP as per {{!RFC8085}}. It is
 RECOMMENDED that clients use an initial interval of 1 seconds,
 a maximum interval of 24 hours, and a base of 1.5. Therefore the
 minimum interval for retry after n failures
-in seconds is min(*1.5^{n-1}, 84600).
+in seconds is min(1.5^{n-1}, 84600).
 
 Clients MUST NOT reset the retry interval until they receive a properly
 signed response.
