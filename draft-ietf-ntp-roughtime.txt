@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 12 August 2026                                           Netnod
-                                                         8 February 2026
+Expires: 21 August 2026                                           Netnod
+                                                        17 February 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 12 August 2026.
+   This Internet-Draft will expire on 21 August 2026.
 
 Copyright Notice
 
@@ -179,7 +179,7 @@ Table of Contents
    malfeasance.  It does so by having responses from servers include a
    signature over a value derived from the client's request, which
    includes a nonce.  This provides cryptographic proof that the
-   timestamp was issued after the server received the client's request.
+   response was issued after the server received the client's request.
    The derived value included in the server's response is the root of a
    Merkle tree [Merkle] which includes the hash value of the client's
    request as the value of one of its leaf nodes.  This enables the
@@ -396,9 +396,10 @@ Table of Contents
 
    The size of the request message SHOULD be at least 1024 bytes when
    the UDP transport mode is used.  To attain this size the ZZZZ tag
-   SHOULD be added to the message.  Responding to requests shorter than
-   1024 bytes is OPTIONAL and servers MUST NOT send responses larger
-   than the requests they are replying to, see Section 9.7.
+   SHOULD be added to the message.  Responding to request messages
+   shorter than 1024 bytes is OPTIONAL and servers MUST NOT send
+   responses larger than the request messages they are replying to, see
+   Section 9.7.
 
 5.2.1.  VER
 
