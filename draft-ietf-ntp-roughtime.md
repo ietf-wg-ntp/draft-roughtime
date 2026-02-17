@@ -107,7 +107,7 @@ Roughtime is a protocol for authenticated rough time synchronization
 that enables clients to provide cryptographic proof of server
 malfeasance. It does so by having responses from servers include a
 signature over a value derived from the client's request, which
-includes a nonce. This provides cryptographic proof that the timestamp
+includes a nonce. This provides cryptographic proof that the response
 was issued after the server received the client's request. The derived
 value included in the server's response is the root of a Merkle tree
 {{Merkle}} which includes the hash value of the client's request as
@@ -326,9 +326,9 @@ message and assign them semantic meaning.
 
 The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
-added to the message. Responding to requests shorter than 1024 bytes
-is OPTIONAL and servers MUST NOT send responses larger than the
-requests they are replying to, see {{amplification-attacks}}.
+added to the message. Responding to request messages shorter than 1024
+bytes is OPTIONAL and servers MUST NOT send responses larger than the
+request messages they are replying to, see {{amplification-attacks}}.
 
 ### VER
 
