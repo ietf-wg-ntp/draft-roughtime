@@ -709,7 +709,7 @@ IPv6 addresses MUST be encapsulated within [].
 
 The value of "sources", if present, MUST be a list of strings
 indicating where updated versions of the list may be aquired. Each
-string MUST be a URL {{!RFC398}} pointing to a list in the format
+string MUST be a URL {{!RFC3986}} pointing to a list in the format
 specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 The value of "reports", if present, MUST be a string indicating a URL
@@ -843,7 +843,7 @@ done with the SRV tag. Additional recommendations for clients are listed in
 IANA is requested to allocate the following entry in the Service
 Name and Transport Protocol Port Number Registry:
 
-      Service Name: Roughtime
+      Service Name: roughtime
 
       Transport Protocol: tcp,udp
 
