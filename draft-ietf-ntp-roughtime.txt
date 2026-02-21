@@ -5,8 +5,8 @@
 Network Time Protocols                                           W. Ladd
 Internet-Draft                                       Akamai Technologies
 Intended status: Experimental                                M. Dansarie
-Expires: 21 August 2026                                           Netnod
-                                                        17 February 2026
+Expires: 25 August 2026                                           Netnod
+                                                        21 February 2026
 
 
                                Roughtime
@@ -46,7 +46,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 21 August 2026.
+   This Internet-Draft will expire on 25 August 2026.
 
 Copyright Notice
 
@@ -781,7 +781,7 @@ Table of Contents
 
    The value of "sources", if present, MUST be a list of strings
    indicating where updated versions of the list may be aquired.  Each
-   string MUST be a URL [RFC398] pointing to a list in the format
+   string MUST be a URL [RFC3986] pointing to a list in the format
    specified here.  The URI scheme MUST be HTTPS [RFC9110].
 
    The value of "reports", if present, MUST be a string indicating a URL
@@ -915,7 +915,7 @@ Table of Contents
    IANA is requested to allocate the following entry in the Service Name
    and Transport Protocol Port Number Registry:
 
-     Service Name: Roughtime
+     Service Name: roughtime
 
      Transport Protocol: tcp,udp
 
@@ -1050,9 +1050,10 @@ Table of Contents
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/rfc/rfc2119>.
 
-   [RFC398]   Pickens, J. and E. Faeh, "UCSB Online Graphics", RFC 398,
-              DOI 10.17487/RFC0398, September 1972,
-              <https://www.rfc-editor.org/rfc/rfc398>.
+   [RFC3986]  Berners-Lee, T., Fielding, R., and L. Masinter, "Uniform
+              Resource Identifier (URI): Generic Syntax", STD 66,
+              RFC 3986, DOI 10.17487/RFC3986, January 2005,
+              <https://www.rfc-editor.org/rfc/rfc3986>.
 
    [RFC4086]  Eastlake 3rd, D., Schiller, J., and S. Crocker,
               "Randomness Requirements for Security", BCP 106, RFC 4086,
