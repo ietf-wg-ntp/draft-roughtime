@@ -50,12 +50,13 @@ informative:
 
 --- abstract
 
-This document describes Roughtime&mdash;a protocol that aims to
-achieve two things: secure rough time synchronization even for clients
-without any idea of what time it is, and giving clients a format by
-which to report any inconsistencies they observe between time servers.
-This document specifies the on-wire protocol required for these goals,
-and discusses aspects of the ecosystem needed for it to work.
+This document describes Roughtime, an experimental protocol that aims
+to achieve two things: secure rough time synchronization even for
+clients without any idea of what time it is, and giving clients a
+format by which to report any inconsistencies they observe between
+time servers. This document specifies the on-wire protocol required
+for these goals, and discusses aspects of the ecosystem needed for it
+to work.
 
 
 --- middle
@@ -63,14 +64,13 @@ and discusses aspects of the ecosystem needed for it to work.
 # Introduction
 
 Time synchronization is essential to Internet security as many
-security protocols and other applications require synchronization
-{{?RFC738}}. Unfortunately, widely deployed protocols such as
-the Network Time Protocol (NTP) {{?RFC5905}} lack essential security
-features, and even newer protocols like Network Time Security (NTS)
-{{?RFC8915}} lack mechanisms to observe that the servers behave
-correctly. Furthermore, clients may lack even a basic idea of the
-time, creating bootstrapping problems as a time is required for
-X.509 certificate validation.
+security protocols and other applications require it {{?RFC738}}.
+Unfortunately, widely deployed protocols such as the Network Time
+Protocol (NTP) {{?RFC5905}} lack essential security features, and even
+newer protocols like Network Time Security (NTS) {{?RFC8915}} lack
+mechanisms to observe that the servers behave correctly. Furthermore,
+clients may lack even a basic idea of the time, creating bootstrapping
+problems as a time is required for X.509 certificate validation.
 
 The primary design goal of Roughtime is to permit devices to obtain a
 rough idea of the current time from fairly static configuration and to
@@ -86,16 +86,20 @@ trusted servers can be used to prove misbehavior by a server, and
 after analysis result in revoking trust in that particular key.
 
 Unlike Khronos {{?RFC9523}} Roughtime produces external evidence that
-timeservers are reporting incompatible times. This requires changes
-to the format of the timestamps and hence cannot be a mere extension to
+timeservers are reporting incompatible times. This requires changes to
+the format of the timestamps and hence cannot be a mere extension to
 NTP.
 
-This memo is limited to describing the Roughtime on-wire protocol.
-Apart from describing the server list and malfeasance report formats,
-this memo does not describe the ecosystem required for maintaining
-lists of trusted servers and processing malfeasance reports, nor the
-means by which the server list is maintained and distributed or the
-policies to apply to such a list.
+Operational experience is needed to evaluate the viability of using
+Roughtime for secure time bootstrapping in Internet-connected systems.
+This includes the need for experience with maintaining a Roughtime
+ecosystem with services that maintain and distribute lists of trusted
+servers and process malfeasance reports. To facilitate the experiments
+necessary to gain that experience, this document is limited to
+describing the Roughtime on-wire protocol. Apart from describing the
+server list and malfeasance report formats, this document does not
+describe the ecosystem, nor the means by which the server list is
+maintained and distributed or the policies to apply to such a list.
 
 # Conventions and Definitions
 
