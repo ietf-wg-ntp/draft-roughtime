@@ -657,14 +657,13 @@ consistent with the causal ordering, and the delay between request and
 response is within an implementation-dependent maximum value, the
 measurement succeeds.
 
-## Server Lists
+## Server Lists {#server-lists}
 
 To facilitate regular updates of lists of trusted servers, clients
 SHOULD implement the server list format specified here. Server lists
 MUST be formatted as JSON {{!RFC8259}} objects and contain the key
 "servers". Server lists MAY also contain the keys "sources" and
 "reports".
-
 
 The value of the "servers" key MUST be a list of server objects, each
 containing the keys "name", "version", "publicKeyType", "publicKey",
@@ -726,7 +725,7 @@ A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.
 
-### Malfeasance report structure
+### Malfeasance report structure {#malfeasance-report-structure}
 
 A malfeasance report MUST be formatted as a JSON {{!RFC8259}} object
 and contain the key "responses". Its value MUST be an ordered list of
@@ -843,24 +842,25 @@ done with the SRV tag. Additional recommendations for clients are listed in
 IANA is requested to allocate the following entry in the Service
 Name and Transport Protocol Port Number Registry:
 
-      Service Name: roughtime
+Service Name: roughtime
 
-      Transport Protocol: tcp,udp
+Transport Protocol: tcp,udp
 
-      Assignee: IESG <iesg@ietf.org>
+Assignee: IESG <iesg@ietf.org>
 
-      Contact: IETF Chair <chair@ietf.org>
+Contact: IETF Chair <chair@ietf.org>
 
-      Description: Roughtime time synchronization
+Description: Roughtime time synchronization
 
-      Reference: [[this document]]
+Reference: [[this document]]
 
-      Port Number: [[TBD1]], selected by IANA from the User Port range
+Port Number: [[TBD1]], selected by IANA from the User Port range
 
-## Roughtime Version Registry
+## Roughtime Versions Registry
 
- IANA is requested to create a new top-level registry entitled "Roughtime
- Version Registry".  Entries shall have the following fields:
+IANA is requested to create a new registry titled "Roughtime
+Versions" in a new "Roughtime" registry group. Entries will have the
+following fields:
 
 Version ID (REQUIRED): a 32-bit unsigned integer
 
@@ -870,35 +870,43 @@ identified.
 Reference (REQUIRED): A reference to a relevant specification
 document.
 
-The policy for allocation of new entries SHOULD be: IETF Review.
+The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 
-The initial contents of this registry shall be as follows:
+The initial contents of this registry are as follows:
 
 | Version ID            | Version name         | Reference     |
 +---------------------- :+---------------------+---------------|
 | 0x0                   | Reserved             | [[this memo]] |
 | 0x1                   | Roughtime version 1  | [[this memo]] |
 | 0x2-0x7fffffff        | Unassigned           |               |
-| 0x80000000-0xffffffff | Reserved for Private | [[this memo]] |
-|                       | or Experimental use  |               |
+| 0x80000000-0xbfffffff | Reserved for         | [[this memo]] |
+|                       | experimental use     |               |
+| 0xc0000000-0xffffffff | Reserved for private | [[this memo]] |
+|                       | use                  |               |
 
-## Roughtime Tag Registry
+Private and experimental use are defined in {{?RFC8126}}. The
+experimental range is intended for testing and evaluating new versions
+of the Roughtime protocol. Such tests may be conducted over the open
+Internet.
 
-IANA is requested to create a new top-level registry entitled "Roughtime Tag
-Registry".  Entries SHALL have the following fields:
+## Roughtime Tags Registry
+
+IANA is requested to create a new registry titled "Roughtime Tags" in
+a new "Roughtime" registry group. Entries will have the following
+fields:
 
 Tag (REQUIRED): A 32-bit unsigned integer in hexadecimal format.
 
 ASCII Representation (REQUIRED): The ASCII representation of the tag
-in accordance with {{type-tag}} of this memo.
+in accordance with {{type-tag}} of this document.
 
 Reference (REQUIRED): A reference to a relevant specification
 document.
 
-The policy for allocation of new entries in this registry SHOULD be:
-Specification Required.
+The policy for allocation of new entries in this registry is
+Specification Required {{?RFC8126}}.
 
-The initial contents of this registry SHALL be as follows:
+The initial contents of this registry are as follows:
 
 | Tag        | ASCII Representation | Reference     |
 +-----------:+----------------------+---------------|
@@ -921,14 +929,103 @@ The initial contents of this registry SHALL be as follows:
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
 
-## Roughtime Malfeasance MIME type
-IANA is requested to register the "application/roughtime-malfeasance+json" media
-type.
+## Media Type Registry
 
-## Roughtime Server List MIME type
+### Roughtime Server List MIME type
 
-IANA is requested to register the "application/roughtime-server+json" media
-type.
+IANA is requested to allocate the following entry in the Media Type
+registry.
+
+Type name: application
+
+Subtype name: roughtime-server+json
+
+Required parameters: N/A
+
+Optional parameters: N/A
+
+Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+{{?RFC8259}}.
+
+Security considerations: {{security-considerations}} of
+[[this document]].
+
+Interoperability considerations: N/A
+
+Published specification: {{server-lists}} of [[this document]].
+
+Applications that use this media type: Roughtime clients
+[[this document]] that update their lists of Roughtime servers.
+
+Fragment identifier considerations: N/A
+
+Additional information:
+
+  Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A
+
+Person & email address to contact for further information: See
+Authors' Addresses section of [[this document]].
+
+Intended usage: COMMON
+
+Restrictions on usage: N/A
+
+Author: See Authors' Addresses section of [[this document]].
+
+Change controller: Internet Engineering Task Force
+
+### Roughtime Malfeasance MIME type
+
+IANA is requested to allocate the following entry in the Media Type
+registry.
+
+Type name: application
+
+Subtype name: roughtime-malfeasance+json
+
+Required parameters: N/A
+
+Optional parameters: N/A
+
+Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+{{?RFC8259}}.
+
+Security considerations: {{security-considerations}} of
+[[this document]].
+
+Interoperability considerations: N/A
+
+Published specification: {{malfeasance-report-structure}} of
+[[this document]].
+
+Applications that use this media type: Roughtime clients
+[[this document]] use this media type to report cryptographic proof
+that a Roughtime server has sent the wrong time.
+
+Fragment identifier considerations: N/A
+
+Additional information:
+
+  Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A
+
+Person & email address to contact for further information: See
+Authors' Addresses section of [[this document]].
+
+Intended usage: COMMON
+
+Restrictions on usage: N/A
+
+Author: See Authors' Addresses section of [[this document]].
+
+Change controller: Internet Engineering Task Force
 
 --- back
 
