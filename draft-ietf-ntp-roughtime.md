@@ -151,7 +151,7 @@ reviewing input reports.
 
 Roughtime messages are maps consisting of one or more (tag, value)
 pairs. They start with a header, which contains the number of pairs,
-the tags, and value offsets. The header is followed by a message
+the value offsets, and the tags. The header is followed by a message
 values section which contains the values associated with the tags in
 the header. Messages MUST be formatted according to {{figmessage}} as
 described in the following sections.
@@ -179,7 +179,7 @@ Roughtime message.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
-.                           N Values                            .
+.                           N values                            .
 .                                                               .
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -222,25 +222,26 @@ attainable accuracy and setting of the RADI tag.
 
 ## Header
 
-All Roughtime messages start with a header. The first four bytes of
-the header is the uint32 number of tags N, and hence of (tag, value)
-pairs.
+As illustrated in {{figmessage}}, the first four bytes of the header
+is the uint32 number of tags N, and hence of (tag, value) pairs. The
+following 4\*(N-1) bytes are offsets, each a uint32, and the last 4\*N
+bytes in the header are tags.
 
-The following 4\*(N-1) bytes are offsets, each a uint32. The last 4\*N
-bytes in the header are tags. Offsets refer to the positions of the
-values in the message values section. All offsets MUST be multiples of
-four and placed in increasing order. The first post-header byte is at
-offset 0. The offset array is considered to have a not explicitly
-encoded value of 0 as its zeroth entry.
+The offsets array is considered to have a not explicitly encoded value
+of 0 as its zeroth entry. Its members refer to the positions of the
+tag values in the message values section. All offsets are multiples of
+four.
 
-The value associated with the ith tag begins at offset[i] and ends at
-offset[i+1]-1, with the exception of the last value which ends at the
-end of the message. Values may have zero length. All lengths and
-offsets are in bytes.
+The members of the offsets and tags arrays, as well as the message
+values section are sorted in ascending order by the tag's numeric
+value. As a consequence, the offset array is also sorted in ascending
+order. A tag MUST NOT appear more than once in a header.
 
-Tags MUST be listed in the same order as the offsets of their values
-and be sorted in ascending order by numeric value. A tag MUST NOT
-appear more than once in a header.
+The first post-header byte, i.e. the first byte of the message values
+section, is at offset 0. The value associated with the ith tag begins
+at offset[i] and ends at offset[i+1]-1, with the exception of the last
+value which ends at the end of the message. Values MAY have zero
+length. All lengths and offsets are in bytes.
 
 # Protocol Details {#protocol-details}
 
