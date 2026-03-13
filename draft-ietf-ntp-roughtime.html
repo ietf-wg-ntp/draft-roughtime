@@ -1336,16 +1336,21 @@ to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
                 <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-service-name-and-transport-" class="internal xref">Service Name and Transport Protocol Port Number Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
-                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-roughtime-version-registry" class="internal xref">Roughtime Version Registry</a></p>
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-roughtime-versions-registry" class="internal xref">Roughtime Versions Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.3">
-                <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-roughtime-tag-registry" class="internal xref">Roughtime Tag Registry</a></p>
+                <p id="section-toc.1-1.12.2.3.1"><a href="#section-12.3" class="auto internal xref">12.3</a>.  <a href="#name-roughtime-tags-registry" class="internal xref">Roughtime Tags Registry</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4">
-                <p id="section-toc.1-1.12.2.4.1"><a href="#section-12.4" class="auto internal xref">12.4</a>.  <a href="#name-roughtime-malfeasance-mime-" class="internal xref">Roughtime Malfeasance MIME type</a></p>
+                <p id="section-toc.1-1.12.2.4.1"><a href="#section-12.4" class="auto internal xref">12.4</a>.  <a href="#name-media-type-registry" class="internal xref">Media Type Registry</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4.2.1">
+                    <p id="section-toc.1-1.12.2.4.2.1.1"><a href="#section-12.4.1" class="auto internal xref">12.4.1</a>.  <a href="#name-roughtime-server-list-mime-" class="internal xref">Roughtime Server List MIME type</a></p>
 </li>
-              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.5">
-                <p id="section-toc.1-1.12.2.5.1"><a href="#section-12.5" class="auto internal xref">12.5</a>.  <a href="#name-roughtime-server-list-mime-" class="internal xref">Roughtime Server List MIME type</a></p>
+                  <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.4.2.2">
+                    <p id="section-toc.1-1.12.2.4.2.2.1"><a href="#section-12.4.2" class="auto internal xref">12.4.2</a>.  <a href="#name-roughtime-malfeasance-mime-" class="internal xref">Roughtime Malfeasance MIME type</a></p>
+</li>
+                </ul>
 </li>
             </ul>
 </li>
@@ -2324,39 +2329,30 @@ done with the SRV tag. Additional recommendations for clients are listed in
         </h3>
 <p id="section-12.1-1">IANA is requested to allocate the following entry in the Service
 Name and Transport Protocol Port Number Registry:<a href="#section-12.1-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-12.1-2">
-<pre>
-  Service Name: roughtime
-
-  Transport Protocol: tcp,udp
-
-  Assignee: IESG &lt;iesg@ietf.org&gt;
-
-  Contact: IETF Chair &lt;chair@ietf.org&gt;
-
-  Description: Roughtime time synchronization
-
-  Reference: [[this document]]
-
-  Port Number: [[TBD1]], selected by IANA from the User Port range
-</pre><a href="#section-12.1-2" class="pilcrow">¶</a>
-</div>
+<p id="section-12.1-2">Service Name: roughtime<a href="#section-12.1-2" class="pilcrow">¶</a></p>
+<p id="section-12.1-3">Transport Protocol: tcp,udp<a href="#section-12.1-3" class="pilcrow">¶</a></p>
+<p id="section-12.1-4">Assignee: IESG <a href="mailto:iesg@ietf.org">iesg@ietf.org</a><a href="#section-12.1-4" class="pilcrow">¶</a></p>
+<p id="section-12.1-5">Contact: IETF Chair <a href="mailto:chair@ietf.org">chair@ietf.org</a><a href="#section-12.1-5" class="pilcrow">¶</a></p>
+<p id="section-12.1-6">Description: Roughtime time synchronization<a href="#section-12.1-6" class="pilcrow">¶</a></p>
+<p id="section-12.1-7">Reference: [[this document]]<a href="#section-12.1-7" class="pilcrow">¶</a></p>
+<p id="section-12.1-8">Port Number: [[TBD1]], selected by IANA from the User Port range<a href="#section-12.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="roughtime-version-registry">
+<div id="roughtime-versions-registry">
 <section id="section-12.2">
-        <h3 id="name-roughtime-version-registry">
-<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-roughtime-version-registry" class="section-name selfRef">Roughtime Version Registry</a>
+        <h3 id="name-roughtime-versions-registry">
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-roughtime-versions-registry" class="section-name selfRef">Roughtime Versions Registry</a>
         </h3>
-<p id="section-12.2-1">IANA is requested to create a new top-level registry entitled "Roughtime
- Version Registry".  Entries shall have the following fields:<a href="#section-12.2-1" class="pilcrow">¶</a></p>
+<p id="section-12.2-1">IANA is requested to create a new registry titled "Roughtime
+Versions" in a new "Roughtime" registry group. Entries will have the
+following fields:<a href="#section-12.2-1" class="pilcrow">¶</a></p>
 <p id="section-12.2-2">Version ID (<span class="bcp14">REQUIRED</span>): a 32-bit unsigned integer<a href="#section-12.2-2" class="pilcrow">¶</a></p>
 <p id="section-12.2-3">Version name (<span class="bcp14">REQUIRED</span>): A short text string naming the version being
 identified.<a href="#section-12.2-3" class="pilcrow">¶</a></p>
 <p id="section-12.2-4">Reference (<span class="bcp14">REQUIRED</span>): A reference to a relevant specification
 document.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
-<p id="section-12.2-5">The policy for allocation of new entries <span class="bcp14">SHOULD</span> be: IETF Review.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
-<p id="section-12.2-6">The initial contents of this registry shall be as follows:<a href="#section-12.2-6" class="pilcrow">¶</a></p>
+<p id="section-12.2-5">The policy for allocation of new entries is IETF Review <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
+<p id="section-12.2-6">The initial contents of this registry are as follows:<a href="#section-12.2-6" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
 <thead>
@@ -2383,34 +2379,49 @@ document.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">0x80000000-0xffffffff</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for Private</td>
+              <td class="text-left" rowspan="1" colspan="1">0x80000000-0xbfffffff</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for</td>
               <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">or Experimental use</td>
+              <td class="text-left" rowspan="1" colspan="1">experimental use</td>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0xc0000000-0xffffffff</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for private</td>
+              <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1"> </td>
+              <td class="text-left" rowspan="1" colspan="1">use</td>
               <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
+<p id="section-12.2-8">Private and experimental use are defined in <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>. The
+experimental range is intended for testing and evaluating new versions
+of the Roughtime protocol. Such tests may be conducted over the open
+Internet.<a href="#section-12.2-8" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="roughtime-tag-registry">
+<div id="roughtime-tags-registry">
 <section id="section-12.3">
-        <h3 id="name-roughtime-tag-registry">
-<a href="#section-12.3" class="section-number selfRef">12.3. </a><a href="#name-roughtime-tag-registry" class="section-name selfRef">Roughtime Tag Registry</a>
+        <h3 id="name-roughtime-tags-registry">
+<a href="#section-12.3" class="section-number selfRef">12.3. </a><a href="#name-roughtime-tags-registry" class="section-name selfRef">Roughtime Tags Registry</a>
         </h3>
-<p id="section-12.3-1">IANA is requested to create a new top-level registry entitled "Roughtime Tag
-Registry".  Entries <span class="bcp14">SHALL</span> have the following fields:<a href="#section-12.3-1" class="pilcrow">¶</a></p>
+<p id="section-12.3-1">IANA is requested to create a new registry titled "Roughtime Tags" in
+a new "Roughtime" registry group. Entries will have the following
+fields:<a href="#section-12.3-1" class="pilcrow">¶</a></p>
 <p id="section-12.3-2">Tag (<span class="bcp14">REQUIRED</span>): A 32-bit unsigned integer in hexadecimal format.<a href="#section-12.3-2" class="pilcrow">¶</a></p>
 <p id="section-12.3-3">ASCII Representation (<span class="bcp14">REQUIRED</span>): The ASCII representation of the tag
-in accordance with <a href="#type-tag" class="auto internal xref">Section 4.1.3</a> of this memo.<a href="#section-12.3-3" class="pilcrow">¶</a></p>
+in accordance with <a href="#type-tag" class="auto internal xref">Section 4.1.3</a> of this document.<a href="#section-12.3-3" class="pilcrow">¶</a></p>
 <p id="section-12.3-4">Reference (<span class="bcp14">REQUIRED</span>): A reference to a relevant specification
 document.<a href="#section-12.3-4" class="pilcrow">¶</a></p>
-<p id="section-12.3-5">The policy for allocation of new entries in this registry <span class="bcp14">SHOULD</span> be:
-Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
-<p id="section-12.3-6">The initial contents of this registry <span class="bcp14">SHALL</span> be as follows:<a href="#section-12.3-6" class="pilcrow">¶</a></p>
+<p id="section-12.3-5">The policy for allocation of new entries in this registry is
+Specification Required <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>]</span>.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
+<p id="section-12.3-6">The initial contents of this registry are as follows:<a href="#section-12.3-6" class="pilcrow">¶</a></p>
 <table class="center" id="table-2">
           <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
 <thead>
@@ -2515,22 +2526,81 @@ Specification Required.<a href="#section-12.3-5" class="pilcrow">¶</a></p>
         </table>
 </section>
 </div>
-<div id="roughtime-malfeasance-mime-type">
+<div id="media-type-registry">
 <section id="section-12.4">
-        <h3 id="name-roughtime-malfeasance-mime-">
-<a href="#section-12.4" class="section-number selfRef">12.4. </a><a href="#name-roughtime-malfeasance-mime-" class="section-name selfRef">Roughtime Malfeasance MIME type</a>
+        <h3 id="name-media-type-registry">
+<a href="#section-12.4" class="section-number selfRef">12.4. </a><a href="#name-media-type-registry" class="section-name selfRef">Media Type Registry</a>
         </h3>
-<p id="section-12.4-1">IANA is requested to register the "application/roughtime-malfeasance+json" media
-type.<a href="#section-12.4-1" class="pilcrow">¶</a></p>
+<div id="roughtime-server-list-mime-type">
+<section id="section-12.4.1">
+          <h4 id="name-roughtime-server-list-mime-">
+<a href="#section-12.4.1" class="section-number selfRef">12.4.1. </a><a href="#name-roughtime-server-list-mime-" class="section-name selfRef">Roughtime Server List MIME type</a>
+          </h4>
+<p id="section-12.4.1-1">IANA is requested to allocate the following entry in the Media Type
+registry.<a href="#section-12.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-2">Type name: application<a href="#section-12.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-3">Subtype name: roughtime-server+json<a href="#section-12.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-4">Required parameters: N/A<a href="#section-12.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-5">Optional parameters: N/A<a href="#section-12.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-6">Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+<span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span>.<a href="#section-12.4.1-6" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-7">Security considerations: <a href="#security-considerations" class="auto internal xref">Section 9</a> of
+[[this document]].<a href="#section-12.4.1-7" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-8">Interoperability considerations: N/A<a href="#section-12.4.1-8" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-9">Published specification: <a href="#server-lists" class="auto internal xref">Section 8.3</a> of [[this document]].<a href="#section-12.4.1-9" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-10">Applications that use this media type: Roughtime clients
+[[this document]] that update their lists of Roughtime servers.<a href="#section-12.4.1-10" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-11">Fragment identifier considerations: N/A<a href="#section-12.4.1-11" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-12">Additional information:<a href="#section-12.4.1-12" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-13">Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A<a href="#section-12.4.1-13" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-14">Person &amp; email address to contact for further information: See
+Authors' Addresses section of [[this document]].<a href="#section-12.4.1-14" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-15">Intended usage: COMMON<a href="#section-12.4.1-15" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-16">Restrictions on usage: N/A<a href="#section-12.4.1-16" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-17">Author: See Authors' Addresses section of [[this document]].<a href="#section-12.4.1-17" class="pilcrow">¶</a></p>
+<p id="section-12.4.1-18">Change controller: Internet Engineering Task Force<a href="#section-12.4.1-18" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="roughtime-server-list-mime-type">
-<section id="section-12.5">
-        <h3 id="name-roughtime-server-list-mime-">
-<a href="#section-12.5" class="section-number selfRef">12.5. </a><a href="#name-roughtime-server-list-mime-" class="section-name selfRef">Roughtime Server List MIME type</a>
-        </h3>
-<p id="section-12.5-1">IANA is requested to register the "application/roughtime-server+json" media
-type.<a href="#section-12.5-1" class="pilcrow">¶</a></p>
+<div id="roughtime-malfeasance-mime-type">
+<section id="section-12.4.2">
+          <h4 id="name-roughtime-malfeasance-mime-">
+<a href="#section-12.4.2" class="section-number selfRef">12.4.2. </a><a href="#name-roughtime-malfeasance-mime-" class="section-name selfRef">Roughtime Malfeasance MIME type</a>
+          </h4>
+<p id="section-12.4.2-1">IANA is requested to allocate the following entry in the Media Type
+registry.<a href="#section-12.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-2">Type name: application<a href="#section-12.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-3">Subtype name: roughtime-malfeasance+json<a href="#section-12.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-4">Required parameters: N/A<a href="#section-12.4.2-4" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-5">Optional parameters: N/A<a href="#section-12.4.2-5" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-6">Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+<span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span>.<a href="#section-12.4.2-6" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-7">Security considerations: <a href="#security-considerations" class="auto internal xref">Section 9</a> of
+[[this document]].<a href="#section-12.4.2-7" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-8">Interoperability considerations: N/A<a href="#section-12.4.2-8" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-9">Published specification: <a href="#malfeasance-report-structure" class="auto internal xref">Section 8.4.1</a> of
+[[this document]].<a href="#section-12.4.2-9" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-10">Applications that use this media type: Roughtime clients
+[[this document]] use this media type to report cryptographic proof
+that a Roughtime server has sent the wrong time.<a href="#section-12.4.2-10" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-11">Fragment identifier considerations: N/A<a href="#section-12.4.2-11" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-12">Additional information:<a href="#section-12.4.2-12" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-13">Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A<a href="#section-12.4.2-13" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-14">Person &amp; email address to contact for further information: See
+Authors' Addresses section of [[this document]].<a href="#section-12.4.2-14" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-15">Intended usage: COMMON<a href="#section-12.4.2-15" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-16">Restrictions on usage: N/A<a href="#section-12.4.2-16" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-17">Author: See Authors' Addresses section of [[this document]].<a href="#section-12.4.2-17" class="pilcrow">¶</a></p>
+<p id="section-12.4.2-18">Change controller: Internet Engineering Task Force<a href="#section-12.4.2-18" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 </section>
@@ -2630,6 +2700,10 @@ type.<a href="#section-12.5-1" class="pilcrow">¶</a></p>
 <dt id="RFC738">[RFC738]</dt>
         <dd>
 <span class="refAuthor">Harrenstien, K.</span>, <span class="refTitle">"Time server"</span>, <span class="seriesInfo">RFC 738</span>, <span class="seriesInfo">DOI 10.17487/RFC0738</span>, <time datetime="1977-10" class="refDate">October 1977</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc738">https://www.rfc-editor.org/rfc/rfc738</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8126">[RFC8126]</dt>
+        <dd>
+<span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8915">[RFC8915]</dt>
         <dd>
