@@ -1053,11 +1053,11 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">Roughtime</td>
-<td class="right">February 2026</td>
+<td class="right">March 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 25 August 2026</td>
+<td class="center">Expires 14 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1070,12 +1070,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-02-21" class="published">21 February 2026</time>
+<time datetime="2026-03-13" class="published">13 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-08-25">25 August 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-14">14 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1128,7 +1128,7 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 25 August 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 14 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1792,11 +1792,11 @@ and INDX. The structure of a response message is illustrated in
 |  |--VERS
 |  |--ROOT
 |--CERT
+|  |--SIG
 |  |--DELE
+|  |  |--PUBK
 |  |  |--MINT
 |  |  |--MAXT
-|  |  |--PUBK
-|  |--SIG
 |--INDX
 </pre>
 </div>
@@ -1890,22 +1890,22 @@ described in <a href="#merkle-tree" class="auto internal xref">Section 5.4</a>.<
           </h4>
 <p id="section-5.3.6-1">The CERT tag contains a public key certificate signed with the
 server's private long-term key. Its value <span class="bcp14">MUST</span> be a Roughtime message
-with the tags DELE and SIG, where SIG is a signature over the DELE
+with the tags SIG and DELE, where SIG is a signature over the DELE
 value. The context string used to generate SIG <span class="bcp14">MUST</span> be "RoughTime v1
 delegation signature".<a href="#section-5.3.6-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.6-2">The DELE tag contains a delegated public key certificate used by the
 server to sign the SREP tag. Its value <span class="bcp14">MUST</span> be a Roughtime message
-with the tags MINT, MAXT, and PUBK. The purpose of the DELE tag is to
+with the tags PUBK, MINT, and MAXT. The purpose of the DELE tag is to
 enable separation of a long-term public key from keys on devices
 exposed to the public Internet.<a href="#section-5.3.6-2" class="pilcrow">¶</a></p>
-<p id="section-5.3.6-3">The MINT tag is the minimum timestamp for which the key in PUBK is
+<p id="section-5.3.6-3">The PUBK tag <span class="bcp14">MUST</span> contain a temporary 32-byte Ed25519 public key which
+is used to sign the SREP tag.<a href="#section-5.3.6-3" class="pilcrow">¶</a></p>
+<p id="section-5.3.6-4">The MINT tag is the minimum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP <span class="bcp14">MUST</span> be more than or equal to MINT for
-a response to be considered valid.<a href="#section-5.3.6-3" class="pilcrow">¶</a></p>
-<p id="section-5.3.6-4">The MAXT tag is the maximum timestamp for which the key in PUBK is
-trusted to sign responses. MIDP <span class="bcp14">MUST</span> be less than or equal to MAXT for
 a response to be considered valid.<a href="#section-5.3.6-4" class="pilcrow">¶</a></p>
-<p id="section-5.3.6-5">The PUBK tag <span class="bcp14">MUST</span> contain a temporary 32-byte Ed25519 public key which
-is used to sign the SREP tag.<a href="#section-5.3.6-5" class="pilcrow">¶</a></p>
+<p id="section-5.3.6-5">The MAXT tag is the maximum timestamp for which the key in PUBK is
+trusted to sign responses. MIDP <span class="bcp14">MUST</span> be less than or equal to MAXT for
+a response to be considered valid.<a href="#section-5.3.6-5" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="indx">
