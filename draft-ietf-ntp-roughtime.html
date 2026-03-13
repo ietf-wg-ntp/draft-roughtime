@@ -8,12 +8,13 @@
 <meta content="Watson Ladd" name="author">
 <meta content="Marcus Dansarie" name="author">
 <meta content="
-       This document describes Roughtime—a protocol that aims to
-achieve two things: secure rough time synchronization even for clients
-without any idea of what time it is, and giving clients a format by
-which to report any inconsistencies they observe between time servers.
-This document specifies the on-wire protocol required for these goals,
-and discusses aspects of the ecosystem needed for it to work. 
+       This document describes Roughtime, an experimental protocol that aims
+to achieve two things: secure rough time synchronization even for
+clients without any idea of what time it is, and giving clients a
+format by which to report any inconsistencies they observe between
+time servers. This document specifies the on-wire protocol required
+for these goals, and discusses aspects of the ecosystem needed for it
+to work. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
 <meta content="timing" name="keyword">
@@ -1092,12 +1093,13 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <h1 id="title">Roughtime</h1>
 <section id="section-abstract">
       <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
-<p id="section-abstract-1">This document describes Roughtime—a protocol that aims to
-achieve two things: secure rough time synchronization even for clients
-without any idea of what time it is, and giving clients a format by
-which to report any inconsistencies they observe between time servers.
-This document specifies the on-wire protocol required for these goals,
-and discusses aspects of the ecosystem needed for it to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+<p id="section-abstract-1">This document describes Roughtime, an experimental protocol that aims
+to achieve two things: secure rough time synchronization even for
+clients without any idea of what time it is, and giving clients a
+format by which to report any inconsistencies they observe between
+time servers. This document specifies the on-wire protocol required
+for these goals, and discusses aspects of the ecosystem needed for it
+to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1374,14 +1376,13 @@ and discusses aspects of the ecosystem needed for it to work.<a href="#section-a
 <a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
       </h2>
 <p id="section-1-1">Time synchronization is essential to Internet security as many
-security protocols and other applications require synchronization
-<span>[<a href="#RFC738" class="cite xref">RFC738</a>]</span>. Unfortunately, widely deployed protocols such as
-the Network Time Protocol (NTP) <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> lack essential security
-features, and even newer protocols like Network Time Security (NTS)
-<span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span> lack mechanisms to observe that the servers behave
-correctly. Furthermore, clients may lack even a basic idea of the
-time, creating bootstrapping problems as a time is required for
-X.509 certificate validation.<a href="#section-1-1" class="pilcrow">¶</a></p>
+security protocols and other applications require it <span>[<a href="#RFC738" class="cite xref">RFC738</a>]</span>.
+Unfortunately, widely deployed protocols such as the Network Time
+Protocol (NTP) <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span> lack essential security features, and even
+newer protocols like Network Time Security (NTS) <span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span> lack
+mechanisms to observe that the servers behave correctly. Furthermore,
+clients may lack even a basic idea of the time, creating bootstrapping
+problems as a time is required for X.509 certificate validation.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">The primary design goal of Roughtime is to permit devices to obtain a
 rough idea of the current time from fairly static configuration and to
 enable them to report any inconsistencies they observe between
@@ -1395,15 +1396,19 @@ malfeasance constructed by chaining together responses from different
 trusted servers can be used to prove misbehavior by a server, and
 after analysis result in revoking trust in that particular key.<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">Unlike Khronos <span>[<a href="#RFC9523" class="cite xref">RFC9523</a>]</span> Roughtime produces external evidence that
-timeservers are reporting incompatible times. This requires changes
-to the format of the timestamps and hence cannot be a mere extension to
+timeservers are reporting incompatible times. This requires changes to
+the format of the timestamps and hence cannot be a mere extension to
 NTP.<a href="#section-1-3" class="pilcrow">¶</a></p>
-<p id="section-1-4">This memo is limited to describing the Roughtime on-wire protocol.
-Apart from describing the server list and malfeasance report formats,
-this memo does not describe the ecosystem required for maintaining
-lists of trusted servers and processing malfeasance reports, nor the
-means by which the server list is maintained and distributed or the
-policies to apply to such a list.<a href="#section-1-4" class="pilcrow">¶</a></p>
+<p id="section-1-4">Operational experience is needed to evaluate the viability of using
+Roughtime for secure time bootstrapping in Internet-connected systems.
+This includes the need for experience with maintaining a Roughtime
+ecosystem with services that maintain and distribute lists of trusted
+servers and process malfeasance reports. To facilitate the experiments
+necessary to gain that experience, this document is limited to
+describing the Roughtime on-wire protocol. Apart from describing the
+server list and malfeasance report formats, this document does not
+describe the ecosystem, nor the means by which the server list is
+maintained and distributed or the policies to apply to such a list.<a href="#section-1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
