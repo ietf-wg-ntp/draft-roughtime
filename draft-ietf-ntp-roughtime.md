@@ -402,11 +402,11 @@ and INDX. The structure of a response message is illustrated in
 |  |--VERS
 |  |--ROOT
 |--CERT
+|  |--SIG
 |  |--DELE
+|  |  |--PUBK
 |  |  |--MINT
 |  |  |--MAXT
-|  |  |--PUBK
-|  |--SIG
 |--INDX
 ~~~~~
 {: #figresponse title="Roughtime response message structure."}
@@ -481,15 +481,18 @@ described in {{merkle-tree}}.
 
 The CERT tag contains a public key certificate signed with the
 server's private long-term key. Its value MUST be a Roughtime message
-with the tags DELE and SIG, where SIG is a signature over the DELE
+with the tags SIG and DELE, where SIG is a signature over the DELE
 value. The context string used to generate SIG MUST be "RoughTime v1
 delegation signature".
 
 The DELE tag contains a delegated public key certificate used by the
 server to sign the SREP tag. Its value MUST be a Roughtime message
-with the tags MINT, MAXT, and PUBK. The purpose of the DELE tag is to
+with the tags PUBK, MINT, and MAXT. The purpose of the DELE tag is to
 enable separation of a long-term public key from keys on devices
 exposed to the public Internet.
+
+The PUBK tag MUST contain a temporary 32-byte Ed25519 public key which
+is used to sign the SREP tag.
 
 The MINT tag is the minimum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP MUST be more than or equal to MINT for
@@ -498,9 +501,6 @@ a response to be considered valid.
 The MAXT tag is the maximum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP MUST be less than or equal to MAXT for
 a response to be considered valid.
-
-The PUBK tag MUST contain a temporary 32-byte Ed25519 public key which
-is used to sign the SREP tag.
 
 ### INDX
 
