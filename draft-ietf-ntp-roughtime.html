@@ -1481,7 +1481,7 @@ reviewing input reports.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
       </h2>
 <p id="section-4-1">Roughtime messages are maps consisting of one or more (tag, value)
 pairs. They start with a header, which contains the number of pairs,
-the tags, and value offsets. The header is followed by a message
+the value offsets, and the tags. The header is followed by a message
 values section which contains the values associated with the tags in
 the header. Messages <span class="bcp14">MUST</span> be formatted according to <a href="#figmessage" class="auto internal xref">Figure 1</a> as
 described in the following sections.<a href="#section-4-1" class="pilcrow">¶</a></p>
@@ -1510,7 +1510,7 @@ Roughtime message.<a href="#section-4-2" class="pilcrow">¶</a></p>
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
-.                           N Values                            .
+.                           N values                            .
 .                                                               .
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -1580,22 +1580,23 @@ attainable accuracy and setting of the RADI tag.<a href="#section-4.1.4-1" class
         <h3 id="name-header">
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-header" class="section-name selfRef">Header</a>
         </h3>
-<p id="section-4.2-1">All Roughtime messages start with a header. The first four bytes of
-the header is the uint32 number of tags N, and hence of (tag, value)
-pairs.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">The following 4*(N-1) bytes are offsets, each a uint32. The last 4*N
-bytes in the header are tags. Offsets refer to the positions of the
-values in the message values section. All offsets <span class="bcp14">MUST</span> be multiples of
-four and placed in increasing order. The first post-header byte is at
-offset 0. The offset array is considered to have a not explicitly
-encoded value of 0 as its zeroth entry.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
-<p id="section-4.2-3">The value associated with the ith tag begins at offset[i] and ends at
-offset[i+1]-1, with the exception of the last value which ends at the
-end of the message. Values may have zero length. All lengths and
-offsets are in bytes.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
-<p id="section-4.2-4">Tags <span class="bcp14">MUST</span> be listed in the same order as the offsets of their values
-and be sorted in ascending order by numeric value. A tag <span class="bcp14">MUST NOT</span>
-appear more than once in a header.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
+<p id="section-4.2-1">As illustrated in <a href="#figmessage" class="auto internal xref">Figure 1</a>, the first four bytes of the header
+is the uint32 number of tags N, and hence of (tag, value) pairs. The
+following 4*(N-1) bytes are offsets, each a uint32, and the last 4*N
+bytes in the header are tags.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The offsets array is considered to have a not explicitly encoded value
+of 0 as its zeroth entry. Its members refer to the positions of the
+tag values in the message values section. All offsets are multiples of
+four.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
+<p id="section-4.2-3">The members of the offsets and tags arrays, as well as the message
+values section are sorted in ascending order by the tag's numeric
+value. As a consequence, the offset array is also sorted in ascending
+order. A tag <span class="bcp14">MUST NOT</span> appear more than once in a header.<a href="#section-4.2-3" class="pilcrow">¶</a></p>
+<p id="section-4.2-4">The first post-header byte, i.e. the first byte of the message values
+section, is at offset 0. The value associated with the ith tag begins
+at offset[i] and ends at offset[i+1]-1, with the exception of the last
+value which ends at the end of the message. Values <span class="bcp14">MAY</span> have zero
+length. All lengths and offsets are in bytes.<a href="#section-4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
