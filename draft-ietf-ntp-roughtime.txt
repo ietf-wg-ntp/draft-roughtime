@@ -661,27 +661,29 @@ Table of Contents
 
 6.  Integration into NTP
 
-   We assume that there is a bound PHI on the frequency error in the
+   We assume that there is a bound phi on the frequency error in the
    clock on the machine.  Let delta be the time difference between the
-   clock on the client and the clock on the server, and let sigma
+   clock on the client and the clock on the server and let sigma
    represent the error in the measured value of delta introduced by the
-   measurement process.
+   measurement process.  Given a measurement taken at a local time t, we
+   know the true time is in (t-delta-sigma, t-delta+sigma).  After d
+   seconds have elapsed we know the true time is within (t-delta-sigma-
+   d*phi, t-delta+sigma+d*phi).
 
-   Given a measurement taken at a local time t, we know the true time is
-   in (t-delta-sigma, t-delta+sigma).  After d seconds have elapsed we
-   know the true time is within (t-delta-sigma-d_PHI,
-   t-delta+sigma+d_PHI).  A simple and effective way to mix with NTP or
-   Precision Time Protocol (PTP) discipline of the clock is to trim the
-   observed intervals in NTP to fit entirely within this window or
-   reject measurements that fall too far outside.  This assumes time has
-   not been stepped.  If the NTP process decides to step the time, it
-   MUST use Roughtime to ensure the new true time estimate that will be
-   stepped to is consistent with the true time.  Should this window
-   become too large, another Roughtime measurement is called for.  The
-   definition of "too large" is implementation defined.  Implementations
-   MAY use other, more sophisticated means of adjusting the clock
-   respecting Roughtime information.  Other applications such as X.509
-   verification may wish to apply different rules.
+   This bound can be used as a simple and effective means to limit the
+   error an attacker can introduce into NTP or Precision Time Protocol
+   (PTP) measurements.  For example, an NTP client can ensure that its
+   observation intervals fall entirely within this range or reject
+   measurements that fall outside.
+
+   An application that needs to verify X.509 certificates (which
+   requires knowledge of the current time), but lacks an accurate and
+   trusted time source can use Roughtime to obtain a time estimate.  In
+   particular, securely establishing NTS-protected NTP time
+   synchronization requires verification of the NTS-KE server's
+   certificate, which is not possible if the client has no idea of the
+   current time (see Section 8.5 of [RFC8915]).  In that case, a
+   Roughtime time estimate can be used for certificate validation.
 
    If an NTP server uses a Roughtime server as a time source for
    synchronization (and not only for filtering its NTP measurements),
@@ -1195,6 +1197,11 @@ Table of Contents
               DOI 10.17487/RFC8259, December 2017,
               <https://www.rfc-editor.org/rfc/rfc8259>.
 
+   [RFC8915]  Franke, D., Sibold, D., Teichel, K., Dansarie, M., and R.
+              Sundblad, "Network Time Security for the Network Time
+              Protocol", RFC 8915, DOI 10.17487/RFC8915, September 2020,
+              <https://www.rfc-editor.org/rfc/rfc8915>.
+
    [RFC9110]  Fielding, R., Ed., Nottingham, M., Ed., and J. Reschke,
               Ed., "HTTP Semantics", STD 97, RFC 9110,
               DOI 10.17487/RFC9110, June 2022,
@@ -1230,11 +1237,6 @@ Table of Contents
               Writing an IANA Considerations Section in RFCs", BCP 26,
               RFC 8126, DOI 10.17487/RFC8126, June 2017,
               <https://www.rfc-editor.org/rfc/rfc8126>.
-
-   [RFC8915]  Franke, D., Sibold, D., Teichel, K., Dansarie, M., and R.
-              Sundblad, "Network Time Security for the Network Time
-              Protocol", RFC 8915, DOI 10.17487/RFC8915, September 2020,
-              <https://www.rfc-editor.org/rfc/rfc8915>.
 
    [RFC9523]  Rozen-Schiff, N., Dolev, D., Mizrahi, T., and M. Schapira,
               "A Secure Selection and Filtering Mechanism for the

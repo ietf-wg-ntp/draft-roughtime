@@ -2010,31 +2010,32 @@ timestamp and computed its signature during the time interval
       <h2 id="name-integration-into-ntp">
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-integration-into-ntp" class="section-name selfRef">Integration into NTP</a>
       </h2>
-<p id="section-6-1">We assume that there is a bound PHI on the frequency error in the
-clock on the machine. Let delta be the time difference between the
-clock on the client and the clock on the server, and let sigma
+<p id="section-6-1">We assume that there is a bound <code>phi</code> on the frequency error in the
+clock on the machine. Let <code>delta</code> be the time difference between the
+clock on the client and the clock on the server and let <code>sigma</code>
 represent the error in the measured value of delta introduced by the
-measurement process.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<p id="section-6-2">Given a measurement taken at a local time t, we
-know the true time is in (t-delta-sigma, t-delta+sigma). After d
+measurement process. Given a measurement taken at a local time <code>t</code>, we
+know the true time is in <code>(t-delta-sigma, t-delta+sigma)</code>. After <code>d</code>
 seconds have elapsed we know the true time is within
-(t-delta-sigma-d<em>PHI, t-delta+sigma+d</em>PHI). A simple and effective way
-to mix with NTP or Precision Time Protocol (PTP) discipline of the
-clock is to trim the observed intervals in NTP to fit entirely within
-this window or reject measurements that fall too far outside. This
-assumes time has not been stepped. If the NTP process decides to step
-the time, it <span class="bcp14">MUST</span> use Roughtime to ensure the new true time estimate
-that will be stepped to is consistent with the true time. Should this
-window become too large, another Roughtime measurement is called for.
-The definition of "too large" is implementation defined.
-Implementations <span class="bcp14">MAY</span> use other, more sophisticated means of adjusting
-the clock respecting Roughtime information. Other applications such as
-X.509 verification may wish to apply different rules.<a href="#section-6-2" class="pilcrow">¶</a></p>
-<p id="section-6-3">If an NTP server uses a Roughtime server as a time source for
+<code>(t-delta-sigma-d*phi, t-delta+sigma+d*phi)</code>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<p id="section-6-2">This bound can be used as a simple and effective means to limit the
+error an attacker can introduce into NTP or Precision Time Protocol
+(PTP) measurements. For example, an NTP client can ensure that its
+observation intervals fall entirely within this range or reject
+measurements that fall outside.<a href="#section-6-2" class="pilcrow">¶</a></p>
+<p id="section-6-3">An application that needs to verify X.509 certificates (which requires
+knowledge of the current time), but lacks an accurate and trusted time
+source can use Roughtime to obtain a time estimate. In particular,
+securely establishing NTS-protected NTP time synchronization requires
+verification of the NTS-KE server's certificate, which is not possible
+if the client has no idea of the current time (see Section 8.5 of
+<span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>). In that case, a Roughtime time estimate can be used for
+certificate validation.<a href="#section-6-3" class="pilcrow">¶</a></p>
+<p id="section-6-4">If an NTP server uses a Roughtime server as a time source for
 synchronization (and not only for filtering its NTP measurements), the
 root dispersion <span class="bcp14">SHOULD</span> include the server's RADI value and root delay
 <span class="bcp14">SHOULD</span> include the interval between sending the Roughtime request and
-receiving the response.<a href="#section-6-3" class="pilcrow">¶</a></p>
+receiving the response.<a href="#section-6-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="grease">
@@ -2671,6 +2672,10 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-14" cla
         <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC8915">[RFC8915]</dt>
+        <dd>
+<span class="refAuthor">Franke, D.</span>, <span class="refAuthor">Sibold, D.</span>, <span class="refAuthor">Teichel, K.</span>, <span class="refAuthor">Dansarie, M.</span>, and <span class="refAuthor">R. Sundblad</span>, <span class="refTitle">"Network Time Security for the Network Time Protocol"</span>, <span class="seriesInfo">RFC 8915</span>, <span class="seriesInfo">DOI 10.17487/RFC8915</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8915">https://www.rfc-editor.org/rfc/rfc8915</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC9110">[RFC9110]</dt>
         <dd>
 <span class="refAuthor">Fielding, R., Ed.</span>, <span class="refAuthor">Nottingham, M., Ed.</span>, and <span class="refAuthor">J. Reschke, Ed.</span>, <span class="refTitle">"HTTP Semantics"</span>, <span class="seriesInfo">STD 97</span>, <span class="seriesInfo">RFC 9110</span>, <span class="seriesInfo">DOI 10.17487/RFC9110</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc9110">https://www.rfc-editor.org/rfc/rfc9110</a>&gt;</span>. </dd>
@@ -2707,10 +2712,6 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-14" cla
 <dt id="RFC8126">[RFC8126]</dt>
         <dd>
 <span class="refAuthor">Cotton, M.</span>, <span class="refAuthor">Leiba, B.</span>, and <span class="refAuthor">T. Narten</span>, <span class="refTitle">"Guidelines for Writing an IANA Considerations Section in RFCs"</span>, <span class="seriesInfo">BCP 26</span>, <span class="seriesInfo">RFC 8126</span>, <span class="seriesInfo">DOI 10.17487/RFC8126</span>, <time datetime="2017-06" class="refDate">June 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8126">https://www.rfc-editor.org/rfc/rfc8126</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC8915">[RFC8915]</dt>
-        <dd>
-<span class="refAuthor">Franke, D.</span>, <span class="refAuthor">Sibold, D.</span>, <span class="refAuthor">Teichel, K.</span>, <span class="refAuthor">Dansarie, M.</span>, and <span class="refAuthor">R. Sundblad</span>, <span class="refTitle">"Network Time Security for the Network Time Protocol"</span>, <span class="seriesInfo">RFC 8915</span>, <span class="seriesInfo">DOI 10.17487/RFC8915</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8915">https://www.rfc-editor.org/rfc/rfc8915</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC9523">[RFC9523]</dt>
       <dd>
