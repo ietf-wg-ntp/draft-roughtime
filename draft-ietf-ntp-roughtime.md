@@ -318,9 +318,6 @@ NOTE TO RFC EDITOR: remove this paragraph before publication. For
 testing this draft of the document, a version number of 0x8000000c is
 used.
 
-## Transport considerations.
-
-
 ## Requests {#requests}
 
 A request MUST contain the tags VER, NONC, and TYPE. It SHOULD include
