@@ -50,12 +50,13 @@ informative:
 
 --- abstract
 
-This document describes Roughtime&mdash;a protocol that aims to
-achieve two things: secure rough time synchronization even for clients
-without any idea of what time it is, and giving clients a format by
-which to report any inconsistencies they observe between time servers.
-This document specifies the on-wire protocol required for these goals,
-and discusses aspects of the ecosystem needed for it to work.
+This document describes Roughtime, an experimental protocol that aims
+to achieve two things: secure rough time synchronization even for
+clients without any idea of what time it is, and giving clients a
+format by which to report any inconsistencies they observe between
+time servers. This document specifies the on-wire protocol required
+for these goals, and discusses aspects of the ecosystem needed for it
+to work.
 
 
 --- middle
@@ -63,13 +64,13 @@ and discusses aspects of the ecosystem needed for it to work.
 # Introduction
 
 Time synchronization is essential to Internet security as many
-security protocols and other applications require synchronization
-{{?RFC738}}. Unfortunately, widely deployed protocols such as
-the Network Time Protocol (NTP) {{?RFC5905}} lack essential security
-features, and even newer protocols like Network Time Security (NTS)
-{{?RFC8915}} lack mechanisms to observe that the servers behave
-correctly. Furthermore, clients may lack even a basic idea of the
-time, creating bootstrapping problems.
+security protocols and other applications require it {{?RFC738}}.
+Unfortunately, widely deployed protocols such as the Network Time
+Protocol (NTP) {{?RFC5905}} lack essential security features, and even
+newer protocols like Network Time Security (NTS) {{?RFC8915}} lack
+mechanisms to observe that the servers behave correctly. Furthermore,
+clients may lack even a basic idea of the time, creating bootstrapping
+problems as a time is required for X.509 certificate validation.
 
 The primary design goal of Roughtime is to permit devices to obtain a
 rough idea of the current time from fairly static configuration and to
@@ -81,18 +82,24 @@ trust in Roughtime. With a sufficiently long list of trusted servers
 and keys, a client will be able to acquire authenticated time with
 high probability, even after long periods of inactivity. Proofs of
 malfeasance constructed by chaining together responses from different
-trusted servers can be used to prove misbehavior by a server, thereby
-revoking trust in that particular key.
+trusted servers can be used to prove misbehavior by a server, and
+after analysis result in revoking trust in that particular key.
 
 Unlike Khronos {{?RFC9523}} Roughtime produces external evidence that
-timeservers are reporting incompatible times. This requires changes
-to the format of the timestamps and hence cannot be a mere extension to
+timeservers are reporting incompatible times. This requires changes to
+the format of the timestamps and hence cannot be a mere extension to
 NTP.
 
-This memo is limited to describing the Roughtime on-wire protocol.
-Apart from describing the server list and malfeasance report formats,
-this memo does not describe the ecosystem required for maintaining
-lists of trusted servers and processing malfeasance reports.
+Operational experience is needed to evaluate the viability of using
+Roughtime for secure time bootstrapping in Internet-connected systems.
+This includes the need for experience with maintaining a Roughtime
+ecosystem with services that maintain and distribute lists of trusted
+servers and process malfeasance reports. To facilitate the experiments
+necessary to gain that experience, this document is limited to
+describing the Roughtime on-wire protocol. Apart from describing the
+server list and malfeasance report formats, this document does not
+describe the ecosystem, nor the means by which the server list is
+maintained and distributed or the policies to apply to such a list.
 
 # Conventions and Definitions
 
@@ -104,7 +111,7 @@ Roughtime is a protocol for authenticated rough time synchronization
 that enables clients to provide cryptographic proof of server
 malfeasance. It does so by having responses from servers include a
 signature over a value derived from the client's request, which
-includes a nonce. This provides cryptographic proof that the timestamp
+includes a nonce. This provides cryptographic proof that the response
 was issued after the server received the client's request. The derived
 value included in the server's response is the root of a Merkle tree
 {{Merkle}} which includes the hash value of the client's request as
@@ -148,7 +155,7 @@ reviewing input reports.
 
 Roughtime messages are maps consisting of one or more (tag, value)
 pairs. They start with a header, which contains the number of pairs,
-the tags, and value offsets. The header is followed by a message
+the value offsets, and the tags. The header is followed by a message
 values section which contains the values associated with the tags in
 the header. Messages MUST be formatted according to {{figmessage}} as
 described in the following sections.
@@ -176,7 +183,7 @@ Roughtime message.
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                                                               |
 .                                                               .
-.                           N Values                            .
+.                           N values                            .
 .                                                               .
 |                                                               |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -219,25 +226,26 @@ attainable accuracy and setting of the RADI tag.
 
 ## Header
 
-All Roughtime messages start with a header. The first four bytes of
-the header is the uint32 number of tags N, and hence of (tag, value)
-pairs.
+As illustrated in {{figmessage}}, the first four bytes of the header
+is the uint32 number of tags N, and hence of (tag, value) pairs. The
+following 4\*(N-1) bytes are offsets, each a uint32, and the last 4\*N
+bytes in the header are tags.
 
-The following 4\*(N-1) bytes are offsets, each a uint32. The last 4\*N
-bytes in the header are tags. Offsets refer to the positions of the
-values in the message values section. All offsets MUST be multiples of
-four and placed in increasing order. The first post-header byte is at
-offset 0. The offset array is considered to have a not explicitly
-encoded value of 0 as its zeroth entry.
+The offsets array is considered to have a not explicitly encoded value
+of 0 as its zeroth entry. Its members refer to the positions of the
+tag values in the message values section. All offsets are multiples of
+four.
 
-The value associated with the ith tag begins at offset[i] and ends at
-offset[i+1]-1, with the exception of the last value which ends at the
-end of the message. Values may have zero length. All lengths and
-offsets are in bytes.
+The members of the offsets and tags arrays, as well as the message
+values section are sorted in ascending order by the tag's numeric
+value. As a consequence, the offset array is also sorted in ascending
+order. A tag MUST NOT appear more than once in a header.
 
-Tags MUST be listed in the same order as the offsets of their values
-and be sorted in ascending order by numeric value. A tag MUST NOT
-appear more than once in a header.
+The first post-header byte, i.e. the first byte of the message values
+section, is at offset 0. The value associated with the ith tag begins
+at offset[i] and ends at offset[i+1]-1, with the exception of the last
+value which ends at the end of the message. Values MAY have zero
+length. All lengths and offsets are in bytes.
 
 # Protocol Details {#protocol-details}
 
@@ -273,23 +281,45 @@ contains a Roughtime message as specified in {{message-format}}.
 
 Roughtime request and response packets MUST be transmitted in a single
 datagram when the UDP transport mode is used. Setting the packet's
-don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks.
+don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
+it may cause packets to get dropped, but not setting it could lead to
+long delays due to reconstruction and dropped fragments.
+
+
+A Roughtime packet may exceed the maximum deliverable length of a UDP
+packet. A client SHOULD deliver the request over TCP if it cannot be
+delivered over UDP, as evidenced by repeated nonresponse. MTU issues
+may lead to persistent nonresponse due to network devices between
+client and server.
+
+Clients SHOULD implement exponential backoff in establishing TCP
+connections and making requests over UDP as per {{!RFC8085}}. It is
+RECOMMENDED that clients use an initial interval of 1 seconds,
+a maximum interval of 24 hours, and a base of 1.5. Therefore the
+minimum interval for retry after n failures
+in seconds is min(1.5^{n-1}, 84600).
+
+Clients MUST NOT reset the retry interval until they receive a properly
+signed response.
 
 Multiple requests and responses can be exchanged over an established
-TCP connection. Clients MAY send multiple requests at once and servers
-MAY send responses out of order. The connection SHOULD be closed by
-the client when it has no more requests to send and has received all
-expected responses. Either side SHOULD close the connection in
-response to synchronization, format, implementation-defined timeouts,
-or other errors.
+TCP connection. Clients MAY send multiple outstanding requests and
+servers MAY send responses out of order. The connection SHOULD be
+closed by the client when it has no more requests to send and has
+received all expected responses. Either side SHOULD close the
+connection in response to synchronization, format,
+implementation-defined timeouts, or other errors.
 
 All requests and responses MUST contain the VER tag. It contains a
 list of one or more uint32 version numbers. The version of Roughtime
-specified by this memo has version number 1.
+specified by this  has version number 1.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
-testing this draft of the memo, a version number of 0x8000000c is
+testing this draft of the document, a version number of 0x8000000c is
 used.
+
+## Transport considerations.
+
 
 ## Requests {#requests}
 
@@ -301,9 +331,9 @@ message and assign them semantic meaning.
 
 The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
-added to the message. Responding to requests shorter than 1024 bytes
-is OPTIONAL and servers MUST NOT send responses larger than the
-requests they are replying to, see {{amplification-attacks}}.
+added to the message. Responding to request messages shorter than 1024
+bytes is OPTIONAL and servers MUST NOT send responses larger than the
+request messages they are replying to, see {{amplification-attacks}}.
 
 ### VER
 
@@ -377,11 +407,11 @@ and INDX. The structure of a response message is illustrated in
 |  |--VERS
 |  |--ROOT
 |--CERT
+|  |--SIG
 |  |--DELE
+|  |  |--PUBK
 |  |  |--MINT
 |  |  |--MAXT
-|  |  |--PUBK
-|  |--SIG
 |--INDX
 ~~~~~
 {: #figresponse title="Roughtime response message structure."}
@@ -456,15 +486,18 @@ described in {{merkle-tree}}.
 
 The CERT tag contains a public key certificate signed with the
 server's private long-term key. Its value MUST be a Roughtime message
-with the tags DELE and SIG, where SIG is a signature over the DELE
+with the tags SIG and DELE, where SIG is a signature over the DELE
 value. The context string used to generate SIG MUST be "RoughTime v1
 delegation signature".
 
 The DELE tag contains a delegated public key certificate used by the
 server to sign the SREP tag. Its value MUST be a Roughtime message
-with the tags MINT, MAXT, and PUBK. The purpose of the DELE tag is to
+with the tags PUBK, MINT, and MAXT. The purpose of the DELE tag is to
 enable separation of a long-term public key from keys on devices
 exposed to the public Internet.
+
+The PUBK tag MUST contain a temporary 32-byte Ed25519 public key which
+is used to sign the SREP tag.
 
 The MINT tag is the minimum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP MUST be more than or equal to MINT for
@@ -473,9 +506,6 @@ a response to be considered valid.
 The MAXT tag is the maximum timestamp for which the key in PUBK is
 trusted to sign responses. MIDP MUST be less than or equal to MAXT for
 a response to be considered valid.
-
-The PUBK tag MUST contain a temporary 32-byte Ed25519 public key which
-is used to sign the SREP tag.
 
 ### INDX
 
@@ -639,12 +669,12 @@ technically possible, generate a malfeasance report (see
 measurement. See {{protocol-details}} for guidance on backoff when
 making repeated measurements.
 
-## Server Lists
+## Server Lists {#server-lists}
 
 To facilitate regular updates of lists of trusted servers, clients
 SHOULD implement the server list format specified here. Server lists
 MUST be formatted as JSON {{!RFC8259}} objects and contain the key
-"servers". Client lists MAY also contain the keys "sources" and
+"servers". Server lists MAY also contain the keys "sources" and
 "reports".
 
 The value of the "servers" key MUST be a list of server objects, each
@@ -658,7 +688,7 @@ The value of "version" MUST be an integer that indicates the highest
 Roughtime version number supported by the server.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. To
-indicate compatibility with drafts of this memo, a decimal
+indicate compatibility with drafts of this document, a decimal
 representation of the version number indicated in {{protocol-details}}
 SHOULD be used. For indicating compatibility with pre-IETF
 specifications of Roughtime, the version number 3000600613 SHOULD be
@@ -690,7 +720,7 @@ IPv6 addresses MUST be encapsulated within [].
 
 The value of "sources", if present, MUST be a list of strings
 indicating where updated versions of the list may be aquired. Each
-string MUST be a URL {{!RFC398}} pointing to a list in the format
+string MUST be a URL {{!RFC3986}} pointing to a list in the format
 specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 The value of "reports", if present, MUST be a string indicating a URL
@@ -698,11 +728,16 @@ The value of "reports", if present, MUST be a string indicating a URL
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
+Server lists have the "application/roughtime-server+json" media
+type.
+
 ## Malfeasance Reporting {#malfeasance-reporting}
 
 A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.
+
+### Malfeasance report structure {#malfeasance-report-structure}
 
 A malfeasance report MUST be formatted as a JSON {{!RFC8259}} object
 and contain the key "responses". Its value MUST be an ordered list of
@@ -723,16 +758,21 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
+Malfeasance reports have the "application/roughtime-malfeasence+json" media
+type.
+
+### Reporting
+
 When the client's list of servers has an associated URL for
-malfeasance reports, it SHOULD send a report whenever it has performed
-a measurement sequence in accordance with {{measurement-sequence}} and
-detected that at least one of the responses is inconsistent with
-causal ordering. Since the failure of a popular Roughtime server can
-cause numerous clients to send malfeasance reports at the same time,
-clients MUST use a reporting mechanism that avoids overloading the
-server receiving the reports. Clients SHOULD use exponential backoff
-for this purpose, with an initial and minimum retry interval of at
-least 10 seconds.
+malfeasance reports, it SHOULD post a malfeasance report to the URL
+whenever it has performed a measurement sequence in accordance with
+{{measurement-sequence}} and detected that at least one of the
+responses is inconsistent with causal ordering. Since the failure of a
+popular Roughtime server can cause numerous clients to send
+malfeasance reports at the same time, clients MUST use a reporting
+mechanism that avoids overloading the server receiving the
+reports. Clients SHOULD use exponential backoff for this purpose, with
+an initial and minimum retry interval of at least 10 seconds.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
@@ -770,8 +810,11 @@ query multiple servers in accordance with the procedure described in
 ## Quantum Resistance
 
 Since the only supported signature scheme, Ed25519, is not quantum
-resistant, the Roughtime version described in this memo will not
-survive the advent of quantum computers.
+resistant, the Roughtime version described in this document will not
+survive the advent of quantum computers. A later version will have to
+be devised and implemented before then. The use of a single version
+number as negotiation point rather than defining a suite of acceptable
+signatures is intended to prevent fragmentation and misconfiguration.
 
 ## Maintaining Lists of Servers
 
@@ -811,24 +854,25 @@ done with the SRV tag. Additional recommendations for clients are listed in
 IANA is requested to allocate the following entry in the Service
 Name and Transport Protocol Port Number Registry:
 
-      Service Name: Roughtime
+Service Name: roughtime
 
-      Transport Protocol: tcp,udp
+Transport Protocol: tcp,udp
 
-      Assignee: IESG <iesg@ietf.org>
+Assignee: IESG <iesg@ietf.org>
 
-      Contact: IETF Chair <chair@ietf.org>
+Contact: IETF Chair <chair@ietf.org>
 
-      Description: Roughtime time synchronization
+Description: Roughtime time synchronization
 
-      Reference: [[this memo]]
+Reference: [[this document]]
 
-      Port Number: [[TBD1]], selected by IANA from the User Port range
+Port Number: [[TBD1]], selected by IANA from the User Port range
 
-## Roughtime Version Registry
+## Roughtime Versions Registry
 
- IANA is requested to create a new registry entitled "Roughtime
- Version Registry".  Entries shall have the following fields:
+IANA is requested to create a new registry titled "Roughtime
+Versions" in a new "Roughtime" registry group. Entries will have the
+following fields:
 
 Version ID (REQUIRED): a 32-bit unsigned integer
 
@@ -838,35 +882,43 @@ identified.
 Reference (REQUIRED): A reference to a relevant specification
 document.
 
-The policy for allocation of new entries SHOULD be: IETF Review.
+The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 
-The initial contents of this registry shall be as follows:
+The initial contents of this registry are as follows:
 
 | Version ID            | Version name         | Reference     |
 +---------------------- :+---------------------+---------------|
 | 0x0                   | Reserved             | [[this memo]] |
 | 0x1                   | Roughtime version 1  | [[this memo]] |
 | 0x2-0x7fffffff        | Unassigned           |               |
-| 0x80000000-0xffffffff | Reserved for Private | [[this memo]] |
-|                       | or Experimental use  |               |
+| 0x80000000-0xbfffffff | Reserved for         | [[this memo]] |
+|                       | experimental use     |               |
+| 0xc0000000-0xffffffff | Reserved for private | [[this memo]] |
+|                       | use                  |               |
 
-## Roughtime Tag Registry
+Private and experimental use are defined in {{?RFC8126}}. The
+experimental range is intended for testing and evaluating new versions
+of the Roughtime protocol. Such tests may be conducted over the open
+Internet.
 
-IANA is requested to create a new registry entitled "Roughtime Tag
-Registry".  Entries SHALL have the following fields:
+## Roughtime Tags Registry
+
+IANA is requested to create a new registry titled "Roughtime Tags" in
+a new "Roughtime" registry group. Entries will have the following
+fields:
 
 Tag (REQUIRED): A 32-bit unsigned integer in hexadecimal format.
 
 ASCII Representation (REQUIRED): The ASCII representation of the tag
-in accordance with {{type-tag}} of this memo.
+in accordance with {{type-tag}} of this document.
 
 Reference (REQUIRED): A reference to a relevant specification
 document.
 
-The policy for allocation of new entries in this registry SHOULD be:
-Specification Required.
+The policy for allocation of new entries in this registry is
+Specification Required {{?RFC8126}}.
 
-The initial contents of this registry SHALL be as follows:
+The initial contents of this registry are as follows:
 
 | Tag        | ASCII Representation | Reference     |
 +-----------:+----------------------+---------------|
@@ -889,6 +941,104 @@ The initial contents of this registry SHALL be as follows:
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
 
+## Media Type Registry
+
+### Roughtime Server List MIME type
+
+IANA is requested to allocate the following entry in the Media Type
+registry.
+
+Type name: application
+
+Subtype name: roughtime-server+json
+
+Required parameters: N/A
+
+Optional parameters: N/A
+
+Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+{{?RFC8259}}.
+
+Security considerations: {{security-considerations}} of
+[[this document]].
+
+Interoperability considerations: N/A
+
+Published specification: {{server-lists}} of [[this document]].
+
+Applications that use this media type: Roughtime clients
+[[this document]] that update their lists of Roughtime servers.
+
+Fragment identifier considerations: N/A
+
+Additional information:
+
+  Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A
+
+Person & email address to contact for further information: See
+Authors' Addresses section of [[this document]].
+
+Intended usage: COMMON
+
+Restrictions on usage: N/A
+
+Author: See Authors' Addresses section of [[this document]].
+
+Change controller: Internet Engineering Task Force
+
+### Roughtime Malfeasance MIME type
+
+IANA is requested to allocate the following entry in the Media Type
+registry.
+
+Type name: application
+
+Subtype name: roughtime-malfeasance+json
+
+Required parameters: N/A
+
+Optional parameters: N/A
+
+Encoding considerations: Encoding considerations are identical to
+those specified for the "application/json" media type, see
+{{?RFC8259}}.
+
+Security considerations: {{security-considerations}} of
+[[this document]].
+
+Interoperability considerations: N/A
+
+Published specification: {{malfeasance-report-structure}} of
+[[this document]].
+
+Applications that use this media type: Roughtime clients
+[[this document]] use this media type to report cryptographic proof
+that a Roughtime server has sent the wrong time.
+
+Fragment identifier considerations: N/A
+
+Additional information:
+
+  Deprecated alias names for this type: N/A
+  Magic number(s): N/A
+  File extension(s): N/A
+  Macintosh file type code(s): N/A
+
+Person & email address to contact for further information: See
+Authors' Addresses section of [[this document]].
+
+Intended usage: COMMON
+
+Restrictions on usage: N/A
+
+Author: See Authors' Addresses section of [[this document]].
+
+Change controller: Internet Engineering Task Force
+
 --- back
 
 # Acknowledgments
@@ -900,4 +1050,6 @@ Michael McCourt, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher
 Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
 Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
 other members of the NTP working group contributed comments and
-suggestions as well as pointed out errors.
+suggestions as well as pointed out errors. We appreciate the last call
+commentators, especially Colin Perkins for providing advice on transport
+considerations.
