@@ -285,12 +285,11 @@ don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
 it may cause packets to get dropped, but not setting it could lead to
 long delays due to reconstruction and dropped fragments.
 
-
-A Roughtime packet may exceed the maximum deliverable length of a UDP
-packet. A client SHOULD deliver the request over TCP if it cannot be
-delivered over UDP, as evidenced by repeated nonresponse. MTU issues
-may lead to persistent nonresponse due to network devices between
-client and server.
+A Roughtime packet could exceed the maximum deliverable length of a
+packet on a particular path, making Roughtime queries over UDP
+impossible on that path. A client SHOULD attempt to use the TCP
+transport mode for Roughtime queries to a server if it does not
+receive responses to its UDP queries.
 
 Clients SHOULD implement exponential backoff in establishing TCP
 connections and making requests over UDP as per {{!RFC8085}}. It is
