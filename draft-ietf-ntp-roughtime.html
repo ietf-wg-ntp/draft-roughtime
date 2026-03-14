@@ -1058,7 +1058,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 14 September 2026</td>
+<td class="center">Expires 15 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1071,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-13" class="published">13 March 2026</time>
+<time datetime="2026-03-14" class="published">14 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-14">14 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-15">15 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1130,7 +1130,7 @@ to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 14 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 15 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1660,14 +1660,15 @@ packet. A client <span class="bcp14">SHOULD</span> deliver the request over TCP 
 delivered over UDP, as evidenced by repeated nonresponse. MTU issues
 may lead to persistent nonresponse due to network devices between
 client and server.<a href="#section-5-5" class="pilcrow">¶</a></p>
-<p id="section-5-6">Clients <span class="bcp14">SHOULD</span> implement exponential backoff in establishing TCP
-connections and making requests over UDP as per <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>. It is
-<span class="bcp14">RECOMMENDED</span> that clients use an initial interval of 1 seconds,
-a maximum interval of 24 hours, and a base of 1.5. Therefore the
-minimum interval for retry after n failures
-in seconds is min(1.5^{n-1}, 84600).<a href="#section-5-6" class="pilcrow">¶</a></p>
-<p id="section-5-7">Clients <span class="bcp14">MUST NOT</span> reset the retry interval until they receive a properly
-signed response.<a href="#section-5-7" class="pilcrow">¶</a></p>
+<p id="section-5-6">Clients <span class="bcp14">MUST</span> implement exponential backoff in establishing TCP
+connections and making requests over UDP. It is <span class="bcp14">RECOMMENDED</span> that
+clients use an initial retry interval of 1 second, a maximum interval
+of 24 hours, and a base of 1.5. Therefore, the minimum interval before
+retrying after <code>n</code> failures in seconds is <code>min(1.5^{n-1}, 86400)</code>.
+Guidance for implementers considering other values can be found in
+Section 3.1.3 of <span>[<a href="#RFC8085" class="cite xref">RFC8085</a>]</span>.<a href="#section-5-6" class="pilcrow">¶</a></p>
+<p id="section-5-7">Clients <span class="bcp14">MUST NOT</span> reset the retry interval until they receive a
+properly signed response.<a href="#section-5-7" class="pilcrow">¶</a></p>
 <p id="section-5-8">Multiple requests and responses can be exchanged over an established
 TCP connection. Clients <span class="bcp14">MAY</span> send multiple outstanding requests and
 servers <span class="bcp14">MAY</span> send responses out of order. The connection <span class="bcp14">SHOULD</span> be
@@ -2195,10 +2196,12 @@ whenever it has performed a measurement sequence in accordance with
 <a href="#measurement-sequence" class="auto internal xref">Section 8.2</a> and detected that at least one of the
 responses is inconsistent with causal ordering. Since the failure of a
 popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients <span class="bcp14">MUST</span> use a reporting
-mechanism that avoids overloading the server receiving the
-reports. Clients <span class="bcp14">SHOULD</span> use exponential backoff for this purpose, with
-an initial and minimum retry interval of at least 10 seconds.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
+malfeasance reports at the same time, clients <span class="bcp14">MUST</span> use
+exponential backoff to prevent overloading the server receiving the
+reports. It is <span class="bcp14">RECOMMENDED</span> that clients use an initial retry interval
+of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
+Therefore, the minimum interval before retrying after <code>n</code> failures in
+seconds is <code>min(10 * 1.5^(n-1), 86400)</code>.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.2-2">Clients <span class="bcp14">MUST NOT</span> send malfeasance reports in response to signature
 verification failures or any other protocol errors.<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
 </section>
