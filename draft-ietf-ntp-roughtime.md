@@ -585,27 +585,29 @@ timestamp and computed its signature during the time interval
 
 # Integration into NTP
 
-We assume that there is a bound PHI on the frequency error in the
-clock on the machine. Let delta be the time difference between the
-clock on the client and the clock on the server, and let sigma
+We assume that there is a bound `phi` on the frequency error in the
+clock on the machine. Let `delta` be the time difference between the
+clock on the client and the clock on the server and let `sigma`
 represent the error in the measured value of delta introduced by the
-measurement process.
-
-Given a measurement taken at a local time t, we
-know the true time is in (t-delta-sigma, t-delta+sigma). After d
+measurement process. Given a measurement taken at a local time `t`, we
+know the true time is in `(t-delta-sigma, t-delta+sigma)`. After `d`
 seconds have elapsed we know the true time is within
-(t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
-to mix with NTP or Precision Time Protocol (PTP) discipline of the
-clock is to trim the observed intervals in NTP to fit entirely within
-this window or reject measurements that fall too far outside. This
-assumes time has not been stepped. If the NTP process decides to step
-the time, it MUST use Roughtime to ensure the new true time estimate
-that will be stepped to is consistent with the true time. Should this
-window become too large, another Roughtime measurement is called for.
-The definition of "too large" is implementation defined.
-Implementations MAY use other, more sophisticated means of adjusting
-the clock respecting Roughtime information. Other applications such as
-X.509 verification may wish to apply different rules.
+`(t-delta-sigma-d*phi, t-delta+sigma+d*phi)`.
+
+This bound can be used as a simple and effective means to limit the
+error an attacker can introduce into NTP or Precision Time Protocol
+(PTP) measurements. For example, an NTP client can ensure that its
+observation intervals fall entirely within this range or reject
+measurements that fall outside.
+
+An application that needs to verify X.509 certificates (which requires
+knowledge of the current time), but lacks an accurate and trusted time
+source can use Roughtime to obtain a time estimate. In particular,
+securely establishing NTS-protected NTP time synchronization requires
+verification of the NTS-KE server's certificate, which is not possible
+if the client has no idea of the current time (see Section 8.5 of
+{{!RFC8915}}). In that case, a Roughtime time estimate can be used for
+certificate validation.
 
 If an NTP server uses a Roughtime server as a time source for
 synchronization (and not only for filtering its NTP measurements), the
