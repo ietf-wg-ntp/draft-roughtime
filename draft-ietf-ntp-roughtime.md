@@ -227,9 +227,9 @@ attainable accuracy and setting of the RADI tag.
 ## Header
 
 As illustrated in {{figmessage}}, the first four bytes of the header
-is the uint32 number of tags N, and hence of (tag, value) pairs. The
-following 4\*(N-1) bytes are offsets, each a uint32, and the last 4\*N
-bytes in the header are tags.
+is the uint32 number of tags `N`, and hence of (tag, value) pairs. The
+following `4\*(N-1)` bytes are offsets, each a uint32, and the last
+`4\*N` bytes in the header are tags.
 
 The offsets array is considered to have an implicitly encoded value of
 0 as its zeroth entry. Its members refer to the positions of the tag
@@ -366,7 +366,7 @@ by servers.
 The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is `H(0xff || public_key)` where `public_key` is the server's
-long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
+long-term, 32-byte Ed25519 public key and `H` is SHA-512 truncated to
 the first 32 bytes.
 
 ### ZZZZ
@@ -545,7 +545,7 @@ which they are stored is described in the next section.
 This section describes how to compute the value of the root of the
 Merkle tree from the values in the tags PATH, INDX, and NONC. The bits
 of INDX are ordered from least to most significant. `H(x)` denotes the
-first 32 bytes of the SHA-512 hash digest of x and `||` denotes
+first 32 bytes of the SHA-512 hash digest of `x` and `||` denotes
 concatenation.
 
 The algorithm maintains a current value `h`. At initialization, `h` is
@@ -578,7 +578,7 @@ A response that passes these checks is said to be valid. Validity of a
 response does not prove that the timestamp's value in the response is
 correct, but merely that the server guarantees that it signed the
 timestamp and computed its signature during the time interval
-(MIDP-RADI, MIDP+RADI).
+`(MIDP-RADI, MIDP+RADI)`.
 
 # Integration into NTP
 
@@ -589,7 +589,7 @@ represent the error in the measured value of delta introduced by the
 measurement process. Given a measurement taken at a local time `t`, we
 know the true time is in `(t-delta-sigma, t-delta+sigma)`. After `d`
 seconds have elapsed we know the true time is within
-`(t-delta-sigma-d*phi, t-delta+sigma+d*phi)`.
+`(t-delta-sigma-d\*phi, t-delta+sigma+d\*phi)`.
 
 This bound can be used as a simple and effective means to limit the
 error an attacker can introduce into NTP or Precision Time Protocol
@@ -766,7 +766,7 @@ exponential backoff to prevent overloading the server receiving the
 reports. It is RECOMMENDED that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
 Therefore, the minimum interval before retrying after `n` failures in
-seconds is `min(10 * 1.5^(n-1), 86400)`.
+seconds is `min(10 \* 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
