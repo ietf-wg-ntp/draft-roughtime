@@ -285,19 +285,19 @@ Don't Fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
 it may cause packets to get dropped, but not setting it could lead to
 long delays due to reconstruction and dropped fragments.
 
+A Roughtime packet could exceed the maximum deliverable length of a
+packet on a particular path, making Roughtime queries over UDP
+impossible on that path. A client SHOULD attempt to use the TCP
+transport mode for Roughtime queries to a server if it does not
+receive responses to its UDP queries.
 
-A Roughtime packet may exceed the maximum deliverable length of a UDP
-packet. A client SHOULD deliver the request over TCP if it cannot be
-delivered over UDP, as evidenced by repeated nonresponse. MTU issues
-may lead to persistent nonresponse due to network devices between
-client and server.
-
-Clients SHOULD implement exponential backoff in establishing TCP
-connections and making requests over UDP as per {{!RFC8085}}. It is
-RECOMMENDED that clients use an initial interval of 1 seconds,
-a maximum interval of 24 hours, and a base of 1.5. Therefore the
-minimum interval for retry after n failures
-in seconds is min(1.5^{n-1}, 84600).
+Clients MUST implement exponential backoff in establishing TCP
+connections and making requests over UDP. It is RECOMMENDED that
+clients use an initial retry interval of 1 second, a maximum interval
+of 24 hours, and a base of 1.5. Therefore, the minimum interval before
+retrying after `n` failures in seconds is `min(1.5^{n-1}, 86400)`.
+Guidance for implementers considering other values can be found in
+Section 3.1.3 of {{!RFC8085}}.
 
 Clients MUST NOT reset the retry interval until they receive a
 properly signed response.
@@ -317,9 +317,6 @@ specified by this document has version number 1.
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
 testing this draft of the document, a version number of 0x8000000c is
 used.
-
-## Transport considerations.
-
 
 ## Requests {#requests}
 
@@ -585,27 +582,29 @@ timestamp and computed its signature during the time interval
 
 # Integration into NTP
 
-We assume that there is a bound PHI on the frequency error in the
-clock on the machine. Let delta be the time difference between the
-clock on the client and the clock on the server, and let sigma
+We assume that there is a bound `phi` on the frequency error in the
+clock on the machine. Let `delta` be the time difference between the
+clock on the client and the clock on the server and let `sigma`
 represent the error in the measured value of delta introduced by the
-measurement process.
-
-Given a measurement taken at a local time t, we
-know the true time is in (t-delta-sigma, t-delta+sigma). After d
+measurement process. Given a measurement taken at a local time `t`, we
+know the true time is in `(t-delta-sigma, t-delta+sigma)`. After `d`
 seconds have elapsed we know the true time is within
-(t-delta-sigma-d*PHI, t-delta+sigma+d*PHI). A simple and effective way
-to mix with NTP or Precision Time Protocol (PTP) discipline of the
-clock is to trim the observed intervals in NTP to fit entirely within
-this window or reject measurements that fall too far outside. This
-assumes time has not been stepped. If the NTP process decides to step
-the time, it MUST use Roughtime to ensure the new true time estimate
-that will be stepped to is consistent with the true time. Should this
-window become too large, another Roughtime measurement is called for.
-The definition of "too large" is implementation defined.
-Implementations MAY use other, more sophisticated means of adjusting
-the clock respecting Roughtime information. Other applications such as
-X.509 verification may wish to apply different rules.
+`(t-delta-sigma-d*phi, t-delta+sigma+d*phi)`.
+
+This bound can be used as a simple and effective means to limit the
+error an attacker can introduce into NTP or Precision Time Protocol
+(PTP) measurements. For example, an NTP client can ensure that its
+observation intervals fall entirely within this range or reject
+measurements that fall outside.
+
+An application that needs to verify X.509 certificates (which requires
+knowledge of the current time), but lacks an accurate and trusted time
+source can use Roughtime to obtain a time estimate. In particular,
+securely establishing NTS-protected NTP time synchronization requires
+verification of the NTS-KE server's certificate, which is not possible
+if the client has no idea of the current time (see Section 8.5 of
+{{!RFC8915}}). In that case, a Roughtime time estimate can be used for
+certificate validation.
 
 If an NTP server uses a Roughtime server as a time source for
 synchronization (and not only for filtering its NTP measurements), the
@@ -762,10 +761,12 @@ whenever it has performed a measurement sequence in accordance with
 {{measurement-sequence}} and detected that at least one of the
 responses is inconsistent with causal ordering. Since the failure of a
 popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients MUST use a reporting
-mechanism that avoids overloading the server receiving the
-reports. Clients SHOULD use exponential backoff for this purpose, with
-an initial and minimum retry interval of at least 10 seconds.
+malfeasance reports at the same time, clients MUST use
+exponential backoff to prevent overloading the server receiving the
+reports. It is RECOMMENDED that clients use an initial retry interval
+of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
+Therefore, the minimum interval before retrying after `n` failures in
+seconds is `min(10 * 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
