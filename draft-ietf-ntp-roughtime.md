@@ -136,8 +136,8 @@ When using multiple servers, a client can detect, cryptographically
 prove, and report inconsistencies between different servers.
 
 A Roughtime server guarantees that the timestamp included in the
-response to a query is generated after the reception of the query and
-prior to the transmission of the associated response. If the time
+response to a request is generated after the reception of the request
+and prior to the transmission of the associated response. If the time
 response from a server is not consistent with time responses from
 other servers, this indicates server error or intentional malfeasance
 that can be reported and potentially used to impeach the server.
@@ -635,14 +635,14 @@ run by the same parties. Roughtime clients SHOULD regularly update
 their view of which servers are trustworthy in order to benefit from
 the detection of misbehavior. Clients SHOULD also have a means of
 reporting to the provider of such a list, such as an operating system
-or software vendor, a malfeasence report as described below.
+or software vendor, a malfeasance report as described below.
 
 ## Measurement Sequence {#measurement-sequence}
 
 The client randomly selects at least three servers from the list, and
 sequentially queries them. The query sequence SHOULD be repeated twice
 with the servers in the same order, to ensure that all possible
-inconsistences can be detected.
+inconsistencies can be detected.
 
 The first probe uses a nonce that is randomly generated. The second
 query uses `H(resp || rand)` where `rand` is a random 32-byte value
@@ -711,7 +711,7 @@ To disambiguate IPv6 addresses from ports when zero compression
 happens, IPv6 addresses MUST be encapsulated within [].
 
 The value of "sources", if present, MUST be a list of strings
-indicating where updated versions of the list may be aquired. Each
+indicating where updated versions of the list may be acquired. Each
 string MUST be a URL {{!RFC3986}} pointing to a list in the format
 specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
@@ -750,7 +750,7 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
-Malfeasance reports have the "application/roughtime-malfeasence+json"
+Malfeasance reports have the "application/roughtime-malfeasance+json"
 media type.
 
 ### Reporting
