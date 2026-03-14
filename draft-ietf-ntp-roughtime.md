@@ -656,7 +656,7 @@ For each pair of responses `(i, j)`, where `i` was received before
 `j`, the client MUST check that `MIDP_i-RADI_i` is less than or equal
 to `MIDP_j+RADI_j`. If these checks pass, the times are consistent
 with causal ordering. The measurement succeeds if the validity checks
-described in {{validity-of-responses}} are successful, the times
+described in {{validity-of-response}} are successful, the times
 reported are consistent with causal ordering, and the delay between
 request and response is within an implementation-dependent maximum
 value.
