@@ -1655,11 +1655,11 @@ datagram when the UDP transport mode is used. Setting the packet's
 don't fragment bit <span>[<a href="#RFC791" class="cite xref">RFC791</a>]</span> is <span class="bcp14">OPTIONAL</span> in IPv4 networks. Setting
 it may cause packets to get dropped, but not setting it could lead to
 long delays due to reconstruction and dropped fragments.<a href="#section-5-4" class="pilcrow">¶</a></p>
-<p id="section-5-5">A Roughtime packet may exceed the maximum deliverable length of a UDP
-packet. A client <span class="bcp14">SHOULD</span> deliver the request over TCP if it cannot be
-delivered over UDP, as evidenced by repeated nonresponse. MTU issues
-may lead to persistent nonresponse due to network devices between
-client and server.<a href="#section-5-5" class="pilcrow">¶</a></p>
+<p id="section-5-5">A Roughtime packet could exceed the maximum deliverable length of a
+packet on a particular path, making Roughtime queries over UDP
+impossible on that path. A client <span class="bcp14">SHOULD</span> attempt to use the TCP
+transport mode for Roughtime queries to a server if it does not
+receive responses to its UDP queries.<a href="#section-5-5" class="pilcrow">¶</a></p>
 <p id="section-5-6">Clients <span class="bcp14">MUST</span> implement exponential backoff in establishing TCP
 connections and making requests over UDP. It is <span class="bcp14">RECOMMENDED</span> that
 clients use an initial retry interval of 1 second, a maximum interval
