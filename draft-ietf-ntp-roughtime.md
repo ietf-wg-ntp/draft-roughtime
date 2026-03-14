@@ -292,15 +292,16 @@ delivered over UDP, as evidenced by repeated nonresponse. MTU issues
 may lead to persistent nonresponse due to network devices between
 client and server.
 
-Clients SHOULD implement exponential backoff in establishing TCP
-connections and making requests over UDP as per {{!RFC8085}}. It is
-RECOMMENDED that clients use an initial interval of 1 seconds,
-a maximum interval of 24 hours, and a base of 1.5. Therefore the
-minimum interval for retry after n failures
-in seconds is min(1.5^{n-1}, 84600).
+Clients MUST implement exponential backoff in establishing TCP
+connections and making requests over UDP. It is RECOMMENDED that
+clients use an initial retry interval of 1 second, a maximum interval
+of 24 hours, and a base of 1.5. Therefore, the minimum interval before
+retrying after `n` failures in seconds is `min(1.5^{n-1}, 86400)`.
+Guidance for implementers considering other values can be found in
+Section 3.1.3 of {{!RFC8085}}.
 
-Clients MUST NOT reset the retry interval until they receive a properly
-signed response.
+Clients MUST NOT reset the retry interval until they receive a
+properly signed response.
 
 Multiple requests and responses can be exchanged over an established
 TCP connection. Clients MAY send multiple outstanding requests and
@@ -762,10 +763,12 @@ whenever it has performed a measurement sequence in accordance with
 {{measurement-sequence}} and detected that at least one of the
 responses is inconsistent with causal ordering. Since the failure of a
 popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients MUST use a reporting
-mechanism that avoids overloading the server receiving the
-reports. Clients SHOULD use exponential backoff for this purpose, with
-an initial and minimum retry interval of at least 10 seconds.
+malfeasance reports at the same time, clients MUST use
+exponential backoff to prevent overloading the server receiving the
+reports. It is RECOMMENDED that clients use an initial retry interval
+of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
+Therefore, the minimum interval before retrying after `n` failures in
+seconds is `min(10 * 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
