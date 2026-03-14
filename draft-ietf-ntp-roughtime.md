@@ -530,7 +530,7 @@ the root of the Merkle tree contained in ROOT. If they are equal, the
 algorithm succeeds. If they are not, or if any of the remaining bits
 of INDX is non-zero, the algorithm fails.
 
-## Validity of Response
+## Validity of Response {#validity-of-response}
 
 A client MUST check the following properties when it receives a
 response. We assume the long-term server public key is known to the
@@ -611,9 +611,9 @@ or software vendor, a malfeasence report as described below.
 ## Measurement Sequence {#measurement-sequence}
 
 The client randomly selects at least three servers from the list, and
-sequentially queries them. The query sequence SHOULD be repeated twice
-with the servers in the same order, to ensure that all possible
-inconsistences can be detected.
+sequentially queries them. To ensure that all possible inconsistencies
+can be detected, it is necessary for clients to repeat the query
+sequence twice with the servers in the same order.
 
 The first probe uses a nonce that is randomly generated. The second
 query uses `H(resp || rand)` where `rand` is a random 32-byte value
@@ -624,13 +624,20 @@ the previous response and a different 32-byte `rand` value. `H(x)` and
 
 For each pair of responses `(i, j)`, where `i` was received before
 `j`, the client MUST check that `MIDP_i-RADI_i` is less than or equal
-to `MIDP_j+RADI_j`. If all checks pass, the times are consistent with
-causal ordering. If at least one check fails, there has been a
-malfeasance and the client SHOULD store a report for evaluation, alert
-the user, and make another measurement. If the times reported are
-consistent with the causal ordering, and the delay between request and
-response is within an implementation-dependent maximum value, the
-measurement succeeds.
+to `MIDP_j+RADI_j`. If these checks pass, the times are consistent
+with causal ordering. The measurement succeeds if the validity checks
+described in {{validity-of-responses}} are successful, the times
+reported are consistent with causal ordering, and the delay between
+request and response is within an implementation-dependent maximum
+value.
+
+If the validity checks are successful, but at least one of the
+responses is not consistent with causal ordering, there has been a
+malfeasance. In case of detected malfeasance, clients SHOULD, if it is
+technically possible, generate a malfeasance report (see
+{{malfeasance-reporting}}), alert the user, and make another
+measurement. See {{protocol-details}} for guidance on backoff when
+making repeated measurements.
 
 ## Server Lists
 
@@ -691,7 +698,7 @@ The value of "reports", if present, MUST be a string indicating a URL
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
-## Malfeasance Reporting
+## Malfeasance Reporting {#malfeasance-reporting}
 
 A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
