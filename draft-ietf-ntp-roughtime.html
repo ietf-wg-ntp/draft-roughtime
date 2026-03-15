@@ -12,9 +12,9 @@
 to achieve two things: secure rough time synchronization even for
 clients without any idea of what time it is, and giving clients a
 format by which to report any inconsistencies they observe between
-time servers. This document specifies the on-wire protocol required
-for these goals, and discusses aspects of the ecosystem needed for it
-to work. 
+timeservers. This document specifies the on-wire protocol required for
+these goals, and discusses aspects of the ecosystem needed for it to
+work. 
     " name="description">
 <meta content="xml2rfc 3.31.0" name="generator">
 <meta content="timing" name="keyword">
@@ -1058,7 +1058,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 15 September 2026</td>
+<td class="center">Expires 16 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1071,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-14" class="published">14 March 2026</time>
+<time datetime="2026-03-15" class="published">15 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-15">15 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-16">16 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1097,9 +1097,9 @@ svg :is([fill="white"], [fill^="#fff"]) {
 to achieve two things: secure rough time synchronization even for
 clients without any idea of what time it is, and giving clients a
 format by which to report any inconsistencies they observe between
-time servers. This document specifies the on-wire protocol required
-for these goals, and discusses aspects of the ecosystem needed for it
-to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+timeservers. This document specifies the on-wire protocol required for
+these goals, and discusses aspects of the ecosystem needed for it to
+work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
 </section>
 <section class="note rfcEditorRemove" id="section-note.1">
       <h2 id="name-about-this-document">
@@ -1130,7 +1130,7 @@ to work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 15 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 16 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1445,7 +1445,7 @@ client requests.<a href="#section-3-1" class="pilcrow">¶</a></p>
         <h3 id="name-single-server-mode">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-single-server-mode" class="section-name selfRef">Single Server Mode</a>
         </h3>
-<p id="section-3.1-1">At its most basic level, Roughtime is a one round protocol in which a
+<p id="section-3.1-1">At its most basic level, Roughtime is a one-round protocol in which a
 completely fresh client requests the current time and the server sends
 a signed response. The response includes a timestamp and a radius used
 to indicate the server's certainty about the reported time.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
@@ -1463,12 +1463,12 @@ been generated after the nonce.<a href="#section-3.1-2" class="pilcrow">¶</a></
         </h3>
 <p id="section-3.2-1">When using multiple servers, a client can detect, cryptographically
 prove, and report inconsistencies between different servers.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
-<p id="section-3.2-2">A Roughtime server guarantees that the timestamp included in the response
-to a query is generated after the reception of the query and prior to
-the transmission of the associated response. If the time response from
-a server is not consistent with time responses from other servers,
-this indicates server error or intentional malfeasance that can be
-reported and potentially used to impeach the server.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">A Roughtime server guarantees that the timestamp included in the
+response to a request is generated after the reception of the request
+and prior to the transmission of the associated response. If the time
+response from a server is not consistent with time responses from
+other servers, this indicates server error or intentional malfeasance
+that can be reported and potentially used to impeach the server.<a href="#section-3.2-2" class="pilcrow">¶</a></p>
 <p id="section-3.2-3">Proofs of malfeasance are constructed by chaining requests to
 different Roughtime servers. Details on proofs and malfeasance
 reporting are provided in <a href="#roughtime-clients" class="auto internal xref">Section 8</a>. For the reporting to
@@ -1537,8 +1537,8 @@ Roughtime message.<a href="#section-4-2" class="pilcrow">¶</a></p>
           <h4 id="name-uint32">
 <a href="#section-4.1.1" class="section-number selfRef">4.1.1. </a><a href="#name-uint32" class="section-name selfRef">uint32</a>
           </h4>
-<p id="section-4.1.1-1">A uint32 is a 32 bit unsigned integer. It is serialized
-with the least significant byte first.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-4.1.1-1">A uint32 is a 32-bit unsigned integer. It is serialized with the least
+significant byte first.<a href="#section-4.1.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="uint64">
@@ -1546,7 +1546,7 @@ with the least significant byte first.<a href="#section-4.1.1-1" class="pilcrow"
           <h4 id="name-uint64">
 <a href="#section-4.1.2" class="section-number selfRef">4.1.2. </a><a href="#name-uint64" class="section-name selfRef">uint64</a>
           </h4>
-<p id="section-4.1.2-1">A uint64 is a 64 bit unsigned integer. It is serialized with the least
+<p id="section-4.1.2-1">A uint64 is a 64-bit unsigned integer. It is serialized with the least
 significant byte first.<a href="#section-4.1.2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1588,12 +1588,12 @@ attainable accuracy and setting of the RADI tag.<a href="#section-4.1.4-1" class
 <a href="#section-4.2" class="section-number selfRef">4.2. </a><a href="#name-header" class="section-name selfRef">Header</a>
         </h3>
 <p id="section-4.2-1">As illustrated in <a href="#figmessage" class="auto internal xref">Figure 1</a>, the first four bytes of the header
-is the uint32 number of tags N, and hence of (tag, value) pairs. The
-following 4*(N-1) bytes are offsets, each a uint32, and the last 4*N
-bytes in the header are tags.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
-<p id="section-4.2-2">The offsets array is considered to have a not explicitly encoded value
-of 0 as its zeroth entry. Its members refer to the positions of the
-tag values in the message values section. All offsets are multiples of
+is the uint32 number of tags <code>N</code>, and hence of (tag, value) pairs. The
+following <code>4\*(N-1)</code> bytes are offsets, each a uint32, and the last
+<code>4\*N</code> bytes in the header are tags.<a href="#section-4.2-1" class="pilcrow">¶</a></p>
+<p id="section-4.2-2">The offsets array is considered to have an implicitly encoded value of
+0 as its zeroth entry. Its members refer to the positions of the tag
+values in the message values section. All offsets are multiples of
 four.<a href="#section-4.2-2" class="pilcrow">¶</a></p>
 <p id="section-4.2-3">The members of the offsets and tags arrays, as well as the message
 values section are sorted in ascending order by the tag's numeric
@@ -1649,7 +1649,7 @@ contains a Roughtime message as specified in <a href="#message-format" class="au
 </div>
 <p id="section-5-4">Roughtime request and response packets <span class="bcp14">MUST</span> be transmitted in a single
 datagram when the UDP transport mode is used. Setting the packet's
-don't fragment bit <span>[<a href="#RFC791" class="cite xref">RFC791</a>]</span> is <span class="bcp14">OPTIONAL</span> in IPv4 networks. Setting
+Don't Fragment bit <span>[<a href="#RFC791" class="cite xref">RFC791</a>]</span> is <span class="bcp14">OPTIONAL</span> in IPv4 networks. Setting
 it may cause packets to get dropped, but not setting it could lead to
 long delays due to reconstruction and dropped fragments.<a href="#section-5-4" class="pilcrow">¶</a></p>
 <p id="section-5-5">A Roughtime packet could exceed the maximum deliverable length of a
@@ -1675,7 +1675,7 @@ connection in response to synchronization, format,
 implementation-defined timeouts, or other errors.<a href="#section-5-8" class="pilcrow">¶</a></p>
 <p id="section-5-9">All requests and responses <span class="bcp14">MUST</span> contain the VER tag. It contains a
 list of one or more uint32 version numbers. The version of Roughtime
-specified by this  has version number 1.<a href="#section-5-9" class="pilcrow">¶</a></p>
+specified by this document has version number 1.<a href="#section-5-9" class="pilcrow">¶</a></p>
 <p id="section-5-10">NOTE TO RFC EDITOR: remove this paragraph before publication. For
 testing this draft of the document, a version number of 0x8000000c is
 used.<a href="#section-5-10" class="pilcrow">¶</a></p>
@@ -1693,7 +1693,7 @@ message and assign them semantic meaning.<a href="#section-5.1-1" class="pilcrow
 UDP transport mode is used. To attain this size the ZZZZ tag <span class="bcp14">SHOULD</span> be
 added to the message. Responding to request messages shorter than 1024
 bytes is <span class="bcp14">OPTIONAL</span> and servers <span class="bcp14">MUST NOT</span> send responses larger than the
-request messages they are replying to, see <a href="#amplification-attacks" class="auto internal xref">Section 9.7</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
+request messages they are replying to; see <a href="#amplification-attacks" class="auto internal xref">Section 9.7</a>.<a href="#section-5.1-2" class="pilcrow">¶</a></p>
 <div id="ver">
 <section id="section-5.1.1">
           <h4 id="name-ver">
@@ -1741,7 +1741,7 @@ by servers.<a href="#section-5.1.3-1" class="pilcrow">¶</a></p>
 <p id="section-5.1.4-1">The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is <code>H(0xff || public_key)</code> where <code>public_key</code> is the server's
-long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
+long-term, 32-byte Ed25519 public key and <code>H</code> is SHA-512 truncated to
 the first 32 bytes.<a href="#section-5.1.4-1" class="pilcrow">¶</a></p>
 </section>
 </div>
@@ -1957,7 +1957,7 @@ which they are stored is described in the next section.<a href="#section-5.3-6" 
 <p id="section-5.3.1-1">This section describes how to compute the value of the root of the
 Merkle tree from the values in the tags PATH, INDX, and NONC. The bits
 of INDX are ordered from least to most significant. <code>H(x)</code> denotes the
-first 32 bytes of the SHA-512 hash digest of x and <code>||</code> denotes
+first 32 bytes of the SHA-512 hash digest of <code>x</code> and <code>||</code> denotes
 concatenation.<a href="#section-5.3.1-1" class="pilcrow">¶</a></p>
 <p id="section-5.3.1-2">The algorithm maintains a current value <code>h</code>. At initialization, <code>h</code> is
 set to <code>H(0x00 || request_packet)</code>. For each step of the algorithm,
@@ -1990,7 +1990,7 @@ algorithm in <a href="#check-algorithm" class="auto internal xref">Section 5.3.1
 response does not prove that the timestamp's value in the response is
 correct, but merely that the server guarantees that it signed the
 timestamp and computed its signature during the time interval
-(MIDP-RADI, MIDP+RADI).<a href="#section-5.4-6" class="pilcrow">¶</a></p>
+<code>(MIDP-RADI, MIDP+RADI)</code>.<a href="#section-5.4-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2007,7 +2007,7 @@ represent the error in the measured value of delta introduced by the
 measurement process. Given a measurement taken at a local time <code>t</code>, we
 know the true time is in <code>(t-delta-sigma, t-delta+sigma)</code>. After <code>d</code>
 seconds have elapsed we know the true time is within
-<code>(t-delta-sigma-d*phi, t-delta+sigma+d*phi)</code>.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<code>(t-delta-sigma-d\*phi, t-delta+sigma+d\*phi)</code>.<a href="#section-6-1" class="pilcrow">¶</a></p>
 <p id="section-6-2">This bound can be used as a simple and effective means to limit the
 error an attacker can introduce into NTP or Precision Time Protocol
 (PTP) measurements. For example, an NTP client can ensure that its
@@ -2061,7 +2061,7 @@ run by the same parties. Roughtime clients <span class="bcp14">SHOULD</span> reg
 their view of which servers are trustworthy in order to benefit from
 the detection of misbehavior. Clients <span class="bcp14">SHOULD</span> also have a means of
 reporting to the provider of such a list, such as an operating system
-or software vendor, a malfeasence report as described below.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+or software vendor, a malfeasance report as described below.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="measurement-sequence">
@@ -2072,7 +2072,7 @@ or software vendor, a malfeasence report as described below.<a href="#section-8.
 <p id="section-8.2-1">The client randomly selects at least three servers from the list, and
 sequentially queries them. The query sequence <span class="bcp14">SHOULD</span> be repeated twice
 with the servers in the same order, to ensure that all possible
-inconsistences can be detected.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+inconsistencies can be detected.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">The first probe uses a nonce that is randomly generated. The second
 query uses <code>H(resp || rand)</code> where <code>rand</code> is a random 32-byte value
 and <code>resp</code> is the entire response to the first probe, including the
@@ -2131,14 +2131,14 @@ conform to the "Text Representation of Addresses" <span>[<a href="#RFC4291" clas
 <span class="bcp14">MUST NOT</span> include zone identifiers <span>[<a href="#RFC9844" class="cite xref">RFC9844</a>]</span>. The port part <span class="bcp14">SHALL</span> be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.<a href="#section-8.3-8" class="pilcrow">¶</a></p>
-<p id="section-8.3-9">To disambiguate IPv6 addresses from ports when zero compression happens,
-IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-9" class="pilcrow">¶</a></p>
+<p id="section-8.3-9">To disambiguate IPv6 addresses from ports when zero compression
+happens, IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-9" class="pilcrow">¶</a></p>
 <p id="section-8.3-10">The value of "sources", if present, <span class="bcp14">MUST</span> be a list of strings
-indicating where updated versions of the list may be aquired. Each
+indicating where updated versions of the list may be acquired. Each
 string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> pointing to a list in the format
 specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
 <p id="section-8.3-11">The value of "reports", if present, <span class="bcp14">MUST</span> be a string indicating a URL
-<span>[<a href="#RFC1738" class="cite xref">RFC1738</a>]</span> where malfeasance reports can be sent by clients using
+<span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> where malfeasance reports can be sent by clients using
 the HTTP POST method <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. The URI scheme <span class="bcp14">MUST</span> be HTTPS
 <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-11" class="pilcrow">¶</a></p>
 <p id="section-8.3-12">Server lists have the "application/roughtime-server+json" media
@@ -2172,8 +2172,8 @@ including the "ROUGHTIM" header.<a href="#section-8.4.1-3" class="pilcrow">¶</a
 including the "ROUGHTIM" header.<a href="#section-8.4.1-4" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-5">The value of "publicKey" <span class="bcp14">MUST</span> be the long-term key that the server was
 expected to use for deriving the response signature.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-6">Malfeasance reports have the "application/roughtime-malfeasence+json" media
-type.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-6">Malfeasance reports have the "application/roughtime-malfeasance+json"
+media type.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reporting">
@@ -2192,7 +2192,7 @@ exponential backoff to prevent overloading the server receiving the
 reports. It is <span class="bcp14">RECOMMENDED</span> that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
 Therefore, the minimum interval before retrying after <code>n</code> failures in
-seconds is <code>min(10 * 1.5^(n-1), 86400)</code>.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
+seconds is <code>min(10 \* 1.5^(n-1), 86400)</code>.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.2-2">Clients <span class="bcp14">MUST NOT</span> send malfeasance reports in response to signature
 verification failures or any other protocol errors.<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
 </section>
@@ -2307,8 +2307,8 @@ move between networks.<a href="#section-10-1" class="pilcrow">¶</a></p>
 key. In multi-tenancy environments, where multiple servers may be
 listening on the same IP or port space, the protocol is designed so
 that the client indicates which server it expects to respond. This is
-done with the SRV tag. Additional recommendations for clients are listed in
-<a href="#roughtime-clients" class="auto internal xref">Section 8</a>.<a href="#section-11-1" class="pilcrow">¶</a></p>
+done with the SRV tag. Additional recommendations for clients are
+listed in <a href="#roughtime-clients" class="auto internal xref">Section 8</a>.<a href="#section-11-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="iana-considerations">
@@ -2374,23 +2374,13 @@ document.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0x80000000-0xbfffffff</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for experimental use</td>
               <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">experimental use</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
             <tr>
               <td class="text-left" rowspan="1" colspan="1">0xc0000000-0xffffffff</td>
-              <td class="text-left" rowspan="1" colspan="1">Reserved for private</td>
+              <td class="text-left" rowspan="1" colspan="1">Reserved for private use</td>
               <td class="text-left" rowspan="1" colspan="1">[[this memo]]</td>
-            </tr>
-            <tr>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
-              <td class="text-left" rowspan="1" colspan="1">use</td>
-              <td class="text-left" rowspan="1" colspan="1"> </td>
             </tr>
           </tbody>
         </table>
@@ -2610,10 +2600,6 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-14" cla
 <a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
         </h3>
 <dl class="references">
-<dt id="RFC1738">[RFC1738]</dt>
-        <dd>
-<span class="refAuthor">Berners-Lee, T.</span>, <span class="refAuthor">Masinter, L.</span>, and <span class="refAuthor">M. McCahill</span>, <span class="refTitle">"Uniform Resource Locators (URL)"</span>, <span class="seriesInfo">RFC 1738</span>, <span class="seriesInfo">DOI 10.17487/RFC1738</span>, <time datetime="1994-12" class="refDate">December 1994</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc1738">https://www.rfc-editor.org/rfc/rfc1738</a>&gt;</span>. </dd>
-<dd class="break"></dd>
 <dt id="RFC20">[RFC20]</dt>
         <dd>
 <span class="refAuthor">Cerf, V.</span>, <span class="refTitle">"ASCII format for network interchange"</span>, <span class="seriesInfo">STD 80</span>, <span class="seriesInfo">RFC 20</span>, <span class="seriesInfo">DOI 10.17487/RFC0020</span>, <time datetime="1969-10" class="refDate">October 1969</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc20">https://www.rfc-editor.org/rfc/rfc20</a>&gt;</span>. </dd>
@@ -2724,8 +2710,8 @@ Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
 Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
 other members of the NTP working group contributed comments and
 suggestions as well as pointed out errors. We appreciate the last call
-commentators, especially Colin Perkins for providing advice on transport
-considerations.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+commentators, especially Colin Perkins for providing advice on
+transport considerations.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="authors-addresses">
