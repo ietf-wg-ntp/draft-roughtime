@@ -120,6 +120,7 @@ amortize the relatively costly signing operation over a number of
 client requests.
 
 ## Single Server Mode
+
 At its most basic level, Roughtime is a one-round protocol in which a
 completely fresh client requests the current time and the server sends
 a signed response. The response includes a timestamp and a radius used
@@ -132,6 +133,7 @@ entropy&mdash;this proves that the signed response could only have
 been generated after the nonce.
 
 ## Multi Server Mode
+
 When using multiple servers, a client can detect, cryptographically
 prove, and report inconsistencies between different servers.
 
@@ -222,7 +224,8 @@ seconds since 00:00:00 on 1 January 1970 (the Unix epoch), assuming
 every day has 86400 seconds. This is a constant offset from the NTP
 timestamp in seconds. Leap seconds do not have an unambiguous
 representation in a timestamp, and this has implications for the
-attainable accuracy and setting of the RADI tag.
+attainable accuracy and setting of the RADI tag (see
+{{response-srep}}).
 
 ## Header
 
@@ -352,7 +355,9 @@ entirely, see {{response-srep}}.
 
 The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
 in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
-contains specific guidelines regarding this.
+contains specific guidelines regarding this. {{measurement-sequence}}
+describes how to securely generate nonces when querying multiple
+servers in sequence.
 
 ### TYPE
 
