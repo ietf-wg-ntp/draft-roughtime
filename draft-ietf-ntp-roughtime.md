@@ -1044,11 +1044,11 @@ Change controller: Internet Engineering Task Force
 {:numbered="false"}
 
 Aanchal Malhotra and Adam Langley authored early drafts of this memo.
-Daniel Franke, Sarah Grant, Martin Langer, Ben Laurie, Peter Löthberg,
-Michael McCourt, Hal Murray, Tal Mizrahi, Ruben Nijveld, Christopher
-Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
-Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
-other members of the NTP working group contributed comments and
-suggestions as well as pointed out errors. We appreciate the last call
-commentators, especially Colin Perkins for providing advice on
-transport considerations.
+Daniel Franke, Sarah Grant, Erik Kline, Martin Langer, Ben Laurie,
+Peter Löthberg, Michael McCourt, Hal Murray, Tal Mizrahi, Ruben
+Nijveld, Christopher Patton, Thomas Peterson, Rich Salz, Dieter
+Sibold, Ragnar Sundblad, Kristof Teichel, Luke Valenta, David Venhoek,
+Ulrich Windl, and the other members of the NTP working group
+contributed comments and suggestions as well as pointed out errors. We
+also acknowledge the helpful comments and suggestions provided by the
+last call reviewers and members of the IESG.
