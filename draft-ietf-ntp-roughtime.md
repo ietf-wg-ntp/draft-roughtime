@@ -54,9 +54,9 @@ This document describes Roughtime, an experimental protocol that aims
 to achieve two things: secure rough time synchronization even for
 clients without any idea of what time it is, and giving clients a
 format by which to report any inconsistencies they observe between
-time servers. This document specifies the on-wire protocol required
-for these goals, and discusses aspects of the ecosystem needed for it
-to work.
+timeservers. This document specifies the on-wire protocol required for
+these goals, and discusses aspects of the ecosystem needed for it to
+work.
 
 
 --- middle
@@ -120,7 +120,7 @@ amortize the relatively costly signing operation over a number of
 client requests.
 
 ## Single Server Mode
-At its most basic level, Roughtime is a one round protocol in which a
+At its most basic level, Roughtime is a one-round protocol in which a
 completely fresh client requests the current time and the server sends
 a signed response. The response includes a timestamp and a radius used
 to indicate the server's certainty about the reported time.
@@ -135,12 +135,12 @@ been generated after the nonce.
 When using multiple servers, a client can detect, cryptographically
 prove, and report inconsistencies between different servers.
 
-A Roughtime server guarantees that the timestamp included in the response
-to a query is generated after the reception of the query and prior to
-the transmission of the associated response. If the time response from
-a server is not consistent with time responses from other servers,
-this indicates server error or intentional malfeasance that can be
-reported and potentially used to impeach the server.
+A Roughtime server guarantees that the timestamp included in the
+response to a request is generated after the reception of the request
+and prior to the transmission of the associated response. If the time
+response from a server is not consistent with time responses from
+other servers, this indicates server error or intentional malfeasance
+that can be reported and potentially used to impeach the server.
 
 Proofs of malfeasance are constructed by chaining requests to
 different Roughtime servers. Details on proofs and malfeasance
@@ -194,12 +194,12 @@ Roughtime message.
 
 ### uint32
 
-A uint32 is a 32 bit unsigned integer. It is serialized
-with the least significant byte first.
+A uint32 is a 32-bit unsigned integer. It is serialized with the least
+significant byte first.
 
 ### uint64
 
-A uint64 is a 64 bit unsigned integer. It is serialized with the least
+A uint64 is a 64-bit unsigned integer. It is serialized with the least
 significant byte first.
 
 ### Tag {#type-tag}
@@ -227,13 +227,13 @@ attainable accuracy and setting of the RADI tag.
 ## Header
 
 As illustrated in {{figmessage}}, the first four bytes of the header
-is the uint32 number of tags N, and hence of (tag, value) pairs. The
-following 4\*(N-1) bytes are offsets, each a uint32, and the last 4\*N
-bytes in the header are tags.
+is the uint32 number of tags `N`, and hence of (tag, value) pairs. The
+following `4\*(N-1)` bytes are offsets, each a uint32, and the last
+`4\*N` bytes in the header are tags.
 
-The offsets array is considered to have a not explicitly encoded value
-of 0 as its zeroth entry. Its members refer to the positions of the
-tag values in the message values section. All offsets are multiples of
+The offsets array is considered to have an implicitly encoded value of
+0 as its zeroth entry. Its members refer to the positions of the tag
+values in the message values section. All offsets are multiples of
 four.
 
 The members of the offsets and tags arrays, as well as the message
@@ -281,7 +281,7 @@ contains a Roughtime message as specified in {{message-format}}.
 
 Roughtime request and response packets MUST be transmitted in a single
 datagram when the UDP transport mode is used. Setting the packet's
-don't fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
+Don't Fragment bit {{!RFC791}} is OPTIONAL in IPv4 networks. Setting
 it may cause packets to get dropped, but not setting it could lead to
 long delays due to reconstruction and dropped fragments.
 
@@ -312,7 +312,7 @@ implementation-defined timeouts, or other errors.
 
 All requests and responses MUST contain the VER tag. It contains a
 list of one or more uint32 version numbers. The version of Roughtime
-specified by this  has version number 1.
+specified by this document has version number 1.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
 testing this draft of the document, a version number of 0x8000000c is
@@ -330,7 +330,7 @@ The size of the request message SHOULD be at least 1024 bytes when the
 UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
 added to the message. Responding to request messages shorter than 1024
 bytes is OPTIONAL and servers MUST NOT send responses larger than the
-request messages they are replying to, see {{amplification-attacks}}.
+request messages they are replying to; see {{amplification-attacks}}.
 
 ### VER
 
@@ -366,7 +366,7 @@ by servers.
 The SRV tag is used by the client to indicate which long-term public
 key it expects to verify the response with. The value of the SRV tag
 is `H(0xff || public_key)` where `public_key` is the server's
-long-term, 32-byte Ed25519 public key and H is SHA-512 truncated to
+long-term, 32-byte Ed25519 public key and `H` is SHA-512 truncated to
 the first 32 bytes.
 
 ### ZZZZ
@@ -545,7 +545,7 @@ which they are stored is described in the next section.
 This section describes how to compute the value of the root of the
 Merkle tree from the values in the tags PATH, INDX, and NONC. The bits
 of INDX are ordered from least to most significant. `H(x)` denotes the
-first 32 bytes of the SHA-512 hash digest of x and `||` denotes
+first 32 bytes of the SHA-512 hash digest of `x` and `||` denotes
 concatenation.
 
 The algorithm maintains a current value `h`. At initialization, `h` is
@@ -578,7 +578,7 @@ A response that passes these checks is said to be valid. Validity of a
 response does not prove that the timestamp's value in the response is
 correct, but merely that the server guarantees that it signed the
 timestamp and computed its signature during the time interval
-(MIDP-RADI, MIDP+RADI).
+`(MIDP-RADI, MIDP+RADI)`.
 
 # Integration into NTP
 
@@ -589,7 +589,7 @@ represent the error in the measured value of delta introduced by the
 measurement process. Given a measurement taken at a local time `t`, we
 know the true time is in `(t-delta-sigma, t-delta+sigma)`. After `d`
 seconds have elapsed we know the true time is within
-`(t-delta-sigma-d*phi, t-delta+sigma+d*phi)`.
+`(t-delta-sigma-d\*phi, t-delta+sigma+d\*phi)`.
 
 This bound can be used as a simple and effective means to limit the
 error an attacker can introduce into NTP or Precision Time Protocol
@@ -635,14 +635,14 @@ run by the same parties. Roughtime clients SHOULD regularly update
 their view of which servers are trustworthy in order to benefit from
 the detection of misbehavior. Clients SHOULD also have a means of
 reporting to the provider of such a list, such as an operating system
-or software vendor, a malfeasence report as described below.
+or software vendor, a malfeasance report as described below.
 
 ## Measurement Sequence {#measurement-sequence}
 
 The client randomly selects at least three servers from the list, and
 sequentially queries them. The query sequence SHOULD be repeated twice
 with the servers in the same order, to ensure that all possible
-inconsistences can be detected.
+inconsistencies can be detected.
 
 The first probe uses a nonce that is randomly generated. The second
 query uses `H(resp || rand)` where `rand` is a random 32-byte value
@@ -707,16 +707,16 @@ MUST NOT include zone identifiers {{!RFC9844}}. The port part SHALL be
 a decimal integer representing a valid port number, i.e. in the range
 0-65535.
 
-To disambiguate IPv6 addresses from ports when zero compression happens,
-IPv6 addresses MUST be encapsulated within [].
+To disambiguate IPv6 addresses from ports when zero compression
+happens, IPv6 addresses MUST be encapsulated within [].
 
 The value of "sources", if present, MUST be a list of strings
-indicating where updated versions of the list may be aquired. Each
+indicating where updated versions of the list may be acquired. Each
 string MUST be a URL {{!RFC3986}} pointing to a list in the format
 specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 The value of "reports", if present, MUST be a string indicating a URL
-{{!RFC1738}} where malfeasance reports can be sent by clients using
+{{!RFC3986}} where malfeasance reports can be sent by clients using
 the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
@@ -750,8 +750,8 @@ including the "ROUGHTIM" header.
 The value of "publicKey" MUST be the long-term key that the server was
 expected to use for deriving the response signature.
 
-Malfeasance reports have the "application/roughtime-malfeasence+json" media
-type.
+Malfeasance reports have the "application/roughtime-malfeasance+json"
+media type.
 
 ### Reporting
 
@@ -766,7 +766,7 @@ exponential backoff to prevent overloading the server receiving the
 reports. It is RECOMMENDED that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
 Therefore, the minimum interval before retrying after `n` failures in
-seconds is `min(10 * 1.5^(n-1), 86400)`.
+seconds is `min(10 \* 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
@@ -838,8 +838,8 @@ It is expected that clients identify a server by its long-term public
 key. In multi-tenancy environments, where multiple servers may be
 listening on the same IP or port space, the protocol is designed so
 that the client indicates which server it expects to respond. This is
-done with the SRV tag. Additional recommendations for clients are listed in
-{{roughtime-clients}}.
+done with the SRV tag. Additional recommendations for clients are
+listed in {{roughtime-clients}}.
 
 # IANA Considerations
 
@@ -880,15 +880,13 @@ The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 
 The initial contents of this registry are as follows:
 
-| Version ID            | Version name         | Reference     |
-+---------------------- :+---------------------+---------------|
-| 0x0                   | Reserved             | [[this memo]] |
-| 0x1                   | Roughtime version 1  | [[this memo]] |
-| 0x2-0x7fffffff        | Unassigned           |               |
-| 0x80000000-0xbfffffff | Reserved for         | [[this memo]] |
-|                       | experimental use     |               |
-| 0xc0000000-0xffffffff | Reserved for private | [[this memo]] |
-|                       | use                  |               |
+| Version ID            | Version name                  | Reference     |
++---------------------- :+------------------------------+---------------|
+| 0x0                   | Reserved                      | [[this memo]] |
+| 0x1                   | Roughtime version 1           | [[this memo]] |
+| 0x2-0x7fffffff        | Unassigned                    |               |
+| 0x80000000-0xbfffffff | Reserved for experimental use | [[this memo]] |
+| 0xc0000000-0xffffffff | Reserved for private use      | [[this memo]] |
 
 Private and experimental use are defined in {{?RFC8126}}. The
 experimental range is intended for testing and evaluating new versions
@@ -1045,5 +1043,5 @@ Patton, Thomas Peterson, Rich Salz, Dieter Sibold, Ragnar Sundblad,
 Kristof Teichel, Luke Valenta, David Venhoek, Ulrich Windl, and the
 other members of the NTP working group contributed comments and
 suggestions as well as pointed out errors. We appreciate the last call
-commentators, especially Colin Perkins for providing advice on transport
-considerations.
+commentators, especially Colin Perkins for providing advice on
+transport considerations.
