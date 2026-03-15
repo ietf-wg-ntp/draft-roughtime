@@ -2070,9 +2070,9 @@ or software vendor, a malfeasance report as described below.<a href="#section-8.
 <a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-measurement-sequence" class="section-name selfRef">Measurement Sequence</a>
         </h3>
 <p id="section-8.2-1">The client randomly selects at least three servers from the list, and
-sequentially queries them. The query sequence <span class="bcp14">SHOULD</span> be repeated twice
-with the servers in the same order, to ensure that all possible
-inconsistencies can be detected.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+sequentially queries them. To ensure that all possible inconsistencies
+can be detected, it is necessary for clients to repeat the query
+sequence twice with the servers in the same order.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <p id="section-8.2-2">The first probe uses a nonce that is randomly generated. The second
 query uses <code>H(resp || rand)</code> where <code>rand</code> is a random 32-byte value
 and <code>resp</code> is the entire response to the first probe, including the
@@ -2081,13 +2081,19 @@ the previous response and a different 32-byte <code>rand</code> value. <code>H(x
 <code>||</code> are defined as in <a href="#check-algorithm" class="auto internal xref">Section 5.3.1</a>.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
 <p id="section-8.2-3">For each pair of responses <code>(i, j)</code>, where <code>i</code> was received before
 <code>j</code>, the client <span class="bcp14">MUST</span> check that <code>MIDP_i-RADI_i</code> is less than or equal
-to <code>MIDP_j+RADI_j</code>. If all checks pass, the times are consistent with
-causal ordering. If at least one check fails, there has been a
-malfeasance and the client <span class="bcp14">SHOULD</span> store a report for evaluation, alert
-the user, and make another measurement. If the times reported are
-consistent with the causal ordering, and the delay between request and
-response is within an implementation-dependent maximum value, the
-measurement succeeds.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+to <code>MIDP_j+RADI_j</code>. If these checks pass, the times are consistent
+with causal ordering. The measurement succeeds if the validity checks
+described in <a href="#validity-of-response" class="auto internal xref">Section 5.4</a> are successful, the times
+reported are consistent with causal ordering, and the delay between
+request and response is within an implementation-dependent maximum
+value.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+<p id="section-8.2-4">If the validity checks are successful, but at least one of the
+responses is not consistent with causal ordering, there has been a
+malfeasance. In case of detected malfeasance, clients <span class="bcp14">SHOULD</span>, if it is
+technically possible, generate a malfeasance report (see
+<a href="#malfeasance-reporting" class="auto internal xref">Section 8.4</a>), alert the user, and make another
+measurement. See <a href="#protocol-details" class="auto internal xref">Section 5</a> for guidance on backoff when
+making repeated measurements.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="server-lists">
