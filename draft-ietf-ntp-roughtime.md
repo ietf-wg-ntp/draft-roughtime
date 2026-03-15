@@ -671,11 +671,14 @@ making repeated measurements.
 ## Server Lists {#server-lists}
 
 To facilitate regular updates of lists of trusted servers, a common
-server list format is specified here. A server list is a JSON
-{{!RFC8259}} object that contains the key "servers". Server list
-objects MAY also contain the keys "sources" and "reports".
-{{appendix-server-list}} contains an example server list in the format
-described here.
+server list format is specified here. Support for the common server
+list format is OPTIONAL and clients MAY instead implement their own
+mechanisms for configuring server lists.
+
+A server list is a JSON {{!RFC8259}} object that contains the key
+"servers". Server list objects MAY also contain the keys "sources" and
+"reports". {{appendix-server-list}} contains an example server list in
+the format described here.
 
 Server lists have the "application/roughtime-server+json" media
 type.
@@ -729,8 +732,7 @@ to a list in the format specified here. The URI scheme MUST be HTTPS
 
 The value of "reports", if present, is a string indicating a URL
 {{!RFC3986}} where malfeasance reports can be sent by clients using
-the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
-{{!RFC9110}}.
+the HTTP POST method. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 ## Malfeasance Reporting {#malfeasance-reporting}
 
@@ -769,16 +771,18 @@ The value of "response" is the received response packet, including the
 ### Reporting
 
 When the client's list of servers has an associated URL for
-malfeasance reports, it SHOULD post a malfeasance report to the URL
-whenever the measurement sequence described in
-{{measurement-sequence}} has detected malfeasance. Since the failure
-of a popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients MUST use exponential
-backoff to prevent overloading the server receiving the reports. It is
-RECOMMENDED that clients use an initial retry interval of 10 seconds,
-a maximum interval of 24 hours, and a base of 1.5. Therefore, the
-minimum interval before retrying after `n` failures in seconds is
-`min(10 \* 1.5^(n-1), 86400)`.
+malfeasance reports, it SHOULD send a malfeasance report to that URL
+when malfeasance is detected (see {{measurement-sequence}}) and it is
+technically feasible to do so. Malfeasance reports are sent using the
+HTTP POST method {{!RFC9110}}.
+
+Since the failure of a popular Roughtime server can cause numerous
+clients to send malfeasance reports at the same time, clients MUST use
+exponential backoff to prevent overloading the server receiving the
+reports. It is RECOMMENDED that clients use an initial retry interval
+of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
+Therefore, the minimum interval before retrying after `n` failures in
+seconds is `min(10 \* 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
