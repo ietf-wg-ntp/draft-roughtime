@@ -797,7 +797,7 @@ Although any random 256-bit string can be used as a private Ed25519
 key, it has a high risk of being vulnerable to small-subgroup attacks
 and timing side-channel leaks. For this reason, all private keys used
 in Roughtime MUST be generated following the procedure described in
-Section 5.1.5 of RFC 8032 {{!RFC8032}}.
+Section 5.1.5 of {{!RFC8032}}.
 
 ## Private Key Compromise
 
@@ -885,7 +885,8 @@ document.
 
 The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 
-The initial contents of this registry are as follows:
+The initial contents of this registry are specified in
+{{tab-versions}}.
 
 | Version ID            | Version name                  | Reference     |
 +---------------------- :+------------------------------+---------------|
@@ -894,6 +895,7 @@ The initial contents of this registry are as follows:
 | 0x2-0x7fffffff        | Unassigned                    |               |
 | 0x80000000-0xbfffffff | Reserved for experimental use | [[this memo]] |
 | 0xc0000000-0xffffffff | Reserved for private use      | [[this memo]] |
+{: #tab-versions title="Initial contents of the Roughtime Versions registry."}
 
 Private and experimental use are defined in {{?RFC8126}}. The
 experimental range is intended for testing and evaluating new versions
@@ -917,7 +919,7 @@ document.
 The policy for allocation of new entries in this registry is
 Specification Required {{?RFC8126}}.
 
-The initial contents of this registry are as follows:
+The initial contents of this registry are specified in {{tab-tags}}.
 
 | Tag        | ASCII Representation | Reference     |
 +-----------:+----------------------+---------------|
@@ -939,6 +941,7 @@ The initial contents of this registry are as follows:
 | 0x5458414d | MAXT                 | [[this memo]] |
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
+{: #tab-tags title="Initial contents of the Roughtime Tags registry."}
 
 ## Media Type Registry
 
@@ -971,12 +974,11 @@ Applications that use this media type: Roughtime clients
 
 Fragment identifier considerations: N/A
 
-Additional information:
-
-  Deprecated alias names for this type: N/A
-  Magic number(s): N/A
-  File extension(s): N/A
-  Macintosh file type code(s): N/A
+Additional information:<br/>
+&nbsp;&nbsp;Deprecated alias names for this type: N/A<br/>
+&nbsp;&nbsp;Magic number(s): N/A<br/>
+&nbsp;&nbsp;File extension(s): N/A<br/>
+&nbsp;&nbsp;Macintosh file type code(s): N/A
 
 Person & email address to contact for further information: See
 Authors' Addresses section of [[this document]].
@@ -1020,12 +1022,11 @@ that a Roughtime server has sent the wrong time.
 
 Fragment identifier considerations: N/A
 
-Additional information:
-
-  Deprecated alias names for this type: N/A
-  Magic number(s): N/A
-  File extension(s): N/A
-  Macintosh file type code(s): N/A
+Additional information:<br/>
+&nbsp;&nbsp;Deprecated alias names for this type: N/A<br/>
+&nbsp;&nbsp;Magic number(s): N/A<br/>
+&nbsp;&nbsp;File extension(s): N/A<br/>
+&nbsp;&nbsp;Macintosh file type code(s): N/A
 
 Person & email address to contact for further information: See
 Authors' Addresses section of [[this document]].
