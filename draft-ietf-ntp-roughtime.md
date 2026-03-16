@@ -46,17 +46,16 @@ informative:
     seriesinfo:
       in: Pomerance, C. (eds) Advances in Cryptology
       Lecture Notes in Computer Science: vol 293
-      DOI: 10.1007/3-540-47184-2_32
+      DOI: 10.1007/3-540-48184-2_32
 
 --- abstract
 
 This document describes Roughtime, an experimental protocol that aims
 to achieve two things: secure rough time synchronization even for
-clients without any idea of what time it is, and giving clients a
-format by which to report any inconsistencies they observe between
-timeservers. This document specifies the on-wire protocol required for
-these goals, and discusses aspects of the ecosystem needed for it to
-work.
+clients without any idea of what time it is, and give clients a format
+for reporting any inconsistencies they observe between timeservers.
+This document specifies the on-wire protocol required for these goals,
+and discusses aspects of the ecosystem needed for it to work.
 
 
 --- middle
@@ -70,11 +69,11 @@ Protocol (NTP) {{?RFC5905}} lack essential security features, and even
 newer protocols like Network Time Security (NTS) {{?RFC8915}} lack
 mechanisms to observe that the servers behave correctly. Furthermore,
 clients may lack even a basic idea of the time, creating bootstrapping
-problems as a time is required for X.509 certificate validation.
+problems as time is required for X.509 certificate validation.
 
 The primary design goal of Roughtime is to permit devices to obtain a
-rough idea of the current time from fairly static configuration and to
-enable them to report any inconsistencies they observe between
+rough idea of the current time from a fairly static configuration and
+to enable them to report any inconsistencies they observe between
 servers. The configuration consists of a list of servers and their
 associated long-term keys, which ideally remain unchanged throughout a
 server's lifetime. This makes the long-term public keys the roots of
@@ -82,10 +81,10 @@ trust in Roughtime. With a sufficiently long list of trusted servers
 and keys, a client will be able to acquire authenticated time with
 high probability, even after long periods of inactivity. Proofs of
 malfeasance constructed by chaining together responses from different
-trusted servers can be used to prove misbehavior by a server, and
-after analysis result in revoking trust in that particular key.
+trusted servers can be used to prove misbehavior by a server and,
+after analysis, result in revoking trust in that particular key.
 
-Unlike Khronos {{?RFC9523}} Roughtime produces external evidence that
+Unlike Khronos {{?RFC9523}}, Roughtime produces external evidence that
 timeservers are reporting incompatible times. This requires changes to
 the format of the timestamps and hence cannot be a mere extension to
 NTP.
@@ -150,7 +149,7 @@ reporting are provided in {{roughtime-clients}}. For the reporting to
 result in impeachment, an additional mechanism is required that
 provides a review and impeachment process. Defining such a mechanism
 is beyond the scope of this document. A simple option could be an
-online forum where a court of human observers judge cases after
+online forum where a court of human observers evaluate cases after
 reviewing input reports.
 
 # Message Format {#message-format}
@@ -159,11 +158,11 @@ Roughtime messages are maps consisting of one or more (tag, value)
 pairs. They start with a header, which contains the number of pairs,
 the value offsets, and the tags. The header is followed by a message
 values section which contains the values associated with the tags in
-the header. Messages MUST be formatted according to {{figmessage}} as
+the header. Messages are formatted according to {{figmessage}} as
 described in the following sections.
 
-Messages MAY be recursive, i.e. the value of a tag can itself be a
-Roughtime message.
+In some cases, messages are recursive, i.e. the value of a tag can
+itself be a Roughtime message.
 
 ~~~~~
  0                   1                   2                   3
@@ -207,15 +206,17 @@ significant byte first.
 ### Tag {#type-tag}
 
 Tags are used to identify values in Roughtime messages. A tag is a
-uint32 but can also be represented as a sequence of up to four ASCII
-characters {{!RFC20}} with the first character in the most significant
-byte. ASCII strings shorter than four characters can be unambiguously
-converted to tags by padding them with zero bytes. Tags MUST NOT
-contain any other bytes than capital letters (A-Z) or padding zero
-bytes. For example, the ASCII string "NONC" would correspond to the
-tag 0x434e4f4e and "VER" would correspond to 0x00524556. On the wire
-VER would be serialized as {0x56, 0x45, 0x52, 0x00} because of the
-little-endian encoding of uint32.
+sequence of four octets. Each tag sequence starts with one to four
+capital ASCII letters (A-Z) {{!RFC20}} followed by zero to three
+padding zero octets. Throughout this document, tags are referred to by
+their ASCII string representation. However, they are registered and
+sorted as uint32 values, where the least significant byte is the first
+octet in the sequence.
+
+For example, the ASCII string "NONC" would correspond to the uint32
+0x434e4f4e which is serialized as {0x4e, 0x4f, 0x4e, 0x43}. "VER"
+would correspond to 0x00524556 and be serialized as
+{0x56, 0x45, 0x52, 0x00}.
 
 ### Timestamp
 
@@ -231,8 +232,8 @@ attainable accuracy and setting of the RADI tag (see
 
 As illustrated in {{figmessage}}, the first four bytes of the header
 is the uint32 number of tags `N`, and hence of (tag, value) pairs. The
-following `4\*(N-1)` bytes are offsets, each a uint32, and the last
-`4\*N` bytes in the header are tags.
+following `4*(N-1)` bytes are offsets, each a uint32, and the last
+`4*N` bytes in the header are tags.
 
 The offsets array is considered to have an implicitly encoded value of
 0 as its zeroth entry. Its members refer to the positions of the tag
@@ -240,7 +241,7 @@ values in the message values section. All offsets are multiples of
 four.
 
 The members of the offsets and tags arrays, as well as the message
-values section are sorted in ascending order by the tag's numeric
+values section are sorted in ascending order by the tag's uint32
 value. As a consequence, the offset array is also sorted in ascending
 order. A tag MUST NOT appear more than once in a header.
 
@@ -258,7 +259,7 @@ send signed time responses in return. Roughtime packets can be sent
 between clients and servers either as UDP datagrams or via TCP
 streams. Servers SHOULD support both the UDP and TCP transport modes.
 
-A Roughtime packet MUST be formatted according to {{figpack}} and as
+Roughtime packets are formatted according to {{figpack}} and as
 described here. The first field is a uint64 with the value
 0x4d49544847554f52 ("ROUGHTIM" in ASCII). The second field is a uint32
 and contains the length of the third field. The third and last field
@@ -297,10 +298,10 @@ receive responses to its UDP queries.
 Clients MUST implement exponential backoff in establishing TCP
 connections and making requests over UDP. It is RECOMMENDED that
 clients use an initial retry interval of 1 second, a maximum interval
-of 24 hours, and a base of 1.5. Therefore, the minimum interval before
-retrying after `n` failures in seconds is `min(1.5^{n-1}, 86400)`.
-Guidance for implementers considering other values can be found in
-Section 3.1.3 of {{!RFC8085}}.
+of 24 hours, and a base of 1.5. Therefore, the minimum interval, in
+seconds, before retrying after `n` failures is `min(1.5^{n-1},
+86400)`. Guidance for implementers considering other values can be
+found in Section 3.1.3 of {{!RFC8085}}.
 
 Clients MUST NOT reset the retry interval until they receive a
 properly signed response.
@@ -313,9 +314,9 @@ received all expected responses. Either side SHOULD close the
 connection in response to synchronization, format,
 implementation-defined timeouts, or other errors.
 
-All requests and responses MUST contain the VER tag. It contains a
-list of one or more uint32 version numbers. The version of Roughtime
-specified by this document has version number 1.
+All requests and responses contain the VER tag. It contains a list of
+one or more uint32 version numbers. The version of Roughtime specified
+by this document has version number 1.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. For
 testing this draft of the document, a version number of 0x8000000c is
@@ -323,30 +324,32 @@ used.
 
 ## Requests {#requests}
 
-A request MUST contain the tags VER, NONC, and TYPE. It SHOULD include
-the tag SRV. Other tags SHOULD be ignored by the server. Requests not
-containing the three mandatory tags MUST be ignored by servers. A
-future version of this protocol may mandate additional tags in the
-message and assign them semantic meaning.
+A request contains the tags VER, NONC, and TYPE. It SHOULD include the
+tag SRV. Unknown tags MUST be ignored by the server. Requests not
+containing the three mandatory tags MUST be ignored. A future version
+of this protocol may mandate additional tags in the message and assign
+them semantic meaning.
 
 The size of the request message SHOULD be at least 1024 bytes when the
-UDP transport mode is used. To attain this size the ZZZZ tag SHOULD be
-added to the message. Responding to request messages shorter than 1024
+UDP transport mode is used. To attain this size, the ZZZZ tag is added
+to the message. A reason for sending request messages smaller could be
+to use the UDP transport mode over paths with low maximum deliverable
+length. However, responding to request messages shorter than 1024
 bytes is OPTIONAL and servers MUST NOT send responses larger than the
 request messages they are replying to; see {{amplification-attacks}}.
 
-### VER
+### VER {#request-ver}
 
 In a request, the VER tag contains a list of uint32 version numbers.
 The VER tag MUST include at least one Roughtime version supported by
 the client and MUST NOT contain more than 32 version numbers. The
-client MUST ensure that the version numbers and tags included in the
-request are not incompatible with each other or the packet contents.
+version numbers and tags included in the request MUST be compatible
+with each other and the packet contents.
 
 The version numbers MUST NOT repeat and MUST be sorted in ascending
 numerical order.
 
-Servers SHOULD ignore any unknown version numbers in the list supplied
+Servers MUST ignore any unknown version numbers in the list supplied
 by the client. If the list contains no version numbers supported by
 the server, it MAY respond with another version or ignore the request
 entirely, see {{response-srep}}.
@@ -354,7 +357,7 @@ entirely, see {{response-srep}}.
 ### NONC
 
 The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
-in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
+in a manner indistinguishable from random. BCP&nbsp;106 {{!RFC4086}}
 contains specific guidelines regarding this. {{measurement-sequence}}
 describes how to securely generate nonces when querying multiple
 servers in sequence.
@@ -376,8 +379,8 @@ the first 32 bytes.
 
 ### ZZZZ
 
-The ZZZZ tag is used to expand the response to the minimum required
-length. Its value MUST be all zero bytes.
+The ZZZZ tag is used to expand the request to the minimum required
+length. Its value is all zero bytes.
 
 ## Responses
 
@@ -393,8 +396,8 @@ procedure:
    long-term key, it SHOULD select that key. Otherwise, if the server
    has multiple long-term keys, then it MUST ignore the request.
 
-A response MUST contain the tags SIG, NONC, TYPE, PATH, SREP, CERT,
-and INDX. The structure of a response message is illustrated in
+A response contains the tags SIG, NONC, TYPE, PATH, SREP, CERT, and
+INDX. The structure of a response message is illustrated in
 {{figresponse}}.
 
 ~~~~~
@@ -422,7 +425,7 @@ No mechanism for reporting errors&mdash;such as wrong request format,
 unsupported version, or unknown SRV value&mdash;back to the client is
 provided. This is based on experience from the NTP protocol, where
 Kiss-o'-Death packets (see Section 7.4 of {{!RFC5905}}) are used to
-indicate errors. The existance of this unauthenticated protocol
+indicate errors. The existence of this unauthenticated protocol
 feature in NTP makes it possible for on-path attackers to make a
 client stop using authenticated modes or certain servers altogether
 (see Section 5.4 of {{!RFC8633}} and Sections 8.3 and 8.7 of
@@ -434,16 +437,16 @@ been excluded from this version of Roughtime.
 
 In general, a SIG tag value is a 64-byte Ed25519 signature
 {{!RFC8032}} over a concatenation of a signature context ASCII string
-and the entire value of a tag. All context strings MUST include a
+and the entire value of a tag. All context strings include a
 terminating zero byte.
 
-The SIG tag in the root of a response MUST be a signature over the
-SREP value using the public key contained in CERT. The context string
-MUST be "RoughTime v1 response signature".
+The SIG tag in the root of a response is a signature over the SREP
+value using the public key contained in CERT and the context string
+"RoughTime v1 response signature".
 
 ### NONC
 
-The NONC tag MUST contain the nonce of the message being responded to.
+The NONC tag contains the nonce of the message being responded to.
 
 ### TYPE
 
@@ -453,32 +456,32 @@ by clients.
 
 ### PATH
 
-The PATH tag value MUST be a multiple of 32 bytes long and represent a
+The PATH tag value is a multiple of 32 bytes long and represents a
 path of 32-byte hash values in the Merkle tree used to generate the
-ROOT value as described in a {{merkle-tree}}. In the case where a
+ROOT value as described in {{merkle-tree}}. In the case where a
 response is prepared for a single request and the Merkle tree contains
-only the root node, the size of PATH MUST be zero.
+only the root node, the size of PATH is zero.
 
 The PATH MUST NOT contain more than 32 hash values. The maximum length
 of PATH is normally limited by the maximum size of the response
 message, see {{requests}} and {{amplification-attacks}}. Server
-implementations SHOULD select a maximum Merkle tree height (see
+implementations MUST select a maximum Merkle tree height (see
 {{merkle-tree}}) that ensures this.
 
 ### SREP {#response-srep}
 
-The SREP tag contains a signed response. Its value MUST be a Roughtime
+The SREP tag contains a signed response. Its value is a Roughtime
 message with the tags VER, RADI, MIDP, VERS, and ROOT.
 
-The VER tag, when used in a response, MUST contain a single uint32
-version number. It SHOULD be one of the version numbers supplied by
-the client in its request. The server MUST ensure that the version
-number corresponds with the rest of the packet contents.
+The VER tag, when used in a response, contains a single uint32 version
+number. It SHOULD be one of the version numbers supplied by the client
+in its request; see {{request-ver}}. The server MUST ensure that the
+version number corresponds with the rest of the packet contents.
 
-The RADI tag value MUST be a uint32 representing the server's estimate
-of the accuracy of MIDP in seconds. Servers MUST ensure that the true
+The RADI tag value is a uint32 representing the server's estimate of
+the accuracy of MIDP in seconds. Servers MUST ensure that the true
 time is within `(MIDP-RADI, MIDP+RADI)` at the moment of processing.
-The value of RADI MUST NOT be zero. Since leap seconds can not be
+The value of RADI MUST NOT be zero. Since leap seconds cannot be
 unambiguously represented by Roughtime timestamps, servers MUST take
 this into account when setting the RADI value during leap second
 events. Servers that do not have any leap second information SHOULD
@@ -486,31 +489,30 @@ set the value of RADI to at least 3. Failure to do so will impact the
 observed correctness of Roughtime servers and can lead to malfeasance
 reports.
 
-The MIDP tag value MUST be the timestamp of the moment of processing.
+The MIDP tag value is the timestamp of the moment of processing.
 
-The VERS tag value MUST contain a list of uint32 version numbers
-supported by the server, sorted in ascending numerical order. It MUST
-contain the version number specified in the VER tag. It MUST NOT
-contain more than 32 version numbers.
+The VERS tag value contains a list of uint32 version numbers supported
+by the server, sorted in ascending numerical order. It MUST contain
+the version number specified in the VER tag. It MUST NOT contain more
+than 32 version numbers.
 
-The ROOT tag MUST contain a 32-byte value of a Merkle tree root as
+The ROOT tag contains a 32-byte value of a Merkle tree root as
 described in {{merkle-tree}}.
 
 ### CERT
 
-The CERT tag contains a public key certificate signed with the
-server's private long-term key. Its value MUST be a Roughtime message
-with the tags SIG and DELE, where SIG is a signature over the DELE
-value. The context string used to generate SIG MUST be "RoughTime v1
-delegation signature".
+The CERT tag contains a public-key certificate signed with the
+server's private long-term key. Its value is a Roughtime message with
+the tags SIG and DELE, where SIG is a signature over the DELE value
+with the context string "RoughTime v1 delegation signature".
 
-The DELE tag contains a delegated public key certificate used by the
-server to sign the SREP tag. Its value MUST be a Roughtime message
-with the tags PUBK, MINT, and MAXT. The purpose of the DELE tag is to
-enable separation of a long-term public key from keys on devices
-exposed to the public Internet.
+The DELE tag contains a delegated public-key certificate used by the
+server to sign the SREP tag. Its value is a Roughtime message with the
+tags PUBK, MINT, and MAXT. The purpose of the DELE tag is to enable
+separation of a long-term public key from keys on devices exposed to
+the public Internet.
 
-The PUBK tag MUST contain a temporary 32-byte Ed25519 public key which
+The PUBK tag contains a temporary 32-byte Ed25519 public key which
 is used to sign the SREP tag.
 
 The MINT tag is the minimum timestamp for which the key in PUBK is
@@ -523,8 +525,8 @@ a response to be considered valid.
 
 ### INDX
 
-The INDX tag value MUST be a uint32 determining the position of NONC
-in the Merkle tree used to generate the ROOT value as described in
+The INDX tag value is a uint32 determining the position of NONC in the
+Merkle tree used to generate the ROOT value as described in
 {{merkle-tree}}.
 
 ## The Merkle Tree {#merkle-tree}
@@ -606,7 +608,7 @@ represent the error in the measured value of delta introduced by the
 measurement process. Given a measurement taken at a local time `t`, we
 know the true time is in `(t-delta-sigma, t-delta+sigma)`. After `d`
 seconds have elapsed we know the true time is within
-`(t-delta-sigma-d\*phi, t-delta+sigma+d\*phi)`.
+`(t-delta-sigma-d*phi, t-delta+sigma+d*phi)`.
 
 This bound can be used as a simple and effective means to limit the
 error an attacker can introduce into NTP or Precision Time Protocol
@@ -646,13 +648,14 @@ signatures. Either signature MAY be invalid for this application.
 
 ## Necessary configuration
 
-To carry out a Roughtime measurement, a client SHOULD be equipped with
-a list of servers, a minimum of three of which are operational and not
-run by the same parties. Roughtime clients SHOULD regularly update
-their view of which servers are trustworthy in order to benefit from
-the detection of misbehavior. Clients SHOULD also have a means of
-reporting to the provider of such a list, such as an operating system
-or software vendor, a malfeasance report as described below.
+To carry out a Roughtime measurement, a client needs a list of
+servers, a minimum of three of which are operational and not run by
+the same parties. Roughtime clients SHOULD regularly update their view
+of which servers are trustworthy in order to benefit from the
+detection of misbehavior (see {{server-lists}}). Clients SHOULD also
+have a means of reporting to the provider of such a list, such as an
+operating system or software vendor, a malfeasance report as described
+in {{malfeasance-reporting}}.
 
 ## Measurement Sequence {#measurement-sequence}
 
@@ -717,9 +720,9 @@ SHOULD be used. For indicating compatibility with pre-IETF
 specifications of Roughtime, the version number 3000600613 SHOULD be
 used.
 
-The value of "publicKeyType" is string indicating the signature scheme
-used by the server. The value for servers supporting version 1 of
-Roughtime is "ed25519".
+The value of "publicKeyType" is a string indicating the signature
+scheme used by the server. The value for servers supporting version 1
+of Roughtime is "ed25519".
 
 The value of "publicKey" is a base64-encoded {{!RFC4648}} string
 representing the long-term public key of the server in a format
@@ -728,23 +731,21 @@ consistent with the value of "publicKeyType".
 The value of "addresses" is a list of address objects. An address
 object contains the keys "protocol" and "address". The value of
 "protocol" is either "tcp" or "udp", indicating the transport mode to
-use. The value of "address" is string indicating a host and a port
+use. The value of "address" is a string indicating a host and a port
 number, separated by a colon character, for example
 "roughtime.example.com:2002". The host part is either an IPv4 address,
 an IPv6 address, or a fully qualified domain name (FQDN). IPv4
-addresses MUST be in dotted decimal notation. IPv6 addresses MUST
-conform to the "Text Representation of Addresses" {{!RFC4291}} and
-MUST NOT include zone identifiers {{!RFC9844}}. The port part SHALL be
-a decimal integer representing a valid port number, i.e. in the range
-0-65535.
-
-To disambiguate IPv6 addresses from ports when zero compression
-happens, IPv6 addresses MUST be encapsulated within [].
+addresses are specified in dotted decimal notation. IPv6 addresses
+MUST conform to the "Text Representation of Addresses" {{!RFC4291}}
+and MUST NOT include zone identifiers {{!RFC9844}}. To disambiguate
+IPv6 addresses from ports when zero compression happens, IPv6
+addresses are encapsulated within []. The port part is a decimal
+integer representing a valid port number, i.e. in the range 0-65535.
 
 The value of "sources", if present, is a list of strings indicating
 where updated versions of the list may be acquired using the HTTP GET
-method {{!RFC9110}}. Each string MUST be a URL {{!RFC3986}} pointing
-to a list in the format specified here. The URI scheme MUST be HTTPS
+method {{!RFC9110}}. Each string is a URL {{!RFC3986}} pointing to a
+list in the format specified here. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
 The value of "reports", if present, is a string indicating a URL
@@ -796,8 +797,8 @@ clients to send malfeasance reports at the same time, clients MUST use
 exponential backoff to prevent overloading the server receiving the
 reports. It is RECOMMENDED that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
-Therefore, the minimum interval before retrying after `n` failures in
-seconds is `min(10 \* 1.5^(n-1), 86400)`.
+Therefore, the minimum interval, in seconds, before retrying after `n`
+failures is `min(10 * 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
@@ -916,13 +917,13 @@ The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 The initial contents of this registry are specified in
 {{tab-versions}}.
 
-| Version ID            | Version name                  | Reference     |
-+---------------------- :+------------------------------+---------------|
-| 0x0                   | Reserved                      | [[this memo]] |
-| 0x1                   | Roughtime version 1           | [[this memo]] |
-| 0x2-0x7fffffff        | Unassigned                    |               |
-| 0x80000000-0xbfffffff | Reserved for experimental use | [[this memo]] |
-| 0xc0000000-0xffffffff | Reserved for private use      | [[this memo]] |
+| Version ID            | Version name                  | Reference         |
++---------------------- :+------------------------------+-------------------|
+| 0x0                   | Reserved                      | [[this document]] |
+| 0x1                   | Roughtime version 1           | [[this document]] |
+| 0x2-0x7fffffff        | Unassigned                    |                   |
+| 0x80000000-0xbfffffff | Reserved for experimental use | [[this document]] |
+| 0xc0000000-0xffffffff | Reserved for private use      | [[this document]] |
 {: #tab-versions title="Initial contents of the Roughtime Versions registry."}
 
 Private and experimental use are defined in {{?RFC8126}}. The
@@ -949,26 +950,26 @@ Specification Required {{?RFC8126}}.
 
 The initial contents of this registry are specified in {{tab-tags}}.
 
-| Tag        | ASCII Representation | Reference     |
-+-----------:+----------------------+---------------|
-| 0x00474953 | SIG                  | [[this memo]] |
-| 0x00524556 | VER                  | [[this memo]] |
-| 0x00565253 | SRV                  | [[this memo]] |
-| 0x434e4f4e | NONC                 | [[this memo]] |
-| 0x454c4544 | DELE                 | [[this memo]] |
-| 0x45505954 | TYPE                 | [[this memo]] |
-| 0x48544150 | PATH                 | [[this memo]] |
-| 0x49444152 | RADI                 | [[this memo]] |
-| 0x4b425550 | PUBK                 | [[this memo]] |
-| 0x5044494d | MIDP                 | [[this memo]] |
-| 0x50455253 | SREP                 | [[this memo]] |
-| 0x53524556 | VERS                 | [[this memo]] |
-| 0x544e494d | MINT                 | [[this memo]] |
-| 0x544f4f52 | ROOT                 | [[this memo]] |
-| 0x54524543 | CERT                 | [[this memo]] |
-| 0x5458414d | MAXT                 | [[this memo]] |
-| 0x58444e49 | INDX                 | [[this memo]] |
-| 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
+| Tag        | ASCII Representation | Reference         |
++-----------:+----------------------+-------------------|
+| 0x00474953 | SIG                  | [[this document]] |
+| 0x00524556 | VER                  | [[this document]] |
+| 0x00565253 | SRV                  | [[this document]] |
+| 0x434e4f4e | NONC                 | [[this document]] |
+| 0x454c4544 | DELE                 | [[this document]] |
+| 0x45505954 | TYPE                 | [[this document]] |
+| 0x48544150 | PATH                 | [[this document]] |
+| 0x49444152 | RADI                 | [[this document]] |
+| 0x4b425550 | PUBK                 | [[this document]] |
+| 0x5044494d | MIDP                 | [[this document]] |
+| 0x50455253 | SREP                 | [[this document]] |
+| 0x53524556 | VERS                 | [[this document]] |
+| 0x544e494d | MINT                 | [[this document]] |
+| 0x544f4f52 | ROOT                 | [[this document]] |
+| 0x54524543 | CERT                 | [[this document]] |
+| 0x5458414d | MAXT                 | [[this document]] |
+| 0x58444e49 | INDX                 | [[this document]] |
+| 0x5a5a5a5a | ZZZZ                 | [[this document]] |
 {: #tab-tags title="Initial contents of the Roughtime Tags registry."}
 
 ## Media Type Registry
@@ -1072,17 +1073,17 @@ Change controller: Internet Engineering Task Force
 # Acknowledgments
 {:numbered="false"}
 
-Aanchal Malhotra and Adam Langley authored early drafts of this memo.
-Daniel Franke, Sarah Grant, Erik Kline, Martin Langer, Ben Laurie,
-Peter Löthberg, Michael McCourt, Hal Murray, Tal Mizrahi, Ruben
-Nijveld, Christopher Patton, Thomas Peterson, Rich Salz, Dieter
+Aanchal Malhotra and Adam Langley authored early drafts of this
+document. Daniel Franke, Sarah Grant, Erik Kline, Martin Langer, Ben
+Laurie, Peter Löthberg, Michael McCourt, Hal Murray, Tal Mizrahi,
+Ruben Nijveld, Christopher Patton, Thomas Peterson, Rich Salz, Dieter
 Sibold, Ragnar Sundblad, Kristof Teichel, Luke Valenta, David Venhoek,
 Ulrich Windl, and the other members of the NTP working group
 contributed comments and suggestions as well as pointed out errors. We
 also acknowledge the helpful comments and suggestions provided by the
 last call reviewers and members of the IESG.
 
-# A. Example Server List {#appendix-server-list}
+# Appendix A. Example Server List {#appendix-server-list}
 {:numbered="false"}
 
 This appendix presents an example Roughtime server list in the format
@@ -1135,13 +1136,13 @@ below with the port number assigned for Roughtime by IANA.
 }
 ~~~~~
 
-# B. Example Malfeasance Report {#appendix-malfeasance-report}
+# Appendix B. Example Malfeasance Report {#appendix-malfeasance-report}
 {:numbered="false"}
 
 This appendix presents an example Roughtime malfeasance report in the
 format described by {{malfeasance-report-structure}}. The report
 provides sufficient information to prove that the server with the
-public key `MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=` responded
+public key `lRhHag6fn2wZQ6idy10ChgpRgks3gvdMM2hWNeJNgXg=` responded
 with a time that is inconsistent with the times reported by the two
 other servers.
 
@@ -1149,10 +1150,10 @@ other servers.
 {
   "responses": [
     {
-      "publicKey": "iue5iA+aL3cY6VvCLrYlHPKkFF0FQj6ZF5AKuALQVhU=",
+      "publicKey": "FnDyLV/68ephhLdFJbdEGCdkVvpXDaVe5PYvRDdlOOY=",
       "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
-AE5PTkNUWVBFWlpaWgwAAIAvlIBYYLjO8Im7wC1o371iHkf695gUBryowo3MkjcEco6aPs
-8oosgJwFdtOdhKehxj5oxe0bxFEqT+1+lmsKNdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AE5PTkNUWVBFWlpaWgEAAACf4gKLPdPfiNTv93lrhNqYgyehDgMyHFmA1BrAhM1QEDBh9l
+BlN6LUye6zghiqSWMwyNm0IucxQxW3zTMrwj4dAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -1172,21 +1173,21 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ==",
       "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
-AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFiohdh58+8xBHlDE8XKTE1xMWGrqpoHv
-pne0McRcIL+aOroCGFSjTHHXa9i4SzV1IkHZA61WrHvBKLo70ozHFoNjpo+zyiiyAnAV20
-52Ep6HGPmjF7RvEUSpP7X6Wawo10BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
-U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACALno8JT7WH5LKj8o7wJ+ooHFBzZP
-S+IHbKKlS19N62zwCAAAAQAAAAFNJRwBERUxFMlJhVW2LZdyog6mAe/6Ct9llSf3HOvmVI
-+/SuuhTafu0R+y7XFEujvAeRKrSACS8xf7kzOBB/fUMagNarxJgAAMAAAAgAAAAKAAAAFB
-VQktNSU5UTUFYVBOICW7RuSxBZZ+BaGSwsdw+mvMODCVr+LL3wglcIUPMy6mtaQAAAAA7Y
-95pAAAAAAAAAAA="
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFhBWL64CToGs4v/4UtfN/80HLFiA09vG
+IDRP/zTjcTj8/1DlZWCsVja6RlfwaYnc1wfJqThfhcuSDonrTGyKngBMGH2UGU3otTJ7rO
+CGKpJYzDI2bQi5zFDFbfNMyvCPh0BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAEAAAADAAAAQ0u4aQAAAAABAAAAc86AWYB/O3Kxzsx4d5P5cbSOftJ
+UA8bWVtVrQ3tc+b0CAAAAQAAAAFNJRwBERUxFI2B5tbj5ePjVKYE0PAL1NmgZOAsqh/E2f
+rom9Ol5BAnVcLje0C6exbXY8hE3dRvYV01Alru8Ocle+jOZT5r8AwMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVKqljhhqi4A54vW20e+slwViPyxybNnqKXzimIiIUHQMaBCvaQAAAADYy
+d9pAAAAAAAAAAA="
     },
     {
-      "publicKey": "3hvZGd6rEA+2oGqiJ0JvfmE8IFeifTTxi9d5+hP/e00=",
-      "rand": "+SYgbyJ3h8x0QbxyEag0s2JCcmSOSkJwh7PM7RoeNPE=",
+      "publicKey": "l9cdSuR8dFxtG9aJo9pWzUXaX8pftNG4UDC45Qk3znc=",
+      "rand": "v/DirVBRQLGtictYD7mN3px02UlMT4J3haTRomt1NNM=",
       "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
-AE5PTkNUWVBFWlpaWgwAAICSTh+Xefh435flYSbqKmCv8lq/ZrzAg3iZW+o5FoEhFUSVGP
-7+Sdl7S74Dx9vJfUcj/e5EdKpFC7E2TYMslq1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AE5PTkNUWVBFWlpaWgEAAABFCvadUKPN/U9OXqFalVFnv/EhsAuPPpBYfo5MDULZKv335k
+bNTZcsYLM96o77yLbvvRk1fm2TQB4yKxbP1jzeAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -1206,21 +1207,21 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ==",
       "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
-AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFghTiAGioXAjo+wYl5Izh4onUiFg7q3D
-5JrlL0yjNixaOQ4i2tYNIje7aXNbol9Nf9/khg/xoxb8J4ANo4zeZgCRJUY/v5J2XtLvgP
-H28l9RyP97kR0qkULsTZNgyyWrV8BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
-U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACAMdSYMaeiq3zjxEWl7Wj8RcysYnp
-V9jZT+w/ARSRULJYCAAAAQAAAAFNJRwBERUxFInVgPIl1d0bJFXuDzST4SfHg6AbATzsbP
-yH2IXdnFvlqo2XdzsH7/frv8IOg3M63bd7rYO2/Kpkrj9+3kytFCAMAAAAgAAAAKAAAAFB
-VQktNSU5UTUFYVCggSSWVwTucgoLe5GDhw4AuPR7t/cvgjkvjW1YHRi+8WKStaQAAAADIX
-d5pAAAAAAAAAAA="
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFj+2I02cCBAfDYzP+8znW6bICqVrAF23
+xNLfM+Qycmkpfp1+BQSb4l/6mRll66l2VIfPSQzigl2V5OJgQzGEBcG/ffmRs1Nlyxgsz3
+qjvvItu+9GTV+bZNAHjIrFs/WPN4BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAEAAAADAAAAw/m2aQAAAAABAAAAS8ROJoXIPSlO9yN+uREb+/UiOJJ
+qCjx3VWZ/vD2FqBMCAAAAQAAAAFNJRwBERUxFw0MFQMiDoHySot8rlnV83Vqaa3qTrAY15
+W1TzqNuAurOvreNw08BfUwxF7BQ/b/JCwCQcqtD5uRYsvikvuyLCwMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVCQs/eCxtWjVrXyse0SeojyZdNFkOwe3B3nLHtHJZK/9gRCvaQAAAADxy
+d9pAAAAAAAAAAA="
     },
     {
-      "publicKey": "MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=",
-      "rand": "0PP8WXctLP7jSk39f9Fn3AlaD/rZuElPwa4/2r6We+c=",
+      "publicKey": "lRhHag6fn2wZQ6idy10ChgpRgks3gvdMM2hWNeJNgXg=",
+      "rand": "lMvMVoLsakxc5ZmMzEFQ8hh1FaDo2gCXXIX/L4QPSxQ=",
       "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
-AE5PTkNUWVBFWlpaWgwAAICvh/FZe3Lm7YBx8MBjhysVTb1YCevyit+PuiV+UnK8dv/BX7
-wc3fwjQz2Ey+rhaDSOUJa7eEelCVPaDDCeQ//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AE5PTkNUWVBFWlpaWgEAAADmAab6GlTSr3xRmwwwvRjW6EKRhtyWYYWZHZIGnF8w2b4DuI
+ICvoCWTwCaupBfcOEwV+RqBWB6L1JUGn+ot8+9AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
@@ -1240,14 +1241,14 @@ AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
 ==",
       "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
-AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFjSsl+saSZViigVerZKO8cKyjuD1KxUX
-A7Q2cjhz4NIkd9e1HuelgI5Fc7jBFiPZrQhQXF2zdNDD07kUmSQBhEO/8FfvBzd/CNDPYT
-L6uFoNI5Qlrt4R6UJU9oMMJ5D/+ABAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
-U1JRFBWRVJTUk9PVAwAAIADAAAAt5S1aQAAAAAMAACAUJWcKWq6IrVklFULVBx05OFAxDp
-8bJdfnKb1UC9NdNkCAAAAQAAAAFNJRwBERUxFZM2rbD13tCCZiUUxaBVR5RIq732RhWcpu
-N9sSzLmNRBtn53Hxd3wwM7f2uuh0tIvIC+zx4pROvNq5Wydzk8dDwMAAAAgAAAAKAAAAFB
-VQktNSU5UTUFYVARGRmpHdNdP6QK4NJwwrmkQvGZBl+YiqEjfQZ9EMQbXeaStaQAAAADpX
-d5pAAAAAAAAAAA="
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFg8MlhdCJeQ2qzN6b9q646W9kB+XmAdS
+g7ToU1gj3AD8AP8eCHfduMBE0E8j4/LqWIr72zWQx8Y1U/1uxs97yMAvgO4ggK+gJZPAJq
+6kF9w4TBX5GoFYHovUlQaf6i3z70BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAEAAAADAAAAw/m2aQAAAAABAAAA6ho4+0Cml+VJbqU7hsF717uusV2
+HYvRbU9CdjJE/Zn0CAAAAQAAAAFNJRwBERUxFM9Fvq8T9kOrxcS7jviCPHe44HX/75Je1h
+afPJ0f8NoASy29EgD7C0c/LMxXiXxEwyuxYTPN9oseAr9XIt68uDwMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVMxBDiNG247IO4onsGcjFHsA3vP+arl+s0lBLhXw0c1RlBCvaQAAAAAEy
+t9pAAAAAAAAAAA="
     }
   ]
 }
