@@ -2191,9 +2191,7 @@ least one server sent the wrong time.<a href="#section-8.4-1" class="pilcrow">¶
 key "responses". Its value is a list of response objects, sorted in
 the order received. Each response object contains the keys "rand",
 "publicKey", "request", and "response". The values of all four keys
-are represented as base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> strings. Together, they
-contain the information necessary for validating a sequence of
-Roughtime queries and cryptographically proving malfeasance.
+are represented as base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> strings.
 <a href="#appendix-malfeasance-report" class="auto internal xref">Appendix "B. Example Malfeasance Report"</a> contains an example malfeasance report
 in the format described here.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-2">Malfeasance reports have the "application/roughtime-malfeasance+json"
