@@ -61,7 +61,7 @@ work.
 
 --- middle
 
-# Introduction
+# Introduction {#introduction}
 
 Time synchronization is essential to Internet security as many
 security protocols and other applications require it {{?RFC738}}.
@@ -120,6 +120,7 @@ amortize the relatively costly signing operation over a number of
 client requests.
 
 ## Single Server Mode
+
 At its most basic level, Roughtime is a one-round protocol in which a
 completely fresh client requests the current time and the server sends
 a signed response. The response includes a timestamp and a radius used
@@ -132,6 +133,7 @@ entropy&mdash;this proves that the signed response could only have
 been generated after the nonce.
 
 ## Multi Server Mode
+
 When using multiple servers, a client can detect, cryptographically
 prove, and report inconsistencies between different servers.
 
@@ -222,7 +224,8 @@ seconds since 00:00:00 on 1 January 1970 (the Unix epoch), assuming
 every day has 86400 seconds. This is a constant offset from the NTP
 timestamp in seconds. Leap seconds do not have an unambiguous
 representation in a timestamp, and this has implications for the
-attainable accuracy and setting of the RADI tag.
+attainable accuracy and setting of the RADI tag (see
+{{response-srep}}).
 
 ## Header
 
@@ -352,7 +355,9 @@ entirely, see {{response-srep}}.
 
 The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
 in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
-contains specific guidelines regarding this.
+contains specific guidelines regarding this. {{measurement-sequence}}
+describes how to securely generate nonces when querying multiple
+servers in sequence.
 
 ### TYPE
 
@@ -412,6 +417,18 @@ and INDX. The structure of a response message is illustrated in
 |--INDX
 ~~~~~
 {: #figresponse title="Roughtime response message structure."}
+
+No mechanism for reporting errors&mdash;such as wrong request format,
+unsupported version, or unknown SRV value&mdash;back to the client is
+provided. This is based on experience from the NTP protocol, where
+Kiss-o'-Death packets (see Section 7.4 of {{!RFC5905}}) are used to
+indicate errors. The existance of this unauthenticated protocol
+feature in NTP makes it possible for on-path attackers to make a
+client stop using authenticated modes or certain servers altogether
+(see Section 5.4 of {{!RFC8633}} and Sections 8.3 and 8.7 of
+{{!RFC8915}}). Considering the protocol's dependence on multiple
+independent servers for security, error reporting functionality has
+been excluded from this version of Roughtime.
 
 ### SIG
 
@@ -670,20 +687,27 @@ making repeated measurements.
 
 ## Server Lists {#server-lists}
 
-To facilitate regular updates of lists of trusted servers, clients
-SHOULD implement the server list format specified here. Server lists
-MUST be formatted as JSON {{!RFC8259}} objects and contain the key
-"servers". Server lists MAY also contain the keys "sources" and
-"reports".
+To facilitate regular updates of lists of trusted servers, a common
+server list format is specified here. Support for the common server
+list format is OPTIONAL and clients MAY instead implement their own
+mechanisms for configuring server lists.
 
-The value of the "servers" key MUST be a list of server objects, each
+A server list is a JSON {{!RFC8259}} object that contains the key
+"servers". Server list objects MAY also contain the keys "sources" and
+"reports". {{appendix-server-list}} contains an example server list in
+the format described here.
+
+Server lists have the "application/roughtime-server+json" media
+type.
+
+The value of the "servers" key is a list of server objects, each
 containing the keys "name", "version", "publicKeyType", "publicKey",
 and "addresses".
 
-The value of "name" MUST be a string and SHOULD contain a server name
-suitable for display to a user.
+The value of "name" is a string that contains a server name suitable
+for display to a user.
 
-The value of "version" MUST be an integer that indicates the highest
+The value of "version" is an integer that indicates the highest
 Roughtime version number supported by the server.
 
 NOTE TO RFC EDITOR: remove this paragraph before publication. To
@@ -693,22 +717,22 @@ SHOULD be used. For indicating compatibility with pre-IETF
 specifications of Roughtime, the version number 3000600613 SHOULD be
 used.
 
-The value of "publicKeyType" MUST be a string indicating the signature
-scheme used by the server. The value for servers supporting version 1
-of Roughtime MUST be "ed25519".
+The value of "publicKeyType" is string indicating the signature scheme
+used by the server. The value for servers supporting version 1 of
+Roughtime is "ed25519".
 
-The value of "publicKey" MUST be a base64-encoded {{!RFC4648}} string
+The value of "publicKey" is a base64-encoded {{!RFC4648}} string
 representing the long-term public key of the server in a format
 consistent with the value of "publicKeyType".
 
-The value of "addresses" MUST be a list of address objects. An address
-object MUST contain the keys "protocol" and "address". The value of
-"protocol" MUST be either "tcp" or "udp", indicating the transport
-mode to use. The value of "address" MUST be string indicating a host
-and a port number, separated by a colon character, for example
-"roughtime.example.com:2002". The host part SHALL be either an IPv4
-address, an IPv6 address, or a fully qualified domain name (FQDN).
-IPv4 addresses MUST be in dotted decimal notation. IPv6 addresses MUST
+The value of "addresses" is a list of address objects. An address
+object contains the keys "protocol" and "address". The value of
+"protocol" is either "tcp" or "udp", indicating the transport mode to
+use. The value of "address" is string indicating a host and a port
+number, separated by a colon character, for example
+"roughtime.example.com:2002". The host part is either an IPv4 address,
+an IPv6 address, or a fully qualified domain name (FQDN). IPv4
+addresses MUST be in dotted decimal notation. IPv6 addresses MUST
 conform to the "Text Representation of Addresses" {{!RFC4291}} and
 MUST NOT include zone identifiers {{!RFC9844}}. The port part SHALL be
 a decimal integer representing a valid port number, i.e. in the range
@@ -717,18 +741,15 @@ a decimal integer representing a valid port number, i.e. in the range
 To disambiguate IPv6 addresses from ports when zero compression
 happens, IPv6 addresses MUST be encapsulated within [].
 
-The value of "sources", if present, MUST be a list of strings
-indicating where updated versions of the list may be acquired. Each
-string MUST be a URL {{!RFC3986}} pointing to a list in the format
-specified here. The URI scheme MUST be HTTPS {{!RFC9110}}.
-
-The value of "reports", if present, MUST be a string indicating a URL
-{{!RFC3986}} where malfeasance reports can be sent by clients using
-the HTTP POST method {{!RFC9110}}. The URI scheme MUST be HTTPS
+The value of "sources", if present, is a list of strings indicating
+where updated versions of the list may be acquired using the HTTP GET
+method {{!RFC9110}}. Each string MUST be a URL {{!RFC3986}} pointing
+to a list in the format specified here. The URI scheme MUST be HTTPS
 {{!RFC9110}}.
 
-Server lists have the "application/roughtime-server+json" media
-type.
+The value of "reports", if present, is a string indicating a URL
+{{!RFC3986}} where malfeasance reports can be sent by clients using
+the HTTP POST method. The URI scheme MUST be HTTPS {{!RFC9110}}.
 
 ## Malfeasance Reporting {#malfeasance-reporting}
 
@@ -736,39 +757,44 @@ A malfeasance report is cryptographic proof that a sequence of
 responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.
 
-### Malfeasance report structure {#malfeasance-report-structure}
+### Malfeasance Report Format {#malfeasance-report-structure}
 
-A malfeasance report MUST be formatted as a JSON {{!RFC8259}} object
-and contain the key "responses". Its value MUST be an ordered list of
-response objects. Each response object MUST contain the keys "rand",
-"request", "response", and "publicKey". The values of all four keys
-MUST be represented as base64-encoded {{!RFC4648}} strings.
-
-The "rand" key MAY be omitted from the first response object in the
-list. In all other cases, its value MUST be the 32-byte value used
-to generate the request nonce value from the previous response packet.
-
-The value of "request" MUST be the transmitted request packet,
-including the "ROUGHTIM" header.
-
-The value of "response" MUST be the received response packet,
-including the "ROUGHTIM" header.
-
-The value of "publicKey" MUST be the long-term key that the server was
-expected to use for deriving the response signature.
+A malfeasance report is a JSON {{!RFC8259}} object that contains the
+key "responses". Its value is a list of response objects, sorted in
+the order received. Each response object contains the keys "rand",
+"publicKey", "request", and "response". The values of all four keys
+are represented as base64-encoded {{!RFC4648}} strings. Together, they
+contain the information necessary for validating a sequence of
+Roughtime queries and cryptographically proving malfeasance.
+{{appendix-malfeasance-report}} contains an example malfeasance report
+in the format described here.
 
 Malfeasance reports have the "application/roughtime-malfeasance+json"
 media type.
 
+The "rand" key MAY be omitted from the first response object in the
+list. In all other cases, its value is the 32-byte value used to
+generate the request nonce value from the previous response packet.
+
+The value of "publicKey" is the long-term key that the server was
+expected to use for deriving the response signature.
+
+The value of "request" is the transmitted request packet, including
+the "ROUGHTIM" header.
+
+The value of "response" is the received response packet, including the
+"ROUGHTIM" header.
+
 ### Reporting
 
 When the client's list of servers has an associated URL for
-malfeasance reports, it SHOULD post a malfeasance report to the URL
-whenever it has performed a measurement sequence in accordance with
-{{measurement-sequence}} and detected that at least one of the
-responses is inconsistent with causal ordering. Since the failure of a
-popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients MUST use
+malfeasance reports, it SHOULD send a malfeasance report to that URL
+when malfeasance is detected (see {{measurement-sequence}}) and it is
+technically feasible to do so. Malfeasance reports are sent using the
+HTTP POST method {{!RFC9110}}.
+
+Since the failure of a popular Roughtime server can cause numerous
+clients to send malfeasance reports at the same time, clients MUST use
 exponential backoff to prevent overloading the server receiving the
 reports. It is RECOMMENDED that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
@@ -777,6 +803,10 @@ seconds is `min(10 \* 1.5^(n-1), 86400)`.
 
 Clients MUST NOT send malfeasance reports in response to signature
 verification failures or any other protocol errors.
+
+As described in {{introduction}}, the operational rules for acceptance
+or rejection of a particular malfeasance report are beyond the scope
+of this document.
 
 # Security Considerations {#security-considerations}
 
@@ -797,7 +827,7 @@ Although any random 256-bit string can be used as a private Ed25519
 key, it has a high risk of being vulnerable to small-subgroup attacks
 and timing side-channel leaks. For this reason, all private keys used
 in Roughtime MUST be generated following the procedure described in
-Section 5.1.5 of RFC 8032 {{!RFC8032}}.
+Section 5.1.5 of {{!RFC8032}}.
 
 ## Private Key Compromise
 
@@ -885,7 +915,8 @@ document.
 
 The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 
-The initial contents of this registry are as follows:
+The initial contents of this registry are specified in
+{{tab-versions}}.
 
 | Version ID            | Version name                  | Reference     |
 +---------------------- :+------------------------------+---------------|
@@ -894,6 +925,7 @@ The initial contents of this registry are as follows:
 | 0x2-0x7fffffff        | Unassigned                    |               |
 | 0x80000000-0xbfffffff | Reserved for experimental use | [[this memo]] |
 | 0xc0000000-0xffffffff | Reserved for private use      | [[this memo]] |
+{: #tab-versions title="Initial contents of the Roughtime Versions registry."}
 
 Private and experimental use are defined in {{?RFC8126}}. The
 experimental range is intended for testing and evaluating new versions
@@ -917,7 +949,7 @@ document.
 The policy for allocation of new entries in this registry is
 Specification Required {{?RFC8126}}.
 
-The initial contents of this registry are as follows:
+The initial contents of this registry are specified in {{tab-tags}}.
 
 | Tag        | ASCII Representation | Reference     |
 +-----------:+----------------------+---------------|
@@ -939,6 +971,7 @@ The initial contents of this registry are as follows:
 | 0x5458414d | MAXT                 | [[this memo]] |
 | 0x58444e49 | INDX                 | [[this memo]] |
 | 0x5a5a5a5a | ZZZZ                 | [[this memo]] |
+{: #tab-tags title="Initial contents of the Roughtime Tags registry."}
 
 ## Media Type Registry
 
@@ -971,12 +1004,11 @@ Applications that use this media type: Roughtime clients
 
 Fragment identifier considerations: N/A
 
-Additional information:
-
-  Deprecated alias names for this type: N/A
-  Magic number(s): N/A
-  File extension(s): N/A
-  Macintosh file type code(s): N/A
+Additional information:<br/>
+&nbsp;&nbsp;Deprecated alias names for this type: N/A<br/>
+&nbsp;&nbsp;Magic number(s): N/A<br/>
+&nbsp;&nbsp;File extension(s): N/A<br/>
+&nbsp;&nbsp;Macintosh file type code(s): N/A
 
 Person & email address to contact for further information: See
 Authors' Addresses section of [[this document]].
@@ -1020,12 +1052,11 @@ that a Roughtime server has sent the wrong time.
 
 Fragment identifier considerations: N/A
 
-Additional information:
-
-  Deprecated alias names for this type: N/A
-  Magic number(s): N/A
-  File extension(s): N/A
-  Macintosh file type code(s): N/A
+Additional information:<br/>
+&nbsp;&nbsp;Deprecated alias names for this type: N/A<br/>
+&nbsp;&nbsp;Magic number(s): N/A<br/>
+&nbsp;&nbsp;File extension(s): N/A<br/>
+&nbsp;&nbsp;Macintosh file type code(s): N/A
 
 Person & email address to contact for further information: See
 Authors' Addresses section of [[this document]].
@@ -1052,3 +1083,174 @@ Ulrich Windl, and the other members of the NTP working group
 contributed comments and suggestions as well as pointed out errors. We
 also acknowledge the helpful comments and suggestions provided by the
 last call reviewers and members of the IESG.
+
+# A. Example Server List {#appendix-server-list}
+{:numbered="false"}
+
+This appendix presents an example Roughtime server list in the format
+described by {{server-lists}}.
+
+NOTE TO RFC EDITOR: replace all occurrences of the port number 2002
+below with the port number assigned for Roughtime by IANA.
+
+~~~~~
+{
+  "servers": [
+    {
+      "name": "example.com Roughtime server",
+      "version": 1,
+      "publicKeyType": "ed25519",
+      "publicKey": "2O3mkkheDExCuhG+ZNIoWmO/IdCdLzADgUn8SnC4hME=",
+      "addresses": [
+        {
+          "protocol": "udp",
+          "address": "roughtime.example.com:2002"
+        },
+        {
+          "protocol": "tcp",
+          "address": "roughtime.example.com:2002"
+        }
+      ]
+    },
+    {
+      "name": "A UDP-only server specified with IP addresses",
+      "version": 1,
+      "publicKeyType": "ed25519",
+      "publicKey": "ZYfeGa94YuG1IZrV3kR9+8/nmZ2lX2XyHmiSb+wI0OY=",
+      "addresses": [
+        {
+          "protocol": "udp",
+          "address": "192.0.2.33:2002"
+        },
+        {
+          "protocol": "udp",
+          "address": "[2001:db8::2:33]:2002"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://www.example.net/roughtime/ecosystem.json",
+    "https://www.example.org/roughtime/ecosystem.json"
+  ],
+  "reports":  "https://www.example.net/roughtime/malfeasance"
+}
+~~~~~
+
+# B. Example Malfeasance Report {#appendix-malfeasance-report}
+{:numbered="false"}
+
+This appendix presents an example Roughtime malfeasance report in the
+format described by {{malfeasance-report-structure}}. The report
+provides sufficient information to prove that the server with the
+public key `MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=` responded
+with a time that is inconsistent with the times reported by the two
+other servers.
+
+~~~~~
+{
+  "responses": [
+    {
+      "publicKey": "iue5iA+aL3cY6VvCLrYlHPKkFF0FQj6ZF5AKuALQVhU=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAIAvlIBYYLjO8Im7wC1o371iHkf695gUBryowo3MkjcEco6aPs
+8oosgJwFdtOdhKehxj5oxe0bxFEqT+1+lmsKNdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFiohdh58+8xBHlDE8XKTE1xMWGrqpoHv
+pne0McRcIL+aOroCGFSjTHHXa9i4SzV1IkHZA61WrHvBKLo70ozHFoNjpo+zyiiyAnAV20
+52Ep6HGPmjF7RvEUSpP7X6Wawo10BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACALno8JT7WH5LKj8o7wJ+ooHFBzZP
+S+IHbKKlS19N62zwCAAAAQAAAAFNJRwBERUxFMlJhVW2LZdyog6mAe/6Ct9llSf3HOvmVI
++/SuuhTafu0R+y7XFEujvAeRKrSACS8xf7kzOBB/fUMagNarxJgAAMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVBOICW7RuSxBZZ+BaGSwsdw+mvMODCVr+LL3wglcIUPMy6mtaQAAAAA7Y
+95pAAAAAAAAAAA="
+    },
+    {
+      "publicKey": "3hvZGd6rEA+2oGqiJ0JvfmE8IFeifTTxi9d5+hP/e00=",
+      "rand": "+SYgbyJ3h8x0QbxyEag0s2JCcmSOSkJwh7PM7RoeNPE=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAICSTh+Xefh435flYSbqKmCv8lq/ZrzAg3iZW+o5FoEhFUSVGP
+7+Sdl7S74Dx9vJfUcj/e5EdKpFC7E2TYMslq1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFghTiAGioXAjo+wYl5Izh4onUiFg7q3D
+5JrlL0yjNixaOQ4i2tYNIje7aXNbol9Nf9/khg/xoxb8J4ANo4zeZgCRJUY/v5J2XtLvgP
+H28l9RyP97kR0qkULsTZNgyyWrV8BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACAMdSYMaeiq3zjxEWl7Wj8RcysYnp
+V9jZT+w/ARSRULJYCAAAAQAAAAFNJRwBERUxFInVgPIl1d0bJFXuDzST4SfHg6AbATzsbP
+yH2IXdnFvlqo2XdzsH7/frv8IOg3M63bd7rYO2/Kpkrj9+3kytFCAMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVCggSSWVwTucgoLe5GDhw4AuPR7t/cvgjkvjW1YHRi+8WKStaQAAAADIX
+d5pAAAAAAAAAAA="
+    },
+    {
+      "publicKey": "MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=",
+      "rand": "0PP8WXctLP7jSk39f9Fn3AlaD/rZuElPwa4/2r6We+c=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAICvh/FZe3Lm7YBx8MBjhysVTb1YCevyit+PuiV+UnK8dv/BX7
+wc3fwjQz2Ey+rhaDSOUJa7eEelCVPaDDCeQ//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFjSsl+saSZViigVerZKO8cKyjuD1KxUX
+A7Q2cjhz4NIkd9e1HuelgI5Fc7jBFiPZrQhQXF2zdNDD07kUmSQBhEO/8FfvBzd/CNDPYT
+L6uFoNI5Qlrt4R6UJU9oMMJ5D/+ABAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAt5S1aQAAAAAMAACAUJWcKWq6IrVklFULVBx05OFAxDp
+8bJdfnKb1UC9NdNkCAAAAQAAAAFNJRwBERUxFZM2rbD13tCCZiUUxaBVR5RIq732RhWcpu
+N9sSzLmNRBtn53Hxd3wwM7f2uuh0tIvIC+zx4pROvNq5Wydzk8dDwMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVARGRmpHdNdP6QK4NJwwrmkQvGZBl+YiqEjfQZ9EMQbXeaStaQAAAADpX
+d5pAAAAAAAAAAA="
+    }
+  ]
+}
+~~~~~
