@@ -1815,6 +1815,17 @@ and INDX. The structure of a response message is illustrated in
 <a href="#name-roughtime-response-message-" class="selfRef">Roughtime response message structure.</a>
           </figcaption></figure>
 </div>
+<p id="section-5.2-5">No mechanism for reporting errors—such as wrong request format,
+unsupported version, or unknown SRV value—back to the client is
+provided. This is based on experience from the NTP protocol, where
+Kiss-o'-Death packets (see Section 7.4 of <span>[<a href="#RFC5905" class="cite xref">RFC5905</a>]</span>) are used to
+indicate errors. The existance of this unauthenticated protocol
+feature in NTP makes it possible for on-path attackers to make a
+client stop using authenticated modes or certain servers altogether
+(see Section 5.4 of <span>[<a href="#RFC8633" class="cite xref">RFC8633</a>]</span> and Sections 8.3 and 8.7 of
+<span>[<a href="#RFC8915" class="cite xref">RFC8915</a>]</span>). Considering the protocol's dependence on multiple
+independent servers for security, error reporting functionality has
+been excluded from this version of Roughtime.<a href="#section-5.2-5" class="pilcrow">¶</a></p>
 <div id="sig">
 <section id="section-5.2.1">
           <h4 id="name-sig">
@@ -2660,6 +2671,10 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-13" cla
         <dd>
 <span class="refAuthor">Josefsson, S.</span>, <span class="refTitle">"The Base16, Base32, and Base64 Data Encodings"</span>, <span class="seriesInfo">RFC 4648</span>, <span class="seriesInfo">DOI 10.17487/RFC4648</span>, <time datetime="2006-10" class="refDate">October 2006</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc4648">https://www.rfc-editor.org/rfc/rfc4648</a>&gt;</span>. </dd>
 <dd class="break"></dd>
+<dt id="RFC5905">[RFC5905]</dt>
+        <dd>
+<span class="refAuthor">Mills, D.</span>, <span class="refAuthor">Martin, J., Ed.</span>, <span class="refAuthor">Burbank, J.</span>, and <span class="refAuthor">W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span class="seriesInfo">RFC 5905</span>, <span class="seriesInfo">DOI 10.17487/RFC5905</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5905">https://www.rfc-editor.org/rfc/rfc5905</a>&gt;</span>. </dd>
+<dd class="break"></dd>
 <dt id="RFC6234">[RFC6234]</dt>
         <dd>
 <span class="refAuthor">Eastlake 3rd, D.</span> and <span class="refAuthor">T. Hansen</span>, <span class="refTitle">"US Secure Hash Algorithms (SHA and SHA-based HMAC and HKDF)"</span>, <span class="seriesInfo">RFC 6234</span>, <span class="seriesInfo">DOI 10.17487/RFC6234</span>, <time datetime="2011-05" class="refDate">May 2011</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc6234">https://www.rfc-editor.org/rfc/rfc6234</a>&gt;</span>. </dd>
@@ -2683,6 +2698,10 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-13" cla
 <dt id="RFC8259">[RFC8259]</dt>
         <dd>
 <span class="refAuthor">Bray, T., Ed.</span>, <span class="refTitle">"The JavaScript Object Notation (JSON) Data Interchange Format"</span>, <span class="seriesInfo">STD 90</span>, <span class="seriesInfo">RFC 8259</span>, <span class="seriesInfo">DOI 10.17487/RFC8259</span>, <time datetime="2017-12" class="refDate">December 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8259">https://www.rfc-editor.org/rfc/rfc8259</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8633">[RFC8633]</dt>
+        <dd>
+<span class="refAuthor">Reilly, D.</span>, <span class="refAuthor">Stenn, H.</span>, and <span class="refAuthor">D. Sibold</span>, <span class="refTitle">"Network Time Protocol Best Current Practices"</span>, <span class="seriesInfo">BCP 223</span>, <span class="seriesInfo">RFC 8633</span>, <span class="seriesInfo">DOI 10.17487/RFC8633</span>, <time datetime="2019-07" class="refDate">July 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc8633">https://www.rfc-editor.org/rfc/rfc8633</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC8915">[RFC8915]</dt>
         <dd>
@@ -2712,10 +2731,6 @@ Authors' Addresses section of [[this document]].<a href="#section-12.4.2-13" cla
 <dt id="Merkle">[Merkle]</dt>
         <dd>
 <span class="refAuthor">Merkle, R. C.</span>, <span class="refTitle">"A Digital Signature Based on a Conventional Encryption Function"</span>, <span class="seriesInfo">in Pomerance, C. (eds) Advances in Cryptology</span>, <span class="seriesInfo">Lecture Notes in Computer Science vol 293</span>, <span class="seriesInfo">DOI 10.1007/3-540-47184-2_32</span>, <time datetime="1988" class="refDate">1988</time>, <span>&lt;<a href="https://doi.org/10.1007/3-540-48184-2_32">https://doi.org/10.1007/3-540-48184-2_32</a>&gt;</span>. </dd>
-<dd class="break"></dd>
-<dt id="RFC5905">[RFC5905]</dt>
-        <dd>
-<span class="refAuthor">Mills, D.</span>, <span class="refAuthor">Martin, J., Ed.</span>, <span class="refAuthor">Burbank, J.</span>, and <span class="refAuthor">W. Kasch</span>, <span class="refTitle">"Network Time Protocol Version 4: Protocol and Algorithms Specification"</span>, <span class="seriesInfo">RFC 5905</span>, <span class="seriesInfo">DOI 10.17487/RFC5905</span>, <time datetime="2010-06" class="refDate">June 2010</time>, <span>&lt;<a href="https://www.rfc-editor.org/rfc/rfc5905">https://www.rfc-editor.org/rfc/rfc5905</a>&gt;</span>. </dd>
 <dd class="break"></dd>
 <dt id="RFC738">[RFC738]</dt>
         <dd>
