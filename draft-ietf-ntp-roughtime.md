@@ -81,7 +81,7 @@ trust in Roughtime. With a sufficiently long list of trusted servers
 and keys, a client will be able to acquire authenticated time with
 high probability, even after long periods of inactivity. Proofs of
 malfeasance constructed by chaining together responses from different
-trusted servers can be used to prove misbehavior by a server, and
+trusted servers can be used to prove misbehavior by a server and,
 after analysis, result in revoking trust in that particular key.
 
 Unlike Khronos {{?RFC9523}}, Roughtime produces external evidence that
