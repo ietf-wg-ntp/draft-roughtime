@@ -763,9 +763,7 @@ A malfeasance report is a JSON {{!RFC8259}} object that contains the
 key "responses". Its value is a list of response objects, sorted in
 the order received. Each response object contains the keys "rand",
 "publicKey", "request", and "response". The values of all four keys
-are represented as base64-encoded {{!RFC4648}} strings. Together, they
-contain the information necessary for validating a sequence of
-Roughtime queries and cryptographically proving malfeasance.
+are represented as base64-encoded {{!RFC4648}} strings.
 {{appendix-malfeasance-report}} contains an example malfeasance report
 in the format described here.
 
