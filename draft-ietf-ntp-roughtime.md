@@ -424,12 +424,12 @@ INDX. The structure of a response message is illustrated in
 No mechanism for reporting errors&mdash;such as wrong request format,
 unsupported version, or unknown SRV value&mdash;back to the client is
 provided. This is based on experience from the NTP protocol, where
-Kiss-o'-Death packets (see Section 7.4 of {{!RFC5905}}) are used to
+Kiss-o'-Death packets (see Section 7.4 of {{?RFC5905}}) are used to
 indicate errors. The existence of this unauthenticated protocol
 feature in NTP makes it possible for on-path attackers to make a
 client stop using authenticated modes or certain servers altogether
-(see Section 5.4 of {{!RFC8633}} and Sections 8.3 and 8.7 of
-{{!RFC8915}}). Considering the protocol's dependence on multiple
+(see Section 5.4 of {{?RFC8633}} and Sections 8.3 and 8.7 of
+{{?RFC8915}}). Considering the protocol's dependence on multiple
 independent servers for security, error reporting functionality has
 been excluded from this version of Roughtime.
 
@@ -622,7 +622,7 @@ source can use Roughtime to obtain a time estimate. In particular,
 securely establishing NTS-protected NTP time synchronization requires
 verification of the NTS-KE server's certificate, which is not possible
 if the client has no idea of the current time (see Section 8.5 of
-{{!RFC8915}}). In that case, a Roughtime time estimate can be used for
+{{?RFC8915}}). In that case, a Roughtime time estimate can be used for
 certificate validation.
 
 If an NTP server uses a Roughtime server as a time source for
