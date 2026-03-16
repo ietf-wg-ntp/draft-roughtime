@@ -16,24 +16,24 @@ timeservers. This document specifies the on-wire protocol required for
 these goals, and discusses aspects of the ecosystem needed for it to
 work. 
     " name="description">
-<meta content="xml2rfc 3.31.0" name="generator">
+<meta content="xml2rfc 3.32.0" name="generator">
 <meta content="timing" name="keyword">
 <meta content="authenticity" name="keyword">
 <meta content="roughtime" name="keyword">
 <meta content="draft-ietf-ntp-roughtime-latest" name="ietf.draft">
 <!-- Generator version information:
-  xml2rfc 3.31.0
+  xml2rfc 3.32.0
     Python 3.12.12
     ConfigArgParse 1.7
     google-i18n-address 3.1.1
     intervaltree 3.2.1
     Jinja2 3.1.6
     lxml 6.0.2
-    platformdirs 4.5.1
+    platformdirs 4.9.4
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.32.5
-    wcwidth 0.3.0
+    wcwidth 0.6.0
 -->
 <link href="draft-ietf-ntp-roughtime.xml" rel="alternate" type="application/rfc+xml">
 <link href="#copyright" rel="license">
@@ -1058,7 +1058,7 @@ svg :is([fill="white"], [fill^="#fff"]) {
 </tr></thead>
 <tfoot><tr>
 <td class="left">Ladd &amp; Dansarie</td>
-<td class="center">Expires 16 September 2026</td>
+<td class="center">Expires 17 September 2026</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1071,12 +1071,12 @@ svg :is([fill="white"], [fill^="#fff"]) {
 <dd class="internet-draft">draft-ietf-ntp-roughtime-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-03-15" class="published">15 March 2026</time>
+<time datetime="2026-03-16" class="published">16 March 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Experimental</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2026-09-16">16 September 2026</time></dd>
+<dd class="expires"><time datetime="2026-09-17">17 September 2026</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1130,7 +1130,7 @@ work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 16 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 17 September 2026.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1285,7 +1285,7 @@ work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
                 <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-malfeasance-reporting" class="internal xref">Malfeasance Reporting</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.1">
-                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="auto internal xref">8.4.1</a>.  <a href="#name-malfeasance-report-structur" class="internal xref">Malfeasance report structure</a></p>
+                    <p id="section-toc.1-1.8.2.4.2.1.1"><a href="#section-8.4.1" class="auto internal xref">8.4.1</a>.  <a href="#name-malfeasance-report-format" class="internal xref">Malfeasance Report Format</a></p>
 </li>
                   <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4.2.2">
                     <p id="section-toc.1-1.8.2.4.2.2.1"><a href="#section-8.4.2" class="auto internal xref">8.4.2</a>.  <a href="#name-reporting" class="internal xref">Reporting</a></p>
@@ -1366,7 +1366,13 @@ work.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
             <p id="section-toc.1-1.14.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
-            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.15.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-a-example-server-list" class="internal xref">A. Example Server List</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-b-example-malfeasance-repor" class="internal xref">B. Example Malfeasance Report</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -2101,54 +2107,57 @@ making repeated measurements.<a href="#section-8.2-4" class="pilcrow">¶</a></p>
         <h3 id="name-server-lists">
 <a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-server-lists" class="section-name selfRef">Server Lists</a>
         </h3>
-<p id="section-8.3-1">To facilitate regular updates of lists of trusted servers, clients
-<span class="bcp14">SHOULD</span> implement the server list format specified here. Server lists
-<span class="bcp14">MUST</span> be formatted as JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> objects and contain the key
-"servers". Server lists <span class="bcp14">MAY</span> also contain the keys "sources" and
-"reports".<a href="#section-8.3-1" class="pilcrow">¶</a></p>
-<p id="section-8.3-2">The value of the "servers" key <span class="bcp14">MUST</span> be a list of server objects, each
+<p id="section-8.3-1">To facilitate regular updates of lists of trusted servers, a common
+server list format is specified here. Support for the common server
+list format is <span class="bcp14">OPTIONAL</span> and clients <span class="bcp14">MAY</span> instead implement their own
+mechanisms for configuring server lists.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">A server list is a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object that contains the key
+"servers". Server list objects <span class="bcp14">MAY</span> also contain the keys "sources" and
+"reports". <a href="#appendix-server-list" class="auto internal xref">Appendix "A. Example Server List"</a> contains an example server list in
+the format described here.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+<p id="section-8.3-3">Server lists have the "application/roughtime-server+json" media
+type.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.3-4">The value of the "servers" key is a list of server objects, each
 containing the keys "name", "version", "publicKeyType", "publicKey",
-and "addresses".<a href="#section-8.3-2" class="pilcrow">¶</a></p>
-<p id="section-8.3-3">The value of "name" <span class="bcp14">MUST</span> be a string and <span class="bcp14">SHOULD</span> contain a server name
-suitable for display to a user.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
-<p id="section-8.3-4">The value of "version" <span class="bcp14">MUST</span> be an integer that indicates the highest
-Roughtime version number supported by the server.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
-<p id="section-8.3-5">NOTE TO RFC EDITOR: remove this paragraph before publication. To
+and "addresses".<a href="#section-8.3-4" class="pilcrow">¶</a></p>
+<p id="section-8.3-5">The value of "name" is a string that contains a server name suitable
+for display to a user.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
+<p id="section-8.3-6">The value of "version" is an integer that indicates the highest
+Roughtime version number supported by the server.<a href="#section-8.3-6" class="pilcrow">¶</a></p>
+<p id="section-8.3-7">NOTE TO RFC EDITOR: remove this paragraph before publication. To
 indicate compatibility with drafts of this document, a decimal
 representation of the version number indicated in <a href="#protocol-details" class="auto internal xref">Section 5</a>
           <span class="bcp14">SHOULD</span> be used. For indicating compatibility with pre-IETF
 specifications of Roughtime, the version number 3000600613 <span class="bcp14">SHOULD</span> be
-used.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
-<p id="section-8.3-6">The value of "publicKeyType" <span class="bcp14">MUST</span> be a string indicating the signature
-scheme used by the server. The value for servers supporting version 1
-of Roughtime <span class="bcp14">MUST</span> be "ed25519".<a href="#section-8.3-6" class="pilcrow">¶</a></p>
-<p id="section-8.3-7">The value of "publicKey" <span class="bcp14">MUST</span> be a base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> string
+used.<a href="#section-8.3-7" class="pilcrow">¶</a></p>
+<p id="section-8.3-8">The value of "publicKeyType" is string indicating the signature scheme
+used by the server. The value for servers supporting version 1 of
+Roughtime is "ed25519".<a href="#section-8.3-8" class="pilcrow">¶</a></p>
+<p id="section-8.3-9">The value of "publicKey" is a base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> string
 representing the long-term public key of the server in a format
-consistent with the value of "publicKeyType".<a href="#section-8.3-7" class="pilcrow">¶</a></p>
-<p id="section-8.3-8">The value of "addresses" <span class="bcp14">MUST</span> be a list of address objects. An address
-object <span class="bcp14">MUST</span> contain the keys "protocol" and "address". The value of
-"protocol" <span class="bcp14">MUST</span> be either "tcp" or "udp", indicating the transport
-mode to use. The value of "address" <span class="bcp14">MUST</span> be string indicating a host
-and a port number, separated by a colon character, for example
-"roughtime.example.com:2002". The host part <span class="bcp14">SHALL</span> be either an IPv4
-address, an IPv6 address, or a fully qualified domain name (FQDN).
-IPv4 addresses <span class="bcp14">MUST</span> be in dotted decimal notation. IPv6 addresses <span class="bcp14">MUST</span>
+consistent with the value of "publicKeyType".<a href="#section-8.3-9" class="pilcrow">¶</a></p>
+<p id="section-8.3-10">The value of "addresses" is a list of address objects. An address
+object contains the keys "protocol" and "address". The value of
+"protocol" is either "tcp" or "udp", indicating the transport mode to
+use. The value of "address" is string indicating a host and a port
+number, separated by a colon character, for example
+"roughtime.example.com:2002". The host part is either an IPv4 address,
+an IPv6 address, or a fully qualified domain name (FQDN). IPv4
+addresses <span class="bcp14">MUST</span> be in dotted decimal notation. IPv6 addresses <span class="bcp14">MUST</span>
 conform to the "Text Representation of Addresses" <span>[<a href="#RFC4291" class="cite xref">RFC4291</a>]</span> and
 <span class="bcp14">MUST NOT</span> include zone identifiers <span>[<a href="#RFC9844" class="cite xref">RFC9844</a>]</span>. The port part <span class="bcp14">SHALL</span> be
 a decimal integer representing a valid port number, i.e. in the range
-0-65535.<a href="#section-8.3-8" class="pilcrow">¶</a></p>
-<p id="section-8.3-9">To disambiguate IPv6 addresses from ports when zero compression
-happens, IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-9" class="pilcrow">¶</a></p>
-<p id="section-8.3-10">The value of "sources", if present, <span class="bcp14">MUST</span> be a list of strings
-indicating where updated versions of the list may be acquired. Each
-string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> pointing to a list in the format
-specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
-<p id="section-8.3-11">The value of "reports", if present, <span class="bcp14">MUST</span> be a string indicating a URL
+0-65535.<a href="#section-8.3-10" class="pilcrow">¶</a></p>
+<p id="section-8.3-11">To disambiguate IPv6 addresses from ports when zero compression
+happens, IPv6 addresses <span class="bcp14">MUST</span> be encapsulated within [].<a href="#section-8.3-11" class="pilcrow">¶</a></p>
+<p id="section-8.3-12">The value of "sources", if present, is a list of strings indicating
+where updated versions of the list may be acquired using the HTTP GET
+method <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. Each string <span class="bcp14">MUST</span> be a URL <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> pointing
+to a list in the format specified here. The URI scheme <span class="bcp14">MUST</span> be HTTPS
+<span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-12" class="pilcrow">¶</a></p>
+<p id="section-8.3-13">The value of "reports", if present, is a string indicating a URL
 <span>[<a href="#RFC3986" class="cite xref">RFC3986</a>]</span> where malfeasance reports can be sent by clients using
-the HTTP POST method <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>. The URI scheme <span class="bcp14">MUST</span> be HTTPS
-<span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-11" class="pilcrow">¶</a></p>
-<p id="section-8.3-12">Server lists have the "application/roughtime-server+json" media
-type.<a href="#section-8.3-12" class="pilcrow">¶</a></p>
+the HTTP POST method. The URI scheme <span class="bcp14">MUST</span> be HTTPS <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.3-13" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="malfeasance-reporting">
@@ -2161,25 +2170,29 @@ responses arrived in that order. It can be used to demonstrate that at
 least one server sent the wrong time.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
 <div id="malfeasance-report-structure">
 <section id="section-8.4.1">
-          <h4 id="name-malfeasance-report-structur">
-<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-malfeasance-report-structur" class="section-name selfRef">Malfeasance report structure</a>
+          <h4 id="name-malfeasance-report-format">
+<a href="#section-8.4.1" class="section-number selfRef">8.4.1. </a><a href="#name-malfeasance-report-format" class="section-name selfRef">Malfeasance Report Format</a>
           </h4>
-<p id="section-8.4.1-1">A malfeasance report <span class="bcp14">MUST</span> be formatted as a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object
-and contain the key "responses". Its value <span class="bcp14">MUST</span> be an ordered list of
-response objects. Each response object <span class="bcp14">MUST</span> contain the keys "rand",
-"request", "response", and "publicKey". The values of all four keys
-<span class="bcp14">MUST</span> be represented as base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> strings.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-2">The "rand" key <span class="bcp14">MAY</span> be omitted from the first response object in the
-list. In all other cases, its value <span class="bcp14">MUST</span> be the 32-byte value used
-to generate the request nonce value from the previous response packet.<a href="#section-8.4.1-2" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-3">The value of "request" <span class="bcp14">MUST</span> be the transmitted request packet,
-including the "ROUGHTIM" header.<a href="#section-8.4.1-3" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-4">The value of "response" <span class="bcp14">MUST</span> be the received response packet,
-including the "ROUGHTIM" header.<a href="#section-8.4.1-4" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-5">The value of "publicKey" <span class="bcp14">MUST</span> be the long-term key that the server was
-expected to use for deriving the response signature.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
-<p id="section-8.4.1-6">Malfeasance reports have the "application/roughtime-malfeasance+json"
-media type.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-1">A malfeasance report is a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object that contains the
+key "responses". Its value is a list of response objects, sorted in
+the order received. Each response object contains the keys "rand",
+"publicKey", "request", and "response". The values of all four keys
+are represented as base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> strings. Together, they
+contain the information necessary for validating a sequence of
+Roughtime queries and cryptographically proving malfeasance.
+<a href="#appendix-malfeasance-report" class="auto internal xref">Appendix "B. Example Malfeasance Report"</a> contains an example malfeasance report
+in the format described here.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-2">Malfeasance reports have the "application/roughtime-malfeasance+json"
+media type.<a href="#section-8.4.1-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-3">The "rand" key <span class="bcp14">MAY</span> be omitted from the first response object in the
+list. In all other cases, its value is the 32-byte value used to
+generate the request nonce value from the previous response packet.<a href="#section-8.4.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-4">The value of "publicKey" is the long-term key that the server was
+expected to use for deriving the response signature.<a href="#section-8.4.1-4" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-5">The value of "request" is the transmitted request packet, including
+the "ROUGHTIM" header.<a href="#section-8.4.1-5" class="pilcrow">¶</a></p>
+<p id="section-8.4.1-6">The value of "response" is the received response packet, including the
+"ROUGHTIM" header.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="reporting">
@@ -2188,19 +2201,22 @@ media type.<a href="#section-8.4.1-6" class="pilcrow">¶</a></p>
 <a href="#section-8.4.2" class="section-number selfRef">8.4.2. </a><a href="#name-reporting" class="section-name selfRef">Reporting</a>
           </h4>
 <p id="section-8.4.2-1">When the client's list of servers has an associated URL for
-malfeasance reports, it <span class="bcp14">SHOULD</span> post a malfeasance report to the URL
-whenever it has performed a measurement sequence in accordance with
-<a href="#measurement-sequence" class="auto internal xref">Section 8.2</a> and detected that at least one of the
-responses is inconsistent with causal ordering. Since the failure of a
-popular Roughtime server can cause numerous clients to send
-malfeasance reports at the same time, clients <span class="bcp14">MUST</span> use
+malfeasance reports, it <span class="bcp14">SHOULD</span> send a malfeasance report to that URL
+when malfeasance is detected (see <a href="#measurement-sequence" class="auto internal xref">Section 8.2</a>) and it is
+technically feasible to do so. Malfeasance reports are sent using the
+HTTP POST method <span>[<a href="#RFC9110" class="cite xref">RFC9110</a>]</span>.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.4.2-2">Since the failure of a popular Roughtime server can cause numerous
+clients to send malfeasance reports at the same time, clients <span class="bcp14">MUST</span> use
 exponential backoff to prevent overloading the server receiving the
 reports. It is <span class="bcp14">RECOMMENDED</span> that clients use an initial retry interval
 of 10 seconds, a maximum interval of 24 hours, and a base of 1.5.
 Therefore, the minimum interval before retrying after <code>n</code> failures in
-seconds is <code>min(10 \* 1.5^(n-1), 86400)</code>.<a href="#section-8.4.2-1" class="pilcrow">¶</a></p>
-<p id="section-8.4.2-2">Clients <span class="bcp14">MUST NOT</span> send malfeasance reports in response to signature
-verification failures or any other protocol errors.<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
+seconds is <code>min(10 \* 1.5^(n-1), 86400)</code>.<a href="#section-8.4.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.4.2-3">Clients <span class="bcp14">MUST NOT</span> send malfeasance reports in response to signature
+verification failures or any other protocol errors.<a href="#section-8.4.2-3" class="pilcrow">¶</a></p>
+<p id="section-8.4.2-4">As described in <a href="#introduction" class="auto internal xref">Section 1</a>, the operational rules for acceptance
+or rejection of a particular malfeasance report are beyond the scope
+of this document.<a href="#section-8.4.2-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -2720,8 +2736,186 @@ commentators, especially Colin Perkins for providing advice on
 transport considerations.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="authors-addresses">
+<div id="appendix-server-list">
 <section id="appendix-B">
+      <h2 id="name-a-example-server-list">
+<a href="#name-a-example-server-list" class="section-name selfRef">A. Example Server List</a>
+      </h2>
+<p id="appendix-B-1">This appendix presents an example Roughtime server list in the format
+described by <a href="#server-lists" class="auto internal xref">Section 8.3</a>.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<p id="appendix-B-2">NOTE TO RFC EDITOR: replace all occurrences of the port number 2002
+below with the port number assigned for Roughtime by IANA.<a href="#appendix-B-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-B-3">
+<pre>
+{
+  "servers": [
+    {
+      "name": "example.com Roughtime server",
+      "version": 1,
+      "publicKeyType": "ed25519",
+      "publicKey": "2O3mkkheDExCuhG+ZNIoWmO/IdCdLzADgUn8SnC4hME=",
+      "addresses": [
+        {
+          "protocol": "udp",
+          "address": "roughtime.example.com:2002"
+        },
+        {
+          "protocol": "tcp",
+          "address": "roughtime.example.com:2002"
+        }
+      ]
+    },
+    {
+      "name": "A UDP-only server specified with IP addresses",
+      "version": 1,
+      "publicKeyType": "ed25519",
+      "publicKey": "ZYfeGa94YuG1IZrV3kR9+8/nmZ2lX2XyHmiSb+wI0OY=",
+      "addresses": [
+        {
+          "protocol": "udp",
+          "address": "192.0.2.33:2002"
+        },
+        {
+          "protocol": "udp",
+          "address": "[2001:db8::2:33]:2002"
+        }
+      ]
+    }
+  ],
+  "sources": [
+    "https://www.example.net/roughtime/ecosystem.json",
+    "https://www.example.org/roughtime/ecosystem.json"
+  ],
+  "reports":  "https://www.example.net/roughtime/malfeasance"
+}
+</pre><a href="#appendix-B-3" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="appendix-malfeasance-report">
+<section id="appendix-C">
+      <h2 id="name-b-example-malfeasance-repor">
+<a href="#name-b-example-malfeasance-repor" class="section-name selfRef">B. Example Malfeasance Report</a>
+      </h2>
+<p id="appendix-C-1">This appendix presents an example Roughtime malfeasance report in the
+format described by <a href="#malfeasance-report-structure" class="auto internal xref">Section 8.4.1</a>. The report
+provides sufficient information to prove that the server with the
+public key <code>MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=</code> responded
+with a time that is inconsistent with the times reported by the two
+other servers.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="appendix-C-2">
+<pre>
+{
+  "responses": [
+    {
+      "publicKey": "iue5iA+aL3cY6VvCLrYlHPKkFF0FQj6ZF5AKuALQVhU=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAIAvlIBYYLjO8Im7wC1o371iHkf695gUBryowo3MkjcEco6aPs
+8oosgJwFdtOdhKehxj5oxe0bxFEqT+1+lmsKNdAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFiohdh58+8xBHlDE8XKTE1xMWGrqpoHv
+pne0McRcIL+aOroCGFSjTHHXa9i4SzV1IkHZA61WrHvBKLo70ozHFoNjpo+zyiiyAnAV20
+52Ep6HGPmjF7RvEUSpP7X6Wawo10BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACALno8JT7WH5LKj8o7wJ+ooHFBzZP
+S+IHbKKlS19N62zwCAAAAQAAAAFNJRwBERUxFMlJhVW2LZdyog6mAe/6Ct9llSf3HOvmVI
++/SuuhTafu0R+y7XFEujvAeRKrSACS8xf7kzOBB/fUMagNarxJgAAMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVBOICW7RuSxBZZ+BaGSwsdw+mvMODCVr+LL3wglcIUPMy6mtaQAAAAA7Y
+95pAAAAAAAAAAA="
+    },
+    {
+      "publicKey": "3hvZGd6rEA+2oGqiJ0JvfmE8IFeifTTxi9d5+hP/e00=",
+      "rand": "+SYgbyJ3h8x0QbxyEag0s2JCcmSOSkJwh7PM7RoeNPE=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAICSTh+Xefh435flYSbqKmCv8lq/ZrzAg3iZW+o5FoEhFUSVGP
+7+Sdl7S74Dx9vJfUcj/e5EdKpFC7E2TYMslq1fAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFghTiAGioXAjo+wYl5Izh4onUiFg7q3D
+5JrlL0yjNixaOQ4i2tYNIje7aXNbol9Nf9/khg/xoxb8J4ANo4zeZgCRJUY/v5J2XtLvgP
+H28l9RyP97kR0qkULsTZNgyyWrV8BAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAN+a2aQAAAAAMAACAMdSYMaeiq3zjxEWl7Wj8RcysYnp
+V9jZT+w/ARSRULJYCAAAAQAAAAFNJRwBERUxFInVgPIl1d0bJFXuDzST4SfHg6AbATzsbP
+yH2IXdnFvlqo2XdzsH7/frv8IOg3M63bd7rYO2/Kpkrj9+3kytFCAMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVCggSSWVwTucgoLe5GDhw4AuPR7t/cvgjkvjW1YHRi+8WKStaQAAAADIX
+d5pAAAAAAAAAAA="
+    },
+    {
+      "publicKey": "MVkBflh/18JUolwbgToBCvBpTaTQ081ivn7odBKfB18=",
+      "rand": "0PP8WXctLP7jSk39f9Fn3AlaD/rZuElPwa4/2r6We+c=",
+      "request": "Uk9VR0hUSU0ABAAABQAAAAQAAAAkAAAARAAAAEgAAABWRVIAU1JW
+AE5PTkNUWVBFWlpaWgwAAICvh/FZe3Lm7YBx8MBjhysVTb1YCevyit+PuiV+UnK8dv/BX7
+wc3fwjQz2Ey+rhaDSOUJa7eEelCVPaDDCeQ//gAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+==",
+      "response": "Uk9VR0hUSU2UAQAABwAAAEAAAABgAAAAZAAAAGQAAADAAAAAWAE
+AAFNJRwBOT05DVFlQRVBBVEhTUkVQQ0VSVElORFjSsl+saSZViigVerZKO8cKyjuD1KxUX
+A7Q2cjhz4NIkd9e1HuelgI5Fc7jBFiPZrQhQXF2zdNDD07kUmSQBhEO/8FfvBzd/CNDPYT
+L6uFoNI5Qlrt4R6UJU9oMMJ5D/+ABAAAABQAAAAQAAAAIAAAAEAAAABQAAABWRVIAUkFES
+U1JRFBWRVJTUk9PVAwAAIADAAAAt5S1aQAAAAAMAACAUJWcKWq6IrVklFULVBx05OFAxDp
+8bJdfnKb1UC9NdNkCAAAAQAAAAFNJRwBERUxFZM2rbD13tCCZiUUxaBVR5RIq732RhWcpu
+N9sSzLmNRBtn53Hxd3wwM7f2uuh0tIvIC+zx4pROvNq5Wydzk8dDwMAAAAgAAAAKAAAAFB
+VQktNSU5UTUFYVARGRmpHdNdP6QK4NJwwrmkQvGZBl+YiqEjfQZ9EMQbXeaStaQAAAADpX
+d5pAAAAAAAAAAA="
+    }
+  ]
+}
+</pre><a href="#appendix-C-2" class="pilcrow">¶</a>
+</div>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-D">
       <h2 id="name-authors-addresses">
 <a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
       </h2>
