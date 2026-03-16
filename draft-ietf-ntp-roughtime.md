@@ -917,11 +917,11 @@ The policy for allocation of new entries is IETF Review {{?RFC8126}}.
 The initial contents of this registry are specified in
 {{tab-versions}}.
 
-| Version ID            | Version name                  | Reference     |
-+---------------------- :+------------------------------+---------------|
+| Version ID            | Version name                  | Reference         |
++---------------------- :+------------------------------+-------------------|
 | 0x0                   | Reserved                      | [[this document]] |
 | 0x1                   | Roughtime version 1           | [[this document]] |
-| 0x2-0x7fffffff        | Unassigned                    |               |
+| 0x2-0x7fffffff        | Unassigned                    |                   |
 | 0x80000000-0xbfffffff | Reserved for experimental use | [[this document]] |
 | 0xc0000000-0xffffffff | Reserved for private use      | [[this document]] |
 {: #tab-versions title="Initial contents of the Roughtime Versions registry."}
