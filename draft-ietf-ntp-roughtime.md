@@ -357,7 +357,7 @@ entirely, see {{response-srep}}.
 ### NONC
 
 The value of the NONC tag is a 32-byte nonce. It SHOULD be generated
-in a manner indistinguishable from random. BCP 106 {{!RFC4086}}
+in a manner indistinguishable from random. BCP&nbsp;106 {{!RFC4086}}
 contains specific guidelines regarding this. {{measurement-sequence}}
 describes how to securely generate nonces when querying multiple
 servers in sequence.
