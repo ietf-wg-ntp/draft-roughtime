@@ -418,6 +418,18 @@ and INDX. The structure of a response message is illustrated in
 ~~~~~
 {: #figresponse title="Roughtime response message structure."}
 
+No mechanism for reporting errors&mdash;such as wrong request format,
+unsupported version, or unknown SRV value&mdash;back to the client is
+provided. This is based on experience from the NTP protocol, where
+Kiss-o'-Death packets (see Section 7.4 of {{!RFC5905}}) are used to
+indicate errors. The existance of this unauthenticated protocol
+feature in NTP makes it possible for on-path attackers to make a
+client stop using authenticated modes or certain servers altogether
+(see Section 5.4 of {{!RFC8633}} and Sections 8.3 and 8.7 of
+{{!RFC8915}}). Considering the protocol's dependence on multiple
+independent servers for security, error reporting functionality has
+been excluded from this version of Roughtime.
+
 ### SIG
 
 In general, a SIG tag value is a 64-byte Ed25519 signature
