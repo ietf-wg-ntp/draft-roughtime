@@ -697,8 +697,8 @@ mechanisms for configuring server lists.
 
 A server list is a JSON {{!RFC8259}} object that contains the key
 "servers". Server list objects MAY also contain the keys "sources" and
-"reports". {{appendix-server-list}} contains an example server list in
-the format described here.
+"reports". Appendix&nbsp;A contains an example server list in the
+format described here.
 
 Server lists have the "application/roughtime-server+json" media
 type.
@@ -765,8 +765,8 @@ key "responses". Its value is a list of response objects, sorted in
 the order received. Each response object contains the keys "rand",
 "publicKey", "request", and "response". The values of all four keys
 are represented as base64-encoded {{!RFC4648}} strings.
-{{appendix-malfeasance-report}} contains an example malfeasance report
-in the format described here.
+Appendix&nbsp;B contains an example malfeasance report in the format
+described here.
 
 Malfeasance reports have the "application/roughtime-malfeasance+json"
 media type.
