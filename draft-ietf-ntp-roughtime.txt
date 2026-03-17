@@ -773,8 +773,8 @@ Table of Contents
 
    A server list is a JSON [RFC8259] object that contains the key
    "servers".  Server list objects MAY also contain the keys "sources"
-   and "reports".  Appendix "Appendix A.  Example Server List" contains
-   an example server list in the format described here.
+   and "reports".  Appendix A contains an example server list in the
+   format described here.
 
    Server lists have the "application/roughtime-server+json" media type.
 
@@ -839,9 +839,8 @@ Table of Contents
    "responses".  Its value is a list of response objects, sorted in the
    order received.  Each response object contains the keys "rand",
    "publicKey", "request", and "response".  The values of all four keys
-   are represented as base64-encoded [RFC4648] strings.
-   Appendix "Appendix B.  Example Malfeasance Report" contains an
-   example malfeasance report in the format described here.
+   are represented as base64-encoded [RFC4648] strings.  Appendix B
+   contains an example malfeasance report in the format described here.
 
    Malfeasance reports have the "application/roughtime-malfeasance+json"
    media type.

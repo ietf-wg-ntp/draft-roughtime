@@ -2128,8 +2128,8 @@ list format is <span class="bcp14">OPTIONAL</span> and clients <span class="bcp1
 mechanisms for configuring server lists.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
 <p id="section-8.3-2">A server list is a JSON <span>[<a href="#RFC8259" class="cite xref">RFC8259</a>]</span> object that contains the key
 "servers". Server list objects <span class="bcp14">MAY</span> also contain the keys "sources" and
-"reports". <a href="#appendix-server-list" class="auto internal xref">Appendix "Appendix A. Example Server List"</a> contains an example server list in
-the format described here.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+"reports". Appendix A contains an example server list in the
+format described here.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
 <p id="section-8.3-3">Server lists have the "application/roughtime-server+json" media
 type.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
 <p id="section-8.3-4">The value of the "servers" key is a list of server objects, each
@@ -2192,8 +2192,8 @@ key "responses". Its value is a list of response objects, sorted in
 the order received. Each response object contains the keys "rand",
 "publicKey", "request", and "response". The values of all four keys
 are represented as base64-encoded <span>[<a href="#RFC4648" class="cite xref">RFC4648</a>]</span> strings.
-<a href="#appendix-malfeasance-report" class="auto internal xref">Appendix "Appendix B. Example Malfeasance Report"</a> contains an example malfeasance report
-in the format described here.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
+Appendix B contains an example malfeasance report in the format
+described here.<a href="#section-8.4.1-1" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-2">Malfeasance reports have the "application/roughtime-malfeasance+json"
 media type.<a href="#section-8.4.1-2" class="pilcrow">¶</a></p>
 <p id="section-8.4.1-3">The "rand" key <span class="bcp14">MAY</span> be omitted from the first response object in the
