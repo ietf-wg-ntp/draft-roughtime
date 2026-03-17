@@ -635,7 +635,7 @@ receiving the response.
 
 The primary purpose of grease is to prevent protocol ossification,
 which could prohibit future protocol extensions and development
-{{!RFC9170}}. In Roughtime, grease is also intended to ensure that
+{{?RFC9170}}. In Roughtime, grease is also intended to ensure that
 clients validate signatures. To grease the Roughtime protocol, servers
 SHOULD send back a fraction of responses with any of the following:
 lack of mandatory tags, version numbers not in the request, undefined
@@ -737,7 +737,7 @@ number, separated by a colon character, for example
 an IPv6 address, or a fully qualified domain name (FQDN). IPv4
 addresses are specified in dotted decimal notation. IPv6 addresses
 MUST conform to the "Text Representation of Addresses" {{!RFC4291}}
-and MUST NOT include zone identifiers {{!RFC9844}}. To disambiguate
+and MUST NOT include zone identifiers {{?RFC9844}}. To disambiguate
 IPv6 addresses from ports when zero compression happens, IPv6
 addresses are encapsulated within []. The port part is a decimal
 integer representing a valid port number, i.e. in the range 0-65535.
